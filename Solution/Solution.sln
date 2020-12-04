@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8C0259BC-14AF-47D3-A5DE-A36036D7F5DD}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cpp", "cpp", "{FABB94F7-AC86-4386-BBAB-EE99A901FE0D}"
+	ProjectSection(SolutionItems) = preProject
+		cpp\AdresZamieszkania.cpp = cpp\AdresZamieszkania.cpp
+		cpp\Autor.cpp = cpp\Autor.cpp
+		cpp\Bibliotekarz.cpp = cpp\Bibliotekarz.cpp
+		cpp\DaneKontaktowe.cpp = cpp\DaneKontaktowe.cpp
+		cpp\Data.cpp = cpp\Data.cpp
+		cpp\Osoba.cpp = cpp\Osoba.cpp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "headers", "headers", "{9B38A47C-309C-4369-8DE6-6BCAB73960F8}"
+	ProjectSection(SolutionItems) = preProject
+		headers\AdresZamieszkania.h = headers\AdresZamieszkania.h
+		headers\Autor.h = headers\Autor.h
+		headers\Bibliotekarz.h = headers\Bibliotekarz.h
+		headers\DaneKontaktowe.h = headers\DaneKontaktowe.h
+		headers\Data.h = headers\Data.h
+		headers\Osoba.h = headers\Osoba.h
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FABB94F7-AC86-4386-BBAB-EE99A901FE0D} = {8C0259BC-14AF-47D3-A5DE-A36036D7F5DD}
+		{9B38A47C-309C-4369-8DE6-6BCAB73960F8} = {8C0259BC-14AF-47D3-A5DE-A36036D7F5DD}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3BDEC3AC-F555-4391-8F74-13795FB9339E}
+	EndGlobalSection
+EndGlobal
