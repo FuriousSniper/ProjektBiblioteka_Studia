@@ -14,9 +14,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cpp", "cpp", "{FABB94F7-AC8
 		cpp\AdresZamieszkania.cpp = cpp\AdresZamieszkania.cpp
 		cpp\Autor.cpp = cpp\Autor.cpp
 		cpp\Bibliotekarz.cpp = cpp\Bibliotekarz.cpp
+		cpp\Czytelnik.cpp = cpp\Czytelnik.cpp
 		cpp\DaneKontaktowe.cpp = cpp\DaneKontaktowe.cpp
 		cpp\Data.cpp = cpp\Data.cpp
 		cpp\Osoba.cpp = cpp\Osoba.cpp
+		cpp\RejestrSpoznien.cpp = cpp\RejestrSpoznien.cpp
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "headers", "headers", "{9B38A47C-309C-4369-8DE6-6BCAB73960F8}"
@@ -24,9 +26,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "headers", "headers", "{9B38
 		headers\AdresZamieszkania.h = headers\AdresZamieszkania.h
 		headers\Autor.h = headers\Autor.h
 		headers\Bibliotekarz.h = headers\Bibliotekarz.h
+		headers\Czytelnik.h = headers\Czytelnik.h
 		headers\DaneKontaktowe.h = headers\DaneKontaktowe.h
 		headers\Data.h = headers\Data.h
 		headers\Osoba.h = headers\Osoba.h
+		headers\RejestrSpoznien.h = headers\RejestrSpoznien.h
 	EndProjectSection
 EndProject
 Global
