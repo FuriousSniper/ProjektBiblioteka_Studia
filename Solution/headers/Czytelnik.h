@@ -2,9 +2,12 @@
 #define CZYTELNIK
 using namespace std;
 #include <string.h>
-#include "..\headers\Data.h"
-#include "..\headers\DaneKontaktowe.h"
-#include "..\headers\AdresZamieszkania.h"
+#include "Data.h"
+#include "DaneKontaktowe.h"
+#include "AdresZamieszkania.h"
+#include "Egzemplarz.h"
+class Egzemplarz;
+class DaneKontaktowe;
 class Czytelnik {
 
 private:

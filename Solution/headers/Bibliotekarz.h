@@ -1,6 +1,9 @@
 #ifndef BIBLIOTEKARZ_H
 #define BIBLIOTEKARZ_H
-
+#include "Osoba.h"
+#include <string>
+#include "DaneKontaktowe.h"
+using namespace std;
 class Bibliotekarz : Osoba {
 
 private:

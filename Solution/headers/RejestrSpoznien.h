@@ -1,5 +1,6 @@
 #ifndef REJESTRSPOZNIEN_H
 #define REJESTRSPOZNIEN_H
+#include "Czytelnik.h"
 using namespace std;
 class RejestrSpoznien {
 

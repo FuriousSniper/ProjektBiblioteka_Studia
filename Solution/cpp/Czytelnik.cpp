@@ -3,63 +3,64 @@
 #include "..\headers\Data.h"
 #include "..\headers\DaneKontaktowe.h"
 #include "..\headers\AdresZamieszkania.h"
-string getId() {
+using namespace std;
+string Czytelnik::getId() {
 	//TODO
 }
-Egzemplarz** getZaleglosci() {
+Egzemplarz** Czytelnik::getZaleglosci(){
 	//TODO
 }
-int setZaleglosci(Egzemplarz** egzemplarze) {
+int Czytelnik::setZaleglosci(Egzemplarz** egzemplarze) {
 	//TODO
 }
-Data getDataPierwszegoWypozyczenia() {
+Data Czytelnik::getDataPierwszegoWypozyczenia() {
 	//TODO
 }
-string getOfertySpecjalne() {
+string Czytelnik::getOfertySpecjalne() {
 	//TODO
 }
-int getIloscWypozyczonychOdDolaczenia() {
+int Czytelnik::getIloscWypozyczonychOdDolaczenia() {
 	//TODO
 }
-string* getPreferowaneTematy() {
+string* Czytelnik::getPreferowaneTematy() {
 	//TODO
 }
-int setPreferowaneTematy(string* tematy) {
+int Czytelnik::setPreferowaneTematy(string* tematy) {
 	//TODO
 }
-Egzemplarz* wypozyczKsiazke(Egzemplarz* ksiazka) {
+Egzemplarz* Czytelnik::wypozyczKsiazke(Egzemplarz* ksiazka) {
 	//TODO
 }
-int oddajKsiazke(Egzemplarz* ksiazka) {
+int Czytelnik::oddajKsiazke(Egzemplarz* ksiazka) {
 	//TODO
 }
-bool sprawdzDostepnoscKsiazki(Egzemplarz* ksiazka) {
+bool Czytelnik::sprawdzDostepnoscKsiazki(Egzemplarz* ksiazka) {
 	//TODO
 }
-Egzemplarz** getWypozyczoneObecnie() {
+Egzemplarz** Czytelnik::getWypozyczoneObecnie() {
 	//TODO
 }
-Data sprawdzTerminOddania(Egzemplarz* ksiazka) {
+Data Czytelnik::sprawdzTerminOddania(Egzemplarz* ksiazka) {
 	//TODO
 }
-int zmienTerminOddania(Data termin) {
+int Czytelnik::zmienTerminOddania(Data termin) {
 	//TODO
 }
-int zarezerwujKsiazke(Egzemplarz* ksiazka) {
+int Czytelnik::zarezerwujKsiazke(Egzemplarz* ksiazka) {
 	//TODO
 }
-Data getDataDolaczenia() {
+Data Czytelnik::getDataDolaczenia() {
 	//TODO
 }
-int setDaneKontaktowe(DaneKontaktowe dane) {
+int Czytelnik::setDaneKontaktowe(DaneKontaktowe dane) {
 	//TODO
 }
-int getDaneKontaktowe() {
+int Czytelnik::getDaneKontaktowe() {
 	//TODO
 }
-Czytelnik(string imie, string nazwisko, Data dataUrodzenia, string* preferowaneTematy) {
+Czytelnik::Czytelnik(string imie, string nazwisko, Data dataUrodzenia, string* preferowaneTematy) {
 	//TODO
 }
-Czytelnik(string imie, string nazwisko, Data dataUrodzenia) {
+Czytelnik::Czytelnik(string imie, string nazwisko, Data dataUrodzenia) {
 	//TODO
 }

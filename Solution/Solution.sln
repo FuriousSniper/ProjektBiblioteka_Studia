@@ -9,37 +9,27 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cpp", "cpp", "{FABB94F7-AC86-4386-BBAB-EE99A901FE0D}"
-	ProjectSection(SolutionItems) = preProject
-		cpp\AdresZamieszkania.cpp = cpp\AdresZamieszkania.cpp
-		cpp\Autor.cpp = cpp\Autor.cpp
-		cpp\Bibliotekarz.cpp = cpp\Bibliotekarz.cpp
-		cpp\Czytelnik.cpp = cpp\Czytelnik.cpp
-		cpp\DaneKontaktowe.cpp = cpp\DaneKontaktowe.cpp
-		cpp\Data.cpp = cpp\Data.cpp
-		cpp\Osoba.cpp = cpp\Osoba.cpp
-		cpp\RejestrSpoznien.cpp = cpp\RejestrSpoznien.cpp
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "headers", "headers", "{9B38A47C-309C-4369-8DE6-6BCAB73960F8}"
-	ProjectSection(SolutionItems) = preProject
-		headers\AdresZamieszkania.h = headers\AdresZamieszkania.h
-		headers\Autor.h = headers\Autor.h
-		headers\Bibliotekarz.h = headers\Bibliotekarz.h
-		headers\Czytelnik.h = headers\Czytelnik.h
-		headers\DaneKontaktowe.h = headers\DaneKontaktowe.h
-		headers\Data.h = headers\Data.h
-		headers\Osoba.h = headers\Osoba.h
-		headers\RejestrSpoznien.h = headers\RejestrSpoznien.h
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProjektBiblioteka", "ProjektBiblioteka\ProjektBiblioteka.vcxproj", "{42ECC352-97D3-4FAF-85C9-2F131F324277}"
 EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{42ECC352-97D3-4FAF-85C9-2F131F324277}.Debug|x64.ActiveCfg = Debug|x64
+		{42ECC352-97D3-4FAF-85C9-2F131F324277}.Debug|x64.Build.0 = Debug|x64
+		{42ECC352-97D3-4FAF-85C9-2F131F324277}.Debug|x86.ActiveCfg = Debug|Win32
+		{42ECC352-97D3-4FAF-85C9-2F131F324277}.Debug|x86.Build.0 = Debug|Win32
+		{42ECC352-97D3-4FAF-85C9-2F131F324277}.Release|x64.ActiveCfg = Release|x64
+		{42ECC352-97D3-4FAF-85C9-2F131F324277}.Release|x64.Build.0 = Release|x64
+		{42ECC352-97D3-4FAF-85C9-2F131F324277}.Release|x86.ActiveCfg = Release|Win32
+		{42ECC352-97D3-4FAF-85C9-2F131F324277}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{FABB94F7-AC86-4386-BBAB-EE99A901FE0D} = {8C0259BC-14AF-47D3-A5DE-A36036D7F5DD}
-		{9B38A47C-309C-4369-8DE6-6BCAB73960F8} = {8C0259BC-14AF-47D3-A5DE-A36036D7F5DD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3BDEC3AC-F555-4391-8F74-13795FB9339E}

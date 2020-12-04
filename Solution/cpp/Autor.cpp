@@ -10,17 +10,17 @@ int Autor::dodajKsiazki(Ksiazka** ksiazki) {
 	throw "Not yet implemented";
 }
 
-Autor::Autor(string imie, string nazwisko, data dataUrodzenia) {
+Autor::Autor(string imie, string nazwisko, Data dataUrodzenia) {
 	// TODO - implement Autor::Autor
 	throw "Not yet implemented";
 }
 
-Autor::Autor(string imie, string nazwisko, data dataUrodzenia, Ksiazka* ksiazka) {
+Autor::Autor(string imie, string nazwisko, Data dataUrodzenia, Ksiazka* ksiazka) {
 	// TODO - implement Autor::Autor
 	throw "Not yet implemented";
 }
 
-Autor::Autor(string imie, string nazwisko, data dataUrodzenia, Ksiazka** ksiazki) {
+Autor::Autor(string imie, string nazwisko, Data dataUrodzenia, Ksiazka** ksiazki) {
 	// TODO - implement Autor::Autor
 	throw "Not yet implemented";
 }

@@ -1,4 +1,5 @@
 #include "..\headers\DaneKontaktowe.h"
+#include <string>
 
 void DaneKontaktowe::printDaneKontaktowe() {
 	// TODO - implement DaneKontaktowe::printDaneKontaktowe

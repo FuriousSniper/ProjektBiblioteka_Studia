@@ -1,6 +1,8 @@
 #ifndef OSOBA_H
 #define OSOBA_H
-
+#include <string>
+#include "Data.h"
+using namespace std;
 class Osoba {
 
 private:

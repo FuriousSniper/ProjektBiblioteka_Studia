@@ -1,5 +1,6 @@
 #include "..\headers\Bibliotekarz.h"
-
+#include <string>
+using namespace std;
 void Bibliotekarz::zmienHaslo(string haslo) {
 	// TODO - implement Bibliotekarz::zmienHaslo
 	throw "Not yet implemented";
