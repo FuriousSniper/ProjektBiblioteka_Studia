@@ -31,7 +31,13 @@ Data Osoba::getDataUrodzenia() {
 	return this->dataUrodzenia;
 }
 
-Osoba::Osoba(string imie, string nazwisko, Data dataUrodzenia):imie(imie),nazwisko(nazwisko),dataUrodzenia(dataUrodzenia){
+void Osoba::setDataUrodzenia(int d, int m, int r) {
+	Data D = Data(d, m, r);
+	this->dataUrodzenia =D;
+}
+
+Osoba::Osoba(string imie, string nazwisko, int d, int m, int r):imie(imie),nazwisko(nazwisko){
+	setDataUrodzenia(d, m, r);
 }
 
 Osoba::Osoba(string imie, string nazwisko) : imie(imie), nazwisko(nazwisko) {

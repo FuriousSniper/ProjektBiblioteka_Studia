@@ -9,7 +9,7 @@ namespace Testy
 	{
 	public:
 		
-		TEST_METHOD(TestOsobaKonstruktor)
+		/*TEST_METHOD(TestOsobaKonstruktor)
 		{
 			Osoba *o = new Osoba("Jan","Pucha");
 			string imie = "Jan";
@@ -40,5 +40,6 @@ namespace Testy
 			string result = o->getNazwisko();
 			Assert::AreEqual(n, result);
 		}
+		*/
 	};
 }

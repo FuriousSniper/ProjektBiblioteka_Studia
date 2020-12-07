@@ -46,8 +46,8 @@ public:
 	Data getDataDolaczenia();
 	int setDaneKontaktowe(DaneKontaktowe dane);
 	DaneKontaktowe getKontakt();
-	Czytelnik(string imie, string nazwisko, Data dataUrodzenia, string* preferowaneTematy);
-	Czytelnik(string imie, string nazwisko, Data dataUrodzenia);
+	Czytelnik(string imie, string nazwisko, int d, int m, int r, string* preferowaneTematy);
+	Czytelnik(string imie, string nazwisko, int d, int m, int r);
 };
 
 #endif

@@ -15,11 +15,11 @@ public:
 
 	int dodajKsiazki(Ksiazka** ksiazki);
 
-	Autor(string imie, string nazwisko, Data dataUrodzenia);
+	Autor(string imie, string nazwisko, int d, int m, int r);
 
-	Autor(string imie, string nazwisko, Data dataUrodzenia, Ksiazka* ksiazka);
+	Autor(string imie, string nazwisko, int d, int m, int r, Ksiazka* ksiazka);
 
-	Autor(string imie, string nazwisko, Data dataUrodzenia, Ksiazka** ksiazki);
+	Autor(string imie, string nazwisko, int d, int m, int r, Ksiazka** ksiazki);
 };
 
 #endif

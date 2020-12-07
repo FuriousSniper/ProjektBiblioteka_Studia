@@ -6,14 +6,21 @@ class Data {
 
 public:
 	int rok;
-	string miesiac;
-	int numerMieszkania;
+	int miesiac;
 	int dzien;
-	string dzienTygodnia;
 	int godzina;
 	int minuta;
 
 	void printData();
+	int setDzien(int dzien);
+	int getDzien();
+	int setMiesiac(int m);
+	int getMiesiac();
+	int setRok(int r);
+	int getRok();
+	Data();
+	Data(int dzien, int miesiac, int rok);
+	Data(int dzien, int miesiac, int rok, int godzina, int minuta);
 };
 
 #endif

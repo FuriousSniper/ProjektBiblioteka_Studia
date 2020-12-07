@@ -24,7 +24,9 @@ public:
 
 	int setWiek(int wiek);
 
-	Osoba(string imie, string nazwisko, Data dataUrodzenia);
+	void setDataUrodzenia(int, int, int);
+
+	Osoba(string imie, string nazwisko, int d, int m, int r);
 
 	Osoba(string imie, string nazwisko);
 

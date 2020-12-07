@@ -163,11 +163,6 @@
     <ClCompile Include="..\cpp\RejestrSpoznien.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Testy\Testy.vcxproj">
-      <Project>{5f4899bf-b61b-417d-a9d8-7ed1ca347453}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
