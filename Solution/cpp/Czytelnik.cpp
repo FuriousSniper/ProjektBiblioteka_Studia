@@ -5,62 +5,80 @@
 #include "..\headers\AdresZamieszkania.h"
 using namespace std;
 string Czytelnik::getId() {
-	//TODO
+	return id;
 }
 Egzemplarz** Czytelnik::getZaleglosci(){
-	//TODO
+	return listaZaleglosci;
 }
 int Czytelnik::setZaleglosci(Egzemplarz** egzemplarze) {
-	//TODO
+	return 1;
 }
 Data Czytelnik::getDataPierwszegoWypozyczenia() {
-	//TODO
+	return dataPierwszegoWypozyczenia;
 }
 string Czytelnik::getOfertySpecjalne() {
 	//TODO
+	throw "not implemented";
 }
 int Czytelnik::getIloscWypozyczonychOdDolaczenia() {
-	//TODO
+	return iloscWypozyczonychOdDolaczenia;
 }
 string* Czytelnik::getPreferowaneTematy() {
-	//TODO
+	return preferowaneTematy;
 }
 int Czytelnik::setPreferowaneTematy(string* tematy) {
 	//TODO
+	throw "not implemented";
 }
-Egzemplarz* Czytelnik::wypozyczKsiazke(Egzemplarz* ksiazka) {
+int Czytelnik::wypozyczKsiazke(Egzemplarz* ksiazka) {
 	//TODO
+	throw "not implemented";
 }
 int Czytelnik::oddajKsiazke(Egzemplarz* ksiazka) {
 	//TODO
+	throw "not implemented";
 }
 bool Czytelnik::sprawdzDostepnoscKsiazki(Egzemplarz* ksiazka) {
 	//TODO
+	throw "not implemented";
 }
 Egzemplarz** Czytelnik::getWypozyczoneObecnie() {
 	//TODO
+	throw "not implemented";
 }
 Data Czytelnik::sprawdzTerminOddania(Egzemplarz* ksiazka) {
 	//TODO
+	throw "not implemented";
 }
 int Czytelnik::zmienTerminOddania(Data termin) {
 	//TODO
+	throw "not implemented";
 }
 int Czytelnik::zarezerwujKsiazke(Egzemplarz* ksiazka) {
 	//TODO
+	throw "not implemented";
 }
 Data Czytelnik::getDataDolaczenia() {
-	//TODO
+	return dataDolaczenia;
 }
+/*
 int Czytelnik::setDaneKontaktowe(DaneKontaktowe dane) {
-	//TODO
+	if (dane.email != "")
+		kontakt.email = dane.email;
+	if (dane.telefon != "")
+		kontakt.telefon = dane.telefon;
+
+	return 1;
 }
-int Czytelnik::getDaneKontaktowe() {
-	//TODO
+
+DaneKontaktowe Czytelnik::getKontakt() {
+	return kontakt;
 }
-Czytelnik::Czytelnik(string imie, string nazwisko, Data dataUrodzenia, string* preferowaneTematy) {
-	//TODO
+*/
+//  ,kontakt("", "")
+Czytelnik::Czytelnik(string imie, string nazwisko, Data dataUrodzenia, string* preferowaneTematy):Osoba(imie,nazwisko,dataUrodzenia),preferowaneTematy(preferowaneTematy),adres("","","") {
 }
-Czytelnik::Czytelnik(string imie, string nazwisko, Data dataUrodzenia) {
-	//TODO
+//  ,kontakt("", "")
+Czytelnik::Czytelnik(string imie, string nazwisko, Data dataUrodzenia):Osoba(imie,nazwisko, dataUrodzenia), adres("", "", "") {
+
 }

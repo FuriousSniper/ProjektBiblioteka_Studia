@@ -7,7 +7,7 @@ using namespace std;
 class Bibliotekarz : Osoba {
 
 private:
-	string identyfikator;
+	string id;
 	string haslo;
 	DaneKontaktowe kontakt;
 
@@ -18,9 +18,13 @@ public:
 
 	void printInfOBibliotekarzu();
 
+	void getBiblioteka();
+
 	Bibliotekarz(string id, string haslo);
 
-	void getBiblioteka();
+	Bibliotekarz(string id, string haslo, string imie, string nazwisko);
+
+	
 };
 
 #endif

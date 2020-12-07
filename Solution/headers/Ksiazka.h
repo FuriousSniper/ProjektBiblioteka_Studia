@@ -26,7 +26,7 @@ public:
 	string* getTagi();
 	void setTagi(string* tagi);
 	Data getDataPremiery();
-	int dodajEgzemplarz(Egzemplarz* egzemplarz);
+	void dodajEgzemplarz(Egzemplarz* egzemplarz);
 	Egzemplarz** getEgzemplarze();
 	int usunEgzemplarz(Egzemplarz* e);
 	int getId();

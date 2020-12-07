@@ -7,7 +7,8 @@
 class Ksiazka;
 using namespace std;
 class Autor : public Osoba {
-
+private:
+	Ksiazka** dziela;
 
 public:
 	int dodajKsiazke(Ksiazka* ksiazka);

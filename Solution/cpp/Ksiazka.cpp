@@ -18,14 +18,16 @@ void Ksiazka::setTagi(string* tagi) {
 Data Ksiazka::getDataPremiery() {
 	return dataPremiery;
 }
-int Ksiazka::dodajEgzemplarz(Egzemplarz* egzemplarz) {
+void Ksiazka::dodajEgzemplarz(Egzemplarz* egzemplarz) {
 	//TODO
+
 }
 Egzemplarz** Ksiazka::getEgzemplarze() {
 	return egzemplarze;
 }
 int Ksiazka::usunEgzemplarz(Egzemplarz* e) {
 	//TODO
+	return 1;
 }
 int Ksiazka::getId() {
 	return id;

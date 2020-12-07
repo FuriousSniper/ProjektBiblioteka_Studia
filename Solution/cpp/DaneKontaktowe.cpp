@@ -11,7 +11,7 @@ Czytelnik* DaneKontaktowe::getCzytelnik() {
 	throw "Not yet implemented";
 }
 
-DaneKontaktowe::DaneKontaktowe(string email, string telefon) {
+DaneKontaktowe::DaneKontaktowe(string email, string telefon):email(email),telefon(telefon){
 	// TODO - implement DaneKontaktowe::DaneKontaktowe
 	throw "Not yet implemented";
 }

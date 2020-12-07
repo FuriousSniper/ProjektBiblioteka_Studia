@@ -1,16 +1,21 @@
-#ifndef CZYTELNIK
-#define CZYTELNIK
+#ifndef CZYTELNIK_H
+#define CZYTELNIK_H
 using namespace std;
-#include <string.h>
-#include "Data.h"
 #include "DaneKontaktowe.h"
+#include <string>
+#include "Data.h"
+
 #include "AdresZamieszkania.h"
 #include "Egzemplarz.h"
+#include "Osoba.h"
 class Egzemplarz;
 class DaneKontaktowe;
-class Czytelnik {
+class Osoba;
+class Czytelnik: public Osoba {
 
 private:
+	//TUTAJ JEST BARDZO DZIWNY BLAD, NALEZY JESZCZE W DRUGIM PLIKU DOPISAC DO KONSTRUKTORA I WTEDY SIE ON POJAWIA
+	//DaneKontaktowe kontakt;
 	string id;
 	Egzemplarz** listaZaleglosci;
 	Data dataPierwszegoWypozyczenia;
@@ -18,8 +23,9 @@ private:
 	int iloscWypozyczonychOdDolaczenia;
 	string* preferowaneTematy;
 	Data dataDolaczenia;
-	DaneKontaktowe kontakt;
+	
 	AdresZamieszkania adres;
+	
 
 public:
 	string getId();
@@ -30,7 +36,7 @@ public:
 	int getIloscWypozyczonychOdDolaczenia();
 	string* getPreferowaneTematy();
 	int setPreferowaneTematy(string* tematy);
-	Egzemplarz* wypozyczKsiazke(Egzemplarz* ksiazka);
+	int wypozyczKsiazke(Egzemplarz* ksiazka);
 	int oddajKsiazke(Egzemplarz* ksiazka);
 	bool sprawdzDostepnoscKsiazki(Egzemplarz* ksiazka);
 	Egzemplarz** getWypozyczoneObecnie();
@@ -39,7 +45,7 @@ public:
 	int zarezerwujKsiazke(Egzemplarz* ksiazka);
 	Data getDataDolaczenia();
 	int setDaneKontaktowe(DaneKontaktowe dane);
-	int getDaneKontaktowe();
+	DaneKontaktowe getKontakt();
 	Czytelnik(string imie, string nazwisko, Data dataUrodzenia, string* preferowaneTematy);
 	Czytelnik(string imie, string nazwisko, Data dataUrodzenia);
 };

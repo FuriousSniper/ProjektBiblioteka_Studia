@@ -161,6 +161,7 @@
     <ClCompile Include="..\cpp\Ksiazka.cpp" />
     <ClCompile Include="..\cpp\Osoba.cpp" />
     <ClCompile Include="..\cpp\RejestrSpoznien.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

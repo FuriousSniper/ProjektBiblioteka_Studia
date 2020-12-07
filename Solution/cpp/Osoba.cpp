@@ -27,14 +27,10 @@ int Osoba::setWiek(int wiek) {
 	throw "Not yet implemented";
 }
 
-Osoba::Osoba(string imie, string nazwisko, Data dataUrodzenia) {
-	// TODO - implement Osoba::Osoba
-	throw "Not yet implemented";
+Osoba::Osoba(string imie, string nazwisko, Data dataUrodzenia):imie(imie),nazwisko(nazwisko),dataUrodzenia(dataUrodzenia){
 }
 
-Osoba::Osoba(string imie, string nazwisko) {
-	// TODO - implement Osoba::Osoba
-	throw "Not yet implemented";
+Osoba::Osoba(string imie, string nazwisko) : imie(imie), nazwisko(nazwisko) {
 }
 
 Data Osoba::getDataUrodzenia() {
