@@ -6,6 +6,4 @@ void AdresZamieszkania::printAdresZamieszkania() {
 }
 
 AdresZamieszkania::AdresZamieszkania(string miasto, string kodPocztowy, string ulica):miasto(miasto),kodPocztowy(kodPocztowy),ulica(ulica) {
-	// TODO - implement AdresZamieszkania::AdresZamieszkania
-	throw "Not yet implemented";
 }

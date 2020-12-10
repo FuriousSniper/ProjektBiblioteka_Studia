@@ -11,8 +11,6 @@ int Autor::dodajKsiazki(Ksiazka** ksiazki) {
 }
 
 Autor::Autor(string imie, string nazwisko, int d, int m, int r):Osoba(imie,nazwisko,d,m,r){
-	// TODO - implement Autor::Autor
-	throw "Not yet implemented";
 }
 
 Autor::Autor(string imie, string nazwisko, int d, int m, int r, Ksiazka* ksiazka): Osoba(imie, nazwisko, d, m, r){
