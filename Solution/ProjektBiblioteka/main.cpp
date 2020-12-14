@@ -7,10 +7,11 @@ using namespace std;
 int main() {
 	//utworzenie instancji obiektu Ui
 	Ui ui = Ui();
-	//Osoba o = ui.createOsoba();
-	//cout << o.getImie();
-	//Czytelnik c = ui.createCzytelnik();
-	//cout << c.getImie();
-	AdresZamieszkania a = ui.createAdres();
+	cout << "Witamy w programie Biblioteka" << endl;
+	int start = ui.signInUpMenu();
+	int login;
+	//cout << n << endl;
+	if (start == 1)
+		login = ui.chooseUserType();
 	return 0;
 }

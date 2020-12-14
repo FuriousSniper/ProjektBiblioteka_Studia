@@ -5,6 +5,8 @@
 #include "..\headers\Czytelnik.h"
 #include "..\headers\AdresZamieszkania.h"
 #include <string>
+#include <exception>
+using namespace std;
 
 Osoba Ui::createOsoba() {
 	Osoba o = Osoba("", "");
@@ -61,5 +63,45 @@ AdresZamieszkania Ui::createAdres() {
 	AdresZamieszkania a = AdresZamieszkania(miasto,kod,ulica);
 	cout<< "Pomyslnie utworzono: Adres" << endl;
 	return a;
+}
+int Ui::signInUpMenu() {
+	int n=0;
+	system("CLS");
+	while (n != 1 && n != 2&&n!=3) {
+		
+		cout << "Wybierz '1', aby sie zalogowac." << endl;
+		cout << "Wybierz '2', aby sie zarejestrowac." << endl;
+		cout << "Wybierz '3', aby wyjsc z programu." << endl;
+		//dodac error handling
+		cout << "Wybor: ";
+		cin >> n;
+		if (n == 3) {
+			cout<<"Zakonczono prace programu"<<endl;
+			return 0;
+		}
+		if (n != 1 && n != 2&&n!=3)
+			cout << "Wybierz poprawna wartosc" << endl;
+	}
+	return n;
+}
+int Ui::chooseUserType() {
+	int n = 0;
+	system("CLS");
+	//petla, ktora sprawia, ze w przypadku zlej odpowiedzi uzytkownik moze wprowadzic inna
+	while (n != 1 && n != 2 && n != 3) {
+		cout << "Wybierz '1', aby zalogowac sie na konto Czytelnika." << endl;
+		cout << "Wybierz '2', aby zalogowac sie na konto Bibliotekarza." << endl;
+		cout << "Wybierz '3', aby wyjsc z programu." << endl;
+		//dodac error handling
+		cout << "Wybor: ";
+		cin >> n;
+		if (n == 3) {
+			cout << "Zakonczono prace programu" << endl;
+			return 0;
+		}
+		if (n != 1 && n != 2 && n != 3)
+			cout << "Wybierz poprawna wartosc" << endl;
+	}
+	return n;
 }
 Ui::Ui() {}

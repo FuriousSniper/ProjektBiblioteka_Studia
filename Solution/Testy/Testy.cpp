@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 #include "..\headers\Osoba.h"
+#include "..\headers\Ui.h"
 #include <string>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -20,5 +21,18 @@ namespace Testy
 			*/
 		}
 		
+	};
+	TEST_CLASS(UiTests)
+	{
+	public:
+		TEST_METHOD(TestSignInUp) {
+			//test metody SignInUpMenu
+			/*
+			Ui ui = Ui();
+			int n = ui.signInUpMenu();
+
+			Assert::AreEqual(1, n);
+			*/
+		}
 	};
 }

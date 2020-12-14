@@ -26,6 +26,19 @@ public:
 	//funkcja do tworzenia obiektu klasy Adres przez uzytkownika
 	//zwraca ona obiekt, ktory tworzy
 	AdresZamieszkania createAdres();
+	
+	//funkcja do wyboru pierwszej akcji uzytkownika. 
+	//umozliwia wybranie logowania lub rejestracji
+	// 1 - logowanie
+	// 2 - rejestracja
+	// inne - blad
+	int signInUpMenu();
+
+	//funkcja w ktorej uzytkownik wybiera typ konta, na ktore sie loguje
+	// 1- czytelnik
+	// 2 - bibliotekarz
+	// inne - blad
+	int chooseUserType();
 	//konstruktor obiektu Ui pozwalajacego na korzystanie z funkcji
 	Ui();
 };

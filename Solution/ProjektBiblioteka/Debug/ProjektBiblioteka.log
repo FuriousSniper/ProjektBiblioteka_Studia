@@ -1,7 +1,2 @@
 ﻿  Ui.cpp
-  main.cpp
-C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(2,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(3,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(4,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-  Generowanie kodu...
   ProjektBiblioteka.vcxproj -> C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\Debug\ProjektBiblioteka.exe
