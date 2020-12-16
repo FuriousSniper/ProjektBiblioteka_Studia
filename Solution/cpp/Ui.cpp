@@ -9,7 +9,6 @@
 using namespace std;
 
 Osoba Ui::createOsoba() {
-	Osoba o = Osoba("", "");
 	string i;
 	string n;
 	int d;
@@ -22,14 +21,12 @@ Osoba Ui::createOsoba() {
 	cout << "Podaj imie: ";
 	cin >> i;
 	cout << endl;
-	o.setImie(i);
 	cout << "Podaj nazwisko: ";
 	cin >> n;
 	cout << endl;
-	o.setNazwisko(n);
 	cout << "Podaj date urodzenia (dd mm rrrr): ";
 	cin >> d >> m >> r;
-	o.setDataUrodzenia(d, m, r);
+	Osoba o = Osoba(i, n, d, m, r);
 	cout << "Pomyslnie utworzono: Osoba" << endl;
 	//zwracanie nowo-utworzonego obiektu
 	return o;

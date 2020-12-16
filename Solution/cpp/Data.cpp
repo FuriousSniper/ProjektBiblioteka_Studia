@@ -1,14 +1,14 @@
 #include "..\headers\Data.h"
 #include <iostream>
 
-void Data::printData() {
+void Data::printData() const {
 	cout << this->godzina << ":";
 
 	if (minuta < 10) {
 		cout << "0";
 	}
 
-	cout << this->minuta << " " << this->dzien << "." << this->miesiac << "." << this->rok << endl;
+	cout << this->minuta << " " << this->dzien << "." << this->miesiac << "." << this->rok <<"r."<< endl;
 }
 int Data::setDzien(int dzien) {
 	this->dzien = dzien;

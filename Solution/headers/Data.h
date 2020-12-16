@@ -11,7 +11,7 @@ public:
 	int godzina;
 	int minuta;
 
-	void printData();
+	void printData() const;
 	int setDzien(int dzien);
 	int getDzien();
 	int setMiesiac(int m);

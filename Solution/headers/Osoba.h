@@ -2,26 +2,30 @@
 #define OSOBA_H
 #include <string>
 #include "Data.h"
+
 using namespace std;
+
 class Osoba {
 
 private:
-	string imie;
-	string nazwisko;
+
+	const string imie;
+	const string nazwisko;
 	int wiek;
-	Data dataUrodzenia;
+	const Data dataUrodzenia;
 
 public:
+
+	//Wywali³em settery do pól sta³ych (wczeœniej nie by³y w ogóle sta³e, a logika wskazuje, ¿e powinny byæ)
+
 	string getNazwisko();
-	int setImie(string imie);
 	string getImie();
-	int setNazwisko(string nazwisko);
 	int getWiek();
 	int setWiek(int wiek);
-	void setDataUrodzenia(int, int, int);
 	Osoba(string imie, string nazwisko, int d, int m, int r);
 	Osoba(string imie, string nazwisko);
 	Data getDataUrodzenia();
+	void printOsoba();
 };
 
 #endif

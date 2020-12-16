@@ -24,8 +24,12 @@ int main() {
 	Data* data = new Data(12,12,2000, 14, 57);
 	data->printData();
 
+	Autor* autor = new Autor("Jan", "Kowalski", 20, 4, 1976);
+	autor->printOsoba();
+
 	delete adres;
 	delete data;
+	delete autor;
 
 	system("pause");
 
