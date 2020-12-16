@@ -60,7 +60,10 @@ AdresZamieszkania Ui::createAdres() {
 	string ulica;
 	cout << "Podaj ulice Twojego adresu zamieszkania: ";
 	cin >> ulica;
-	AdresZamieszkania a = AdresZamieszkania(miasto,kod,ulica);
+	cout << "Podaj numer Twojego mieszkania";
+	int numerMieszkania;
+	cin >> numerMieszkania;
+	AdresZamieszkania a = AdresZamieszkania(miasto,kod,ulica, numerMieszkania);
 	cout<< "Pomyslnie utworzono: Adres" << endl;
 	return a;
 }
