@@ -13,23 +13,14 @@ private:
 
 public:
 	string getNazwisko();
-
 	int setImie(string imie);
-
 	string getImie();
-
 	int setNazwisko(string nazwisko);
-
 	int getWiek();
-
 	int setWiek(int wiek);
-
 	void setDataUrodzenia(int, int, int);
-
 	Osoba(string imie, string nazwisko, int d, int m, int r);
-
 	Osoba(string imie, string nazwisko);
-
 	Data getDataUrodzenia();
 };
 

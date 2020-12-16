@@ -21,6 +21,12 @@ int main() {
 	AdresZamieszkania* adres = new AdresZamieszkania("Janow", "56-567", "Fiolkowa", 4);
 	adres->printAdresZamieszkania();
 
+	Data* data = new Data(12,12,2000, 14, 57);
+	data->printData();
+
+	delete adres;
+	delete data;
+
 	system("pause");
 
 	return 0;
