@@ -1,9 +1,9 @@
 #include "..\headers\AdresZamieszkania.h"
+#include <iostream>
 
 void AdresZamieszkania::printAdresZamieszkania() {
-	// TODO - implement AdresZamieszkania::printAdresZamieszkania
-	throw "Not yet implemented";
+	cout << "ul. " << ulica << " " << numerMieszkania << " " << miasto << " " << kodPocztowy << endl;
 }
 
-AdresZamieszkania::AdresZamieszkania(string miasto, string kodPocztowy, string ulica):miasto(miasto),kodPocztowy(kodPocztowy),ulica(ulica) {
-}
+AdresZamieszkania::AdresZamieszkania(string miasto, string kodPocztowy, string ulica, int numerMieszkania) : miasto(miasto), kodPocztowy(kodPocztowy), ulica(ulica), numerMieszkania(numerMieszkania) {};
+

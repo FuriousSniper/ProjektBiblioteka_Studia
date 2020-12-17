@@ -1,8 +1,14 @@
 #include "..\headers\Data.h"
+#include <iostream>
 
-void Data::printData() {
-	// TODO - implement Data::printData
-	throw "Not yet implemented";
+void Data::printData() const {
+	cout << this->godzina << ":";
+
+	if (minuta < 10) {
+		cout << "0";
+	}
+
+	cout << this->minuta << " " << this->dzien << "." << this->miesiac << "." << this->rok <<"r."<< endl;
 }
 int Data::setDzien(int dzien) {
 	this->dzien = dzien;
@@ -25,9 +31,6 @@ int Data::setRok(int r) {
 int Data::getRok() {
 	return this->rok;
 }
-Data::Data():dzien(0),miesiac(0),rok(0),godzina(0),minuta(0) {
-
-}
-Data::Data(int dzien, int miesiac, int rok) : dzien(dzien), miesiac(miesiac), rok(rok), godzina(0), minuta(0) {
-
-}
+Data::Data():dzien(0),miesiac(NULL),rok(NULL),godzina(0),minuta(0) {}
+Data::Data(int dzien, int miesiac, int rok) : dzien(dzien), miesiac(miesiac), rok(rok), godzina(0), minuta(0) {}
+Data::Data(int dzien, int miesiac, int rok, int godzina, int minuta) : dzien(dzien), miesiac(miesiac), rok(rok), godzina(godzina), minuta(minuta) {}

@@ -76,9 +76,9 @@ DaneKontaktowe Czytelnik::getKontakt() {
 }
 */
 //  ,kontakt("", "")
-Czytelnik::Czytelnik(string imie, string nazwisko, int d, int m, int r, string* preferowaneTematy):Osoba(imie,nazwisko, d, m,r),preferowaneTematy(preferowaneTematy),adres("","","") {
+Czytelnik::Czytelnik(string imie, string nazwisko, int d, int m, int r, string* preferowaneTematy):Osoba(imie,nazwisko, d, m,r),preferowaneTematy(preferowaneTematy),adres("","","",0) {
 }
 //  ,kontakt("", "")
-Czytelnik::Czytelnik(string imie, string nazwisko, int d, int m, int r):Osoba(imie,nazwisko, d,m,r), adres("", "", "") {
+Czytelnik::Czytelnik(string imie, string nazwisko, int d, int m, int r):Osoba(imie,nazwisko, d,m,r), adres("", "", "",0) {
 
 }

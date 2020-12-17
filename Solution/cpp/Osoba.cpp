@@ -1,46 +1,41 @@
 #include "..\headers\Osoba.h"
+#include <iostream>
 
 string Osoba::getNazwisko() {
 	return this->nazwisko;
-}
-
-int Osoba::setImie(string imie) {
-	this->imie = imie;
-	return 1;
 }
 
 string Osoba::getImie() {
 	return this->imie;
 }
 
-int Osoba::setNazwisko(string nazwisko) {
-	this->nazwisko = nazwisko;
-	return 1;
-}
-
 int Osoba::getWiek() {
 	return this->wiek;
-}
-
-int Osoba::setWiek(int wiek) {
-	this->wiek = wiek;
-	return wiek;
 }
 
 Data Osoba::getDataUrodzenia() {
 	return this->dataUrodzenia;
 }
 
-void Osoba::setDataUrodzenia(int d, int m, int r) {
-	Data D = Data(d, m, r);
-	this->dataUrodzenia =D;
+int Osoba::setWiek(int wiek) {
+	this->wiek = wiek;
+	return this->wiek;
 }
 
-Osoba::Osoba(string imie, string nazwisko, int d, int m, int r):imie(imie),nazwisko(nazwisko){
-	setDataUrodzenia(d, m, r);
+void Osoba::printOsoba() {
+	
+	//TODO: uwzglêdnienie drukowania wieku (na razie ze wzglêdu na brak inicjalizacji pola tego nie robi).
+
+	cout << this->imie << " " << this->nazwisko << ", data urodzenia: ";
+	dataUrodzenia.printData();
 }
 
-Osoba::Osoba(string imie, string nazwisko) : imie(imie), nazwisko(nazwisko) {
+Osoba::Osoba(string imie, string nazwisko, int d, int m, int r):imie(imie),nazwisko(nazwisko), dataUrodzenia(Data(d,m,r)){
+
+	//TODO: obliczanie wieku osoby na podstawie daty urodzenia.
+}
+
+Osoba::Osoba(string imie, string nazwisko) : imie(imie), nazwisko(nazwisko),dataUrodzenia(Data()), wiek(0) {
 }
 
 
