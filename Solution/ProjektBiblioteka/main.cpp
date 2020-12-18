@@ -3,6 +3,8 @@
 #include "..\headers\Ui.h";
 #include "..\headers\Autor.h";
 #include "..\headers\AdresZamieszkania.h";
+#include "Libraries/sqlite3/sqlite3.h";
+
 using namespace std;
 
 int main() {
