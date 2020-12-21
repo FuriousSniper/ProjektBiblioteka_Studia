@@ -55,7 +55,7 @@ int Egzemplarz::getIloscStron() {
 	//TODO
 	return iloscStron;
 }
-int Egzemplarz::getNumerISBN() {
+string Egzemplarz::getNumerISBN() {
 	//TODO
 	return numerISBN;
 }
@@ -63,9 +63,9 @@ string Egzemplarz::getWydawnictwo() {
 	//TODO
 	return wydawnictwo;
 }
-Egzemplarz::Egzemplarz(int iloscStron, int nrISBN, string wydawnictwo, Data dataZakupu) {
+Egzemplarz::Egzemplarz(int iloscStron, string nrISBN, string wydawnictwo, Data dataZakupu):iloscStron(iloscStron), numerISBN(nrISBN),wydawnictwo(wydawnictwo),dataZakupu(dataZakupu){
 	//TODO
 }
-Egzemplarz::Egzemplarz(int iloscStron, int nrISBN, string wydawnictwo) {
+Egzemplarz::Egzemplarz(int iloscStron, string nrISBN, string wydawnictwo) : iloscStron(iloscStron), numerISBN(nrISBN), wydawnictwo(wydawnictwo) {
 	//TODO
 }

@@ -23,3 +23,12 @@ public:
 };
 
 #endif
+
+//w bazie danych AUTOR
+/*
+	ID INT PRIMARY        KEY      NOT NULL,"	
+	imie				   TEXT				,"	//imie autora
+	nazwisko			   TEXT				,"	//nazwisko autora
+	dataUrodzenia		   DATE				,"	//data urodzenia autora
+	ksiazki				   TEXT					//tytuly ksiazek ktore autor napisal. wpisywac z delimiterem "||"
+*/

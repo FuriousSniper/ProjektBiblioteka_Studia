@@ -1,0 +1,150 @@
+//tworzenie nowej tabeli
+
+sqlite3* db;
+	int rc; // This line
+	const char* sql; // This line
+	rc = sqlite3_open("main_db.db", &db);
+	char* error=NULL;
+	// Create SQL statement 
+	sql = "CREATE TABLE CZYTELNIK("
+		"ID INT PRIMARY        KEY      NOT NULL,"
+		"listaZaleglosci       TEXT     ,"
+		"dataPierwszegoWypozyczenia     DATE     ,"
+		"iloscWypozyczonychOdDolaczenia  INT             ,"
+		"preferowaneTematy     TEXT             ,"
+		"dataDolaczenia        DATE             ,"
+		"miasto				   TEXT             ,"
+		"kodPocztowy           TEXT             ,"
+		"ulica                 TEXT             ,"
+
+		"imie                  TEXT             ,"
+		"nazwisko              TEXT             ,"
+		"wiek                  TEXT             ,"
+		"dataUrodzenia         DATE             ,"
+		"numerMieszkania       TEXT             );";
+
+	// Execute SQL statement 
+	rc = sqlite3_exec(db, sql,NULL,NULL,&error);
+	if (rc != SQLITE_OK) {
+		std::cerr << "Error Create Table" << std::endl;
+		cout << error << endl;
+		sqlite3_free(error);
+	}
+	else
+		std::cout << "Table created Successfully" << std::endl;
+	sqlite3_close(db);
+//=======================================================================================================
+//sprawdzanie czy tabela sie utworzyla poprawnie
+sqlite3* db;
+	sqlite3_stmt* stmt;
+
+	sqlite3_open("main_db.db", &db);
+
+	if (db == NULL)
+	{
+		printf("Failed to open DB\n");
+		return 1;
+	}
+
+	printf("Performing query...\n");
+	sqlite3_prepare_v2(db, "select * from CZYTELNIK", -1, &stmt, NULL);
+
+	printf("Got results:\n");
+	sqlite3_step(stmt);
+	int num_cols = sqlite3_column_count(stmt);
+	cout << num_cols << endl;
+	for (int i = 0; i < num_cols; i++) {
+		cout << sqlite3_column_name(stmt, i)<<"    ";
+		cout << sqlite3_column_decltype(stmt, i) << endl;
+	}
+	sqlite3_finalize(stmt);
+
+
+//=========================================================================================================
+
+//dodawanie rekordu do tabeli i sprawdzanie jej zawartosci
+
+sqlite3* db;
+	sqlite3_stmt* stmt;
+	char* error;
+	sqlite3_open("main_db.db", &db);
+
+	if (db == NULL)
+	{
+		printf("Failed to open DB\n");
+		return 1;
+	}
+	const char* sql;
+	sql = "INSERT INTO "
+		"CZYTELNIK("
+		"	ID,"
+		"	listaZaleglosci,"
+		"	dataPierwszegoWypozyczenia,"
+		"	iloscWypozyczonychOdDolaczenia,"
+		"	preferowaneTematy,"
+		"	dataDolaczenia,"
+		"	miasto,"
+		"	kodPocztowy,"
+		"	ulica,"
+		"	imie,"
+		"	nazwisko,"
+		"	wiek,"
+		"	dataUrodzenia,"
+		"	haslo,"
+		"	numerMieszkania"
+		") "
+		"VALUES ("
+		"	0002,"
+		"	'',"
+		"	'',"
+		"	0,"
+		"	'',"
+		"	DATE(),"
+		"		'Krakow',"
+		"		'31-356',"
+		"		'Dluga',"
+		"		'Niko',"
+		"		'Kovac',"
+		"		26,"
+		"		'1994 - 5 - 11',"
+		"		'Kovac',"
+		"		17"
+		"	);";
+	sqlite3_exec(db, sql, NULL, NULL, &error);
+	if (error != SQLITE_OK)
+		cout << "blad: "<<error << endl;
+
+	printf("Performing query...\n");
+	sqlite3_prepare_v2(db, "select * from CZYTELNIK", -1, &stmt, NULL);
+
+	printf("Got results:\n");
+	bool done = false;
+	int row = 0;
+	int bytes;
+	const unsigned char* text;
+	while (!done) {
+		//printf("In select while\n");
+		switch (sqlite3_step(stmt)) {
+		case SQLITE_ROW:
+			//bytes = sqlite3_column_bytes(stmt, 0);
+			for (int i= 0; i < sqlite3_column_count(stmt); i++) {
+				cout<<sqlite3_column_name(stmt, i) << ": ";
+				cout<<sqlite3_column_text(stmt, i)<<endl;
+			}
+			cout << endl;
+
+			row++;
+			break;
+
+		case SQLITE_DONE:
+			done = true;
+			break;
+
+		default:
+			fprintf(stderr, "Failed.\n");
+			return 1;
+		}
+	}
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+	system("pause");

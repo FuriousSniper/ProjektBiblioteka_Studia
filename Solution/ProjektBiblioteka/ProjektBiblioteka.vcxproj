@@ -150,6 +150,8 @@
     <ClInclude Include="..\headers\Osoba.h" />
     <ClInclude Include="..\headers\RejestrSpoznien.h" />
     <ClInclude Include="..\headers\Ui.h" />
+    <ClInclude Include="Libraries\sqlite3\sqlite3.h" />
+    <ClInclude Include="Libraries\sqlite3\sqlite3ext.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\cpp\AdresZamieszkania.cpp" />
@@ -163,7 +165,18 @@
     <ClCompile Include="..\cpp\Osoba.cpp" />
     <ClCompile Include="..\cpp\RejestrSpoznien.cpp" />
     <ClCompile Include="..\cpp\Ui.cpp" />
+    <ClCompile Include="Libraries\sqlite3\shell.c" />
+    <ClCompile Include="Libraries\sqlite3\sqlite3.c" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Testy\Testy.vcxproj">
+      <Project>{82d3a529-bfaa-49c7-86ef-39947bc654bd}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="expenses.db" />
+    <None Include="main_db.db" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

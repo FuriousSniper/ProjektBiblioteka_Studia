@@ -10,7 +10,7 @@ class Egzemplarz {
 
 private:
 	int iloscStron;
-	int numerISBN;
+	string numerISBN;
 	string wydawnictwo;
 	Data dataZakupu;
 	Czytelnik* osobaWyp;
@@ -35,11 +35,24 @@ public:
 	void setPrzetrzymany(int p);
 	Data getDataZakupu();
 	int getIloscStron();
-	int getNumerISBN();
+	string getNumerISBN();
 	string getWydawnictwo();
-	Egzemplarz(int iloscStron, int nrISBN, string wydawnictwo, Data dataZakupu);
-	Egzemplarz(int iloscStron, int nrISBN, string wydawnictwo);
+	Egzemplarz(int iloscStron, string nrISBN, string wydawnictwo, Data dataZakupu);
+	Egzemplarz(int iloscStron, string nrISBN, string wydawnictwo);
 
 };
 
 #endif
+//w bazie danych EGZEMPLARZE
+/*
+ ID				INT PRIMARY        KEY      NOT NULL,	//id w bazie danych
+ iloscStron		INT		NOT NULL;	//ilosc stron ksiazki
+ numerISBN		TEXT	NOT NULL	//nr isbn ksiazki
+ wydawnictwo	TEXT				//nazwa wydawnictwa
+ osobaWyp		TEXT				//ID czytelnika, ktory wypozyczyl ksiazke (z bazy danych)
+dataWyp			DATE				//data, w ktorej czytelnik wypozyczyl ksiazke
+dataOdd			DATE				//data, do ktorej przedluzajacy ma oddac ksiazke
+przedluzony		BOOLEAN				//czy ksiazka jest przedluzona?
+przetrzymany	INT					//ilosc dni, ktora osoba wypozyczajaca przetrzymala ksiazke po zakonczeniu terminu
+ksiazka			TEXT				//tytul ksiazki
+*/

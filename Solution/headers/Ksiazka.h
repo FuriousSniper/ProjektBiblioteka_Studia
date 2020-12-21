@@ -38,3 +38,13 @@ public:
 };
 
 #endif
+
+//w bazie danych KSIAZKA
+/*
+ID				INT		//id w bazie danych
+tytul			TEXT	//tytul ksiazki
+autorzy			TEXT	//autorzy ksiazki. moze byc kilku. wpisywac z delimiterem "||". przyklad: "Sasha Kostylev||Niko Kovac"
+kategoria		TEXT	//kategoria ksiazki, np. romans, przygodowa, podroznicza
+egzemplarze		TEXT	//nr isbn poszczegolnych egzemplarzy (odpowiada tym z tabeli EGZEMPLARZE). wpisywac z delimiterem "||"
+dataPremiery	DATE	//data premiery ksiazki
+*/

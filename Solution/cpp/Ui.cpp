@@ -4,6 +4,7 @@
 #include "..\headers\Autor.h"
 #include "..\headers\Czytelnik.h"
 #include "..\headers\AdresZamieszkania.h"
+#include "../ProjektBiblioteka/Libraries/sqlite3/sqlite3.h";
 #include <string>
 #include <exception>
 using namespace std;

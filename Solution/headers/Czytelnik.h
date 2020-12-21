@@ -52,3 +52,22 @@ public:
 };
 
 #endif
+
+//w bazie danych CZYTELNIK
+/*
+	"ID INT PRIMARY        KEY      NOT NULL,"
+	"listaZaleglosci       TEXT     ,"
+	"dataPierwszegoWypozyczenia     DATE     ,"
+	"iloscWypozyczonychOdDolaczenia  INT             ,"
+	"preferowaneTematy     TEXT             ,"
+	"dataDolaczenia        DATE             ,"
+	"miasto				   TEXT             ,"
+	"kodPocztowy           TEXT             ,"
+	"ulica                 TEXT             ,"
+	"imie                  TEXT             ,"
+	"nazwisko              TEXT             ,"
+	"wiek                  TEXT             ,"
+	"dataUrodzenia         DATE             ,"
+	"haslo				   TEXT				,"
+	"numerMieszkania       TEXT             );";
+*/
