@@ -181,3 +181,62 @@ bool Ui::confirmVerification() {
 		}
 	}
 }
+bool Ui::addBook() {
+	system("CLS");
+	cout << "Dodawanie ksiazki" << endl;
+
+	string tytul="";
+	string autorzy="";
+	string tagi = "";
+	string kategoria="";
+	string egzemplarze="";
+	int d, m, r;
+
+	cout << "Podaj tytul\nTytul: ";
+	//uzywam getline, zeby pozwolic na spizywanie tytulow ze spacjami.
+	getline(cin, tytul);
+	cout<< "Podaj autorow. Jesli wielu, wpisywac ze znakami specjalnymi \" || \" pomiedzy. Przyklad: \"Sasha Kostylev || Niko Kovac\" \nAutorzy: ";
+	getline(cin, autorzy);
+	cout << "Podaj tagi. Jesli kilka, wpisywac ze znakami specjalnymi \" || \" pomiedzy.\nTagi: ";
+	getline(cin, tagi);
+	cout << "Podaj kategorie\nKategoria: ";
+	getline(cin, kategoria);
+	cout << "Podaj numery ISBN egzemplarzy. Jesli kilka, wpisywac ze znakami specjalnymi \" || \" pomiedzy. Przyklad: 978-83-246-3342-5||978-83-61040-85-9\nNumery: ";
+	getline(cin, egzemplarze);
+	cout << "Podaj date wydania (dd mm rrrr): ";
+	cin >> d >> m >> r;
+	if (tytul != "" && kategoria != "") {
+		//dodawanie nowej ksiazki do tabeli
+		sqlite3* db;
+		sqlite3_stmt* stmt;
+		char* error;
+		sqlite3_open("main_db.db", &db);
+		if (db == NULL)
+		{
+			printf("Blad przy otwieraniu bazy danych\n");
+			return 1;
+		}
+
+		string sql2;
+		sql2 = "INSERT INTO "
+			"KSIAZKA (tytul,autorzy,tagi,kategoria,egzemplarze,dataPremiery) "
+			"VALUES ('" +
+			tytul + "','" +
+			autorzy + "','" +
+			tagi + "','" +
+			kategoria + "','" +
+			egzemplarze + "','" +
+			to_string(d) + "-" +
+			to_string(m) + "-" +
+			to_string(r) +
+			"'	);";
+		sqlite3_exec(db, sql2.c_str(), NULL, NULL, &error);
+		if (error != SQLITE_OK) {
+			cout << "blad: " << error << endl;
+			system("pause");
+		}
+	}
+	else {
+		cout << "Pola \'tytul\' i \'kategoria\' nie moga byc puste!" << endl;
+	}
+}

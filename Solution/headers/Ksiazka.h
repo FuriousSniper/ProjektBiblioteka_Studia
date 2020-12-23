@@ -44,6 +44,7 @@ public:
 ID				INT		//id w bazie danych
 tytul			TEXT	//tytul ksiazki
 autorzy			TEXT	//autorzy ksiazki. moze byc kilku. wpisywac z delimiterem "||". przyklad: "Sasha Kostylev||Niko Kovac"
+tagi			TEXT	//tagi ksiazki. przyklad - biznes, bestseller, itd. wpisywac z ||
 kategoria		TEXT	//kategoria ksiazki, np. romans, przygodowa, podroznicza
 egzemplarze		TEXT	//nr isbn poszczegolnych egzemplarzy (odpowiada tym z tabeli EGZEMPLARZE). wpisywac z delimiterem "||"
 dataPremiery	DATE	//data premiery ksiazki

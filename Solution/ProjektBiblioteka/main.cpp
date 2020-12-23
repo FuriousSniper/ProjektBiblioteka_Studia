@@ -8,24 +8,6 @@
 using namespace std;
 
 int main() {
-	//EGZEMPLARZ, KSIAZKA, CZYTELNIK GOTOWE
-	/*
-	string id;
-	Egzemplarz** listaZaleglosci;
-	Data dataPierwszegoWypozyczenia;
-	int iloscWypozyczonychObecnie;
-	int iloscWypozyczonychOdDolaczenia;
-	string* preferowaneTematy;
-	Data dataDolaczenia;
-	string miasto;
-	string kodPocztowy;
-	string ulica;
-	int numerMieszkania;
-	const string imie;
-	const string nazwisko;
-	int wiek;
-	const Data dataUrodzenia;
-	*/
 	Ui ui = Ui();
 	sqlite3* db;
 	sqlite3_stmt* stmt;
@@ -108,6 +90,7 @@ int main() {
 			return 1;
 		}
 	}*/
+	
 	for (;;) {
 		int tryb = ui.signInUpMenu();
 		if (tryb == 1) {
@@ -143,7 +126,7 @@ int main() {
 					sql2 = "INSERT INTO "
 						"CZYTELNIK "
 						"VALUES ("
-						"	0003,"			//DO IMPLEMENTACJI - ID 
+						"	'',"			
 						"	'',"			//RESZTA ZOSTAJE PUSTA
 						"	'',"			//BO UZYTKOWNIK NIC JESZCZE NIE WYPOZYCZYL
 						"	0,"
@@ -180,6 +163,7 @@ int main() {
 			break;
 		}
 	}
+	
 		sqlite3_close(db);
 		system("pause");
 	

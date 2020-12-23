@@ -45,6 +45,8 @@ public:
 	//funkcja w ktorej uzytkownik wybiera typ konta, na ktore sie rejestruje
 	int chooseUserTypeRegistration();
 	bool confirmVerification();
+
+	bool addBook();
 };
 
 #endif

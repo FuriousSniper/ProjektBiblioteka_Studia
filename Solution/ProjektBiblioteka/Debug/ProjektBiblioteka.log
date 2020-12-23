@@ -1,9 +1,9 @@
 ﻿  main.cpp
-C:\Users\samix\Desktop\Projekt Biblioteka\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(2,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\samix\Desktop\Projekt Biblioteka\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(3,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\samix\Desktop\Projekt Biblioteka\ProjektBiblioteka_Studia\Solution\headers\Ui.h(8,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\samix\Desktop\Projekt Biblioteka\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(4,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\samix\Desktop\Projekt Biblioteka\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(5,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\samix\Desktop\Projekt Biblioteka\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(6,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\samix\Desktop\Projekt Biblioteka\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(31,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
-  ProjektBiblioteka.vcxproj -> C:\Users\samix\Desktop\Projekt Biblioteka\ProjektBiblioteka_Studia\Solution\Debug\ProjektBiblioteka.exe
+C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(2,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
+C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(3,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
+C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\headers\Ui.h(8,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
+C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(4,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
+C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(5,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
+C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(6,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
+C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(13,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
+  ProjektBiblioteka.vcxproj -> C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\Debug\ProjektBiblioteka.exe
