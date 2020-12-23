@@ -26,7 +26,7 @@ int main() {
 	int wiek;
 	const Data dataUrodzenia;
 	*/
-	
+	Ui ui = Ui();
 	sqlite3* db;
 	sqlite3_stmt* stmt;
 	char* error;
@@ -36,7 +36,7 @@ int main() {
 	{
 		printf("Failed to open DB\n");
 		return 1;
-	}
+	}/*
 	const char* sql;
 	sql = "INSERT INTO "
 		"CZYTELNIK("
@@ -107,10 +107,81 @@ int main() {
 			fprintf(stderr, "Failed.\n");
 			return 1;
 		}
+	}*/
+	for (;;) {
+		int tryb = ui.signInUpMenu();
+		if (tryb == 1) {
+			//TRYB LOGOWANIA
+			int acc_type = ui.chooseUserType();
+			if (acc_type == 3)
+				continue;
+			else if (acc_type == 0)
+				break;
+			else if (acc_type == 1) {
+				//LOGOWANIE CZYTELNIKA
+			}
+			else {
+				//LOGOWANIE BIBLIOTEKARZA
+			}
+		}
+		else if (tryb == 2) {
+			//TRYB REJESTRACJI
+			int acc_type2 = ui.chooseUserTypeRegistration();
+			if (acc_type2 == 0)
+				break;
+			else if (acc_type2 == 3)
+				continue;
+			else if (acc_type2 == 1) {
+				//REJESTRACJA CZYTELNIKA
+				Czytelnik new_user = ui.createCzytelnik();
+				new_user.setAdresZamieszkania(ui.createAdres());
+				new_user.printInfo();
+				//WERYFIKACJA POPRAWNOSCI WPROWADZONYCH DANYCH
+				if (ui.confirmVerification() == true) {
+					//DODANIE CZYTELNIKA DO BAZY DANYCH
+					string sql2;
+					sql2 = "INSERT INTO "
+						"CZYTELNIK "
+						"VALUES ("
+						"	0003,"			//DO IMPLEMENTACJI - ID 
+						"	'',"			//RESZTA ZOSTAJE PUSTA
+						"	'',"			//BO UZYTKOWNIK NIC JESZCZE NIE WYPOZYCZYL
+						"	0,"
+						"	'',"
+						"	DATE(),'"+
+						new_user.getAdres().getMiasto()+"','"+
+						new_user.getAdres().getKodPocztowy()+"','"+
+						new_user.getAdres().getUlica()+"','"+
+						new_user.getImie()+"','"+
+						new_user.getNazwisko()+"','"+
+						to_string(new_user.getWiek())+"','"+
+						to_string(new_user.getDataUrodzenia().getDzien())+"-"+
+						to_string(new_user.getDataUrodzenia().getMiesiac())+"-"+ //DO UJEDNOLICENIA
+						to_string(new_user.getDataUrodzenia().getRok())+"','"+	 //FORMAT WYSWIETLANIA DATY
+						to_string(new_user.getAdres().getNumerMieszkania())+"','"+
+						new_user.getHaslo()+"'"
+						"	);";
+					sqlite3_exec(db, sql2.c_str(), NULL, NULL, &error);
+					if (error != SQLITE_OK) {
+						cout << "blad: " << error << endl;
+						system("pause");
+					}
+				}
+				else {
+					continue;
+				}
+			}
+			else {
+				//REJESTRACJA BIBLIOTEKARZA
+			}
+		}
+		else {
+			//POTENCJALNY ERROR HANDLING
+			break;
+		}
 	}
-	sqlite3_finalize(stmt);
-	sqlite3_close(db);
-	system("pause");
+		sqlite3_close(db);
+		system("pause");
 	
 	return 0;
 }

@@ -1,5 +1,6 @@
 #include "..\headers\Czytelnik.h"
 #include <string>
+#include <iostream>
 #include "..\headers\Data.h"
 #include "..\headers\DaneKontaktowe.h"
 #include "..\headers\AdresZamieszkania.h"
@@ -60,6 +61,29 @@ int Czytelnik::zarezerwujKsiazke(Egzemplarz* ksiazka) {
 }
 Data Czytelnik::getDataDolaczenia() {
 	return dataDolaczenia;
+}
+int Czytelnik::setAdresZamieszkania(AdresZamieszkania newAdress) {
+	this->adres.miasto = newAdress.miasto;
+	this->adres.kodPocztowy = newAdress.kodPocztowy;
+	this->adres.ulica = newAdress.ulica;
+	this->adres.numerMieszkania = newAdress.numerMieszkania;
+	return 0;
+}
+void Czytelnik::printInfo() {
+	cout << "\nWyswietlanie informacji o uzytkowniku z ID: " << this->getId() << endl;
+	cout << this->getImie() << " " << this->getNazwisko() << ", wiek: " << this->getWiek()<<" lat" << endl;
+	cout << this->adres.ulica << "/" << this->adres.numerMieszkania << endl;
+	cout << this->adres.kodPocztowy << " " << this->adres.miasto << endl;
+}
+void Czytelnik::setHaslo(string newHaslo) {
+	this->haslo = newHaslo;
+}
+
+AdresZamieszkania Czytelnik::getAdres() {
+	return this->adres;
+}
+string Czytelnik::getHaslo() {
+	return this->haslo;
 }
 /*
 int Czytelnik::setDaneKontaktowe(DaneKontaktowe dane) {

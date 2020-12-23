@@ -16,16 +16,15 @@ class Czytelnik: public Osoba {
 private:
 	//TUTAJ JEST BARDZO DZIWNY BLAD, NALEZY JESZCZE W DRUGIM PLIKU DOPISAC DO KONSTRUKTORA I WTEDY SIE ON POJAWIA
 	//DaneKontaktowe kontakt;
-	string id;
+	const string id;
 	Egzemplarz** listaZaleglosci;
 	Data dataPierwszegoWypozyczenia;
 	int iloscWypozyczonychObecnie;
 	int iloscWypozyczonychOdDolaczenia;
 	string* preferowaneTematy;
 	Data dataDolaczenia;
-	
 	AdresZamieszkania adres;
-	
+	string haslo;
 
 public:
 	string getId();
@@ -46,9 +45,13 @@ public:
 	Data getDataDolaczenia();
 	int setDaneKontaktowe(DaneKontaktowe dane);
 	DaneKontaktowe getKontakt();
+	int setAdresZamieszkania(AdresZamieszkania newAdress);
 	Czytelnik(string imie, string nazwisko, int d, int m, int r);
 	Czytelnik(string imie, string nazwisko, int d, int m, int r, string* preferowaneTematy);
-	
+	void printInfo();
+	void setHaslo(string newHaslo);
+	AdresZamieszkania getAdres();
+	string getHaslo();
 };
 
 #endif

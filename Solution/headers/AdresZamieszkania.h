@@ -14,6 +14,10 @@ public:
 
 	void printAdresZamieszkania();
 	AdresZamieszkania(string, string, string, int);
+	string getMiasto();
+	string getKodPocztowy();
+	string getUlica();
+	int getNumerMieszkania();
 };
 
 #endif
