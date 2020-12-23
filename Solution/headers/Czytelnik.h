@@ -58,7 +58,7 @@ public:
 
 //w bazie danych CZYTELNIK
 /*
-	"ID INT PRIMARY        KEY      NOT NULL,"
+	"ID INT PRIMARY        KEY      ,"
 	"listaZaleglosci       TEXT     ,"
 	"dataPierwszegoWypozyczenia     DATE     ,"
 	"iloscWypozyczonychOdDolaczenia  INT             ,"
