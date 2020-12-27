@@ -46,7 +46,11 @@ public:
 	int chooseUserTypeRegistration();
 	bool confirmVerification();
 
+	//funkcja dodajaca ksiazke do biblioteki.
+	//po callu wymagane jest wpisanie tytulu i kategorii, aby dodac ksiazke
 	bool addBook();
+
+	int getBooks();
 };
 
 #endif

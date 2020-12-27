@@ -240,3 +240,112 @@ bool Ui::addBook() {
 		cout << "Pola \'tytul\' i \'kategoria\' nie moga byc puste!" << endl;
 	}
 }
+
+int Ui::getBooks() {
+	system("CLS");
+	cout << "Przegladanie ksiazek\n" << endl;
+		//wyswietlanie ksiazek w zwyklym formacie
+		sqlite3* db;
+		sqlite3_stmt* stmt;
+		const char* sql2;
+		sql2 = "SELECT tytul, autorzy from KSIAZKA;";
+		char* error;
+		sqlite3_open("main_db.db", &db);
+		if (db == NULL)
+		{
+			printf("Blad przy otwieraniu bazy danych\n");
+			return 1;
+		}
+		for (;;) {
+			//wypisywanie wszystkich ksiazek
+			sqlite3_prepare_v2(db, sql2, -1, &stmt, NULL);
+			bool done = false;
+			string opt;
+			int row = 0;
+			while (!done) {
+				switch (sqlite3_step(stmt)) {
+				case SQLITE_ROW:
+					for (int i = 0; i < sqlite3_column_count(stmt); i++) {
+						cout << sqlite3_column_name(stmt, i) << ": ";
+						if (sqlite3_column_text(stmt, i) != NULL)
+							cout << sqlite3_column_text(stmt, i) << endl;
+					}
+					cout << endl;
+
+					row++;
+					break;
+
+				case SQLITE_DONE:
+					done = true;
+					break;
+
+				default:
+					fprintf(stderr, "Failed.\n");
+					return 1;
+				}
+			}
+			sqlite3_finalize(stmt);
+			cout << "Wpisz tytul ksiazki, aby ja wypozyczyc. \nWpisz \'1\', aby dowiedziec sie, ile ksiazek jest wypozyczonych na Twoim koncie.\nWpisz \'2\', aby posortowac liste wzgledem tytulow.\nWpisz \'3\', aby posortowac liste wzgledem autorow\nWpisz \'4\', aby wyjsc z menu\n";
+			cout << "Wybor: ";
+			getline(cin, opt);
+			if (opt == "1") {
+				//pokazuje ilosc wypozyczonych ksiazek przez czytelnika
+				system("CLS");
+				cout << "Ilosc wypozyczonych ksiazek na Twoim koncie to " << endl;
+				//TODO=========================================
+			}
+			if (opt == "2") {
+				//sortuje ksiazki wzgledem tytulow
+				system("CLS");
+				cout << "Sortowanie wzgledem tytulow " << endl;
+				sql2 = "SELECT tytul, autorzy from KSIAZKA ORDER BY tytul ASC;";
+			}
+			if (opt == "3") {
+				//sortuje ksiazki wzgledem autorow
+				system("CLS");
+				cout << "Sortowanie wzgledem autorow " << endl;
+				sql2 = "SELECT tytul, autorzy from KSIAZKA ORDER BY autorzy ASC;";
+			}
+			if (opt == "4") {
+				//wyjscie z programu
+				return 1;
+			}
+			else {
+				//TODO
+				cout << "Probujesz wypozyczyc ksiazke o tytule: " << opt << endl;
+					//if(Czytelnik.getIloscWypozyczonych) ==========================================
+				string sql = "SELECT * FROM KSIAZKA WHERE tytul='" + opt + "';";
+				sqlite3_stmt* stmt2;
+				done = false;
+				sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt2, NULL);
+				//kontrolne wypisywanie, tutaj cos sie robi...
+				while (!done) {
+					cout << "wypisywanie" << endl;
+					switch (sqlite3_step(stmt2)) {
+					case SQLITE_ROW:
+						for (int i = 0; i < sqlite3_column_count(stmt2); i++) {
+							cout << sqlite3_column_name(stmt2, i) << ": ";
+							if (sqlite3_column_text(stmt2, i) != NULL)
+								cout << sqlite3_column_text(stmt2, i) << endl;
+						}
+						cout << endl;
+
+						row++;
+						break;
+
+					case SQLITE_DONE:
+						done = true;
+						break;
+
+					default:
+						fprintf(stderr, "Failed.\n");
+						return 1;
+					}
+				}
+				sqlite3_finalize(stmt2);
+				//wypozycza ksiazke o wskazanym tytule (jesli takiej nie ma, to sygnalizuje blad
+			}
+		}
+		sqlite3_finalize(stmt);
+		sqlite3_close(db);
+}
