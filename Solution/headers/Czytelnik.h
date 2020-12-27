@@ -72,5 +72,9 @@ public:
 	"wiek                  TEXT             ,"
 	"dataUrodzenia         DATE             ,"
 	"haslo				   TEXT				,"
-	"numerMieszkania       TEXT             );";
+	"numerMieszkania       TEXT             
+	"ksiazka1			   TEXT				,"
+	"ksiazka2			   TEXT				,"
+	"ksiazka3			   TEXT				,"
+	);";
 */

@@ -349,3 +349,73 @@ int Ui::getBooks() {
 		sqlite3_finalize(stmt);
 		sqlite3_close(db);
 }
+
+int Ui::getNumberOfLentBooks(Czytelnik c) {
+	sqlite3* db;
+	sqlite3_stmt* stmt;
+	//Czytelnik c jest zalogowanym czytelnikiem, wiec pola, ktorych uzywamy w getterach sa w pamieci.
+	string query = "SELECT ksiazka1, ksiazka2, ksiazka3 from CZYTELNIK WHERE imie='" + c.getImie() + "' AND nazwisko='" + c.getNazwisko() + "';";
+	int counter = 0;
+	sqlite3_open("main_db.db", &db);
+	if (db == NULL)
+	{
+		printf("Blad przy otwieraniu bazy danych\n");
+		return 1;
+	}
+	sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, NULL);
+	sqlite3_step(stmt);
+	//wynikiem jest 1 rzad, w ktorym odczytujemy wszystkie 3 kolumny, ktore pobralismy. jesli sa one nullem, to nie zwiekszamy licznika.
+	int num_cols = sqlite3_column_count(stmt);
+	for (int i = 0; i < num_cols; i++) {
+		if (sqlite3_column_text(stmt, i) != NULL)
+			counter++;
+	}
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+	return counter;
+}
+int Ui::lendBook(Czytelnik c,string isbn) {
+	int l = getNumberOfLentBooks(c);
+	if (l < 3) {
+		sqlite3* db;
+		sqlite3_stmt* stmt;
+		char* error;
+		//Czytelnik c jest zalogowanym czytelnikiem, wiec pola, ktorych uzywamy w getterach sa w pamieci.
+		string query = "SELECT ksiazka1, ksiazka2, ksiazka3 from CZYTELNIK WHERE imie='" + c.getImie() + "' AND nazwisko='" + c.getNazwisko() + "';";
+		int counter = 1;
+		sqlite3_open("main_db.db", &db);
+		if (db == NULL)
+		{
+			printf("Blad przy otwieraniu bazy danych\n");
+			return 1;
+		}
+		sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, NULL);
+		sqlite3_step(stmt);
+		//wynikiem jest 1 rpw, w ktorym odczytujemy wszystkie 3 kolumny, ktore pobralismy. jesli sa one nullem, to nie zwiekszamy licznika.
+		int num_cols = sqlite3_column_count(stmt);
+		//znajdujemy kolumne w tabeli odpowiadajaca za "pusta ksiazke". w tamtym miejscu zapisujemy ISBN wypozyczanego egzemplarza
+		for (int i = 0; i < num_cols; i++) {
+			if (sqlite3_column_text(stmt, i) != NULL)
+				break;
+			else
+				counter++;
+		}
+		sqlite3_finalize(stmt);
+		//updatujemy row, czyli konkretniej - kolumne gdzie zapisujemy nowo wypozyczona ksiazke danego czytelnika
+		query = "UPDATE CZYTELNIK SET ksiazka"+to_string(counter)+"='"+isbn+"' WHERE imie='" + c.getImie() + "' AND nazwisko='" + c.getNazwisko() + "';";
+		int rc = sqlite3_exec(db, query.c_str(), NULL, NULL, &error);
+		if (rc != SQLITE_OK) {
+			cout << error << endl;
+			sqlite3_free(error);
+		}
+		else
+			std::cout << "Wypozyczono" << std::endl;
+
+		sqlite3_close(db);
+		//sukces, zwracamy 1
+		return 1;
+	}
+	else
+		//zwracamy blad, bo user nie moze wypozyczyc wiecej niz 3 ksiazek
+		return -1;
+}

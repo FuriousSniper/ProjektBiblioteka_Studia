@@ -164,10 +164,9 @@ int main() {
 		}
 	}
 	*/
-	
-		sqlite3_close(db);
-
-		ui.getBooks();
+		
+		
+		sqlite3_close(db);	
 		system("pause");
 	
 	return 0;

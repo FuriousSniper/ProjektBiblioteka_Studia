@@ -51,6 +51,11 @@ public:
 	bool addBook();
 
 	int getBooks();
+
+	//funkcja do zliczania ilosci wypozyczonych ksiazek przez czytelnika
+	int getNumberOfLentBooks(Czytelnik c);
+
+	int lendBook(Czytelnik c, string isbn);
 };
 
 #endif
