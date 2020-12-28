@@ -45,7 +45,7 @@ public:
 #endif
 //w bazie danych EGZEMPLARZE
 /*
- ID				INT PRIMARY        KEY      NOT NULL,	//id w bazie danych
+ ID				INT PRIMARY        KEY,	//id w bazie danych
  iloscStron		INT		NOT NULL;	//ilosc stron ksiazki
  numerISBN		TEXT	NOT NULL	//nr isbn ksiazki
  wydawnictwo	TEXT				//nazwa wydawnictwa

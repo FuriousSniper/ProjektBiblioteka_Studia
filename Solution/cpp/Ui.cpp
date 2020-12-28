@@ -419,3 +419,106 @@ int Ui::lendBook(Czytelnik c,string isbn) {
 		//zwracamy blad, bo user nie moze wypozyczyc wiecej niz 3 ksiazek
 		return -1;
 }
+int Ui::addEgzemplarz() {
+	system("CLS");
+	cout << "Dodawanie egzemplarza ksiazki" << endl;
+	sqlite3* db;
+	sqlite3_stmt* stmt;
+	char* error;
+	sqlite3_open("main_db.db", &db);
+	if (db == NULL)
+	{
+		printf("Blad przy otwieraniu bazy danych\n");
+		return -1;
+	}
+	string ilosc;
+	string isbn;
+	string wydawnictwo;
+	string tytul;
+	string query;
+	
+	cout << "Podaj ilosc stron\nIlosc stron: ";
+	getline(cin, ilosc);
+	cout << "Podaj numer ISBN \nNumer ISBN: ";
+	getline(cin, isbn);
+	cout << "Podaj wydawnictwo \nWydawnictwo: ";
+	getline(cin, wydawnictwo);
+	cout << "Podaj tytul \nTytul: ";
+	getline(cin, tytul);
+
+	query = "INSERT INTO EGZEMPLARZE(iloscStron,numerISBN,wydawnictwo,osobaWyp,dataWyp,dataOdd,przedluzony,przetrzymany,ksiazka) "
+		"VALUES(" +
+		ilosc + "," +// ilosc stron
+		"'" + isbn + "'," + //isbn
+		"'" + wydawnictwo + "'," + //wydawnictwo
+		"''," + //osoba wypozyczajaca
+		"''," + //data wypozyczenia
+		"''," + //data oddania
+		"0," + //przedluzony
+		"0," + //przetrzymany
+		"'" + tytul + "' " + //tytul
+		");";
+	sqlite3_exec(db, query.c_str(), NULL, NULL, &error);
+	if (error != SQLITE_OK) {
+		cout << "blad: " << error << endl;
+		system("pause");
+		sqlite3_close(db);
+		return -1;
+	}
+	sqlite3_close(db);
+	return 1;
+
+}
+int Ui::addEgzemplarz2(string isbn, string tytul) {
+	system("CLS");
+	cout << "Dodawanie egzemplarza ksiazki" << endl;
+	sqlite3* db;
+	char* error;
+	sqlite3_open("main_db.db", &db);
+	if (db == NULL)
+	{
+		printf("Blad przy otwieraniu bazy danych\n");
+		return -1;
+	}
+	string ilosc;
+	string wydawnictwo;
+	string query;
+
+	cout << "Podaj ilosc stron\nIlosc stron: ";
+	getline(cin, ilosc);
+	cout << "Podaj wydawnictwo \nWydawnictwo: ";
+	getline(cin, wydawnictwo);
+	/*
+ ID				INT PRIMARY        KEY,	//id w bazie danych
+ iloscStron		INT		NOT NULL;	//ilosc stron ksiazki
+ numerISBN		TEXT	NOT NULL	//nr isbn ksiazki
+ wydawnictwo	TEXT				//nazwa wydawnictwa
+ osobaWyp		TEXT				//ID czytelnika, ktory wypozyczyl ksiazke (z bazy danych)
+dataWyp			DATE				//data, w ktorej czytelnik wypozyczyl ksiazke
+dataOdd			DATE				//data, do ktorej przedluzajacy ma oddac ksiazke
+przedluzony		BOOLEAN				//czy ksiazka jest przedluzona?
+przetrzymany	INT					//ilosc dni, ktora osoba wypozyczajaca przetrzymala ksiazke po zakonczeniu terminu
+ksiazka			TEXT				//tytul ksiazki
+*/
+	query = "INSERT INTO EGZEMPLARZE(iloscStron,numerISBN,wydawnictwo,osobaWyp,dataWyp,dataOdd,przedluzony,przetrzymany,ksiazka) "
+	"VALUES("+
+	ilosc + ","+// ilosc stron
+	"'" + isbn + "',"+ //isbn
+	"'" + wydawnictwo + "',"+ //wydawnictwo
+	"'',"+ //osoba wypozyczajaca
+	"'',"+ //data wypozyczenia
+	"'',"+ //data oddania
+	"0,"+ //przedluzony
+	"0,"+ //przetrzymany
+	"'" + tytul + "' "+ //tytul
+	");";
+	sqlite3_exec(db, query.c_str(), NULL, NULL, &error);
+	if (error != SQLITE_OK) {
+		cout << "blad: " << error << endl;
+		system("pause");
+		sqlite3_close(db);
+		return -1;
+	}
+	sqlite3_close(db);
+	return 1;
+}

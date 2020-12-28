@@ -55,7 +55,13 @@ public:
 	//funkcja do zliczania ilosci wypozyczonych ksiazek przez czytelnika
 	int getNumberOfLentBooks(Czytelnik c);
 
+	//metoda do wypozyczania ksiazek. jako argumenty przyjmuje obiekt zalogowanego czytelnika oraz nr isbn wypozyczanej ksiazki. zwraca wartosc odpowiadajaca kodowi bledu (1 - sukces)
 	int lendBook(Czytelnik c, string isbn);
+
+	//metoda dodajaca egzemplarz danej ksiazki do bazy danych
+	int addEgzemplarz();
+	//metoda dodajaca egzemplarz danej ksiazki do bazy danych. jako parametr przyjmuje nr isbn dodawanej ksiazki, co pozwala na uproszczenie funkcji dodawania ksiazek.
+	int addEgzemplarz2(string isbn, string tytul);
 };
 
 #endif
