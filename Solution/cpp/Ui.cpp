@@ -138,6 +138,23 @@ int Ui::chooseUserType() {
 	return n;
 }
 Ui::Ui() {}
+std::vector<std::string> Ui::split_string(std::string stringToBeSplitted, std::string delimeter) {
+	std::vector<std::string> splittedString;
+	int startIndex = 0;
+	int  endIndex = 0;
+	while ((endIndex = stringToBeSplitted.find(delimeter, startIndex)) < stringToBeSplitted.size())
+	{
+		std::string val = stringToBeSplitted.substr(startIndex, endIndex - startIndex);
+		splittedString.push_back(val);
+		startIndex = endIndex + delimeter.size();
+	}
+	if (startIndex < stringToBeSplitted.size())
+	{
+		std::string val = stringToBeSplitted.substr(startIndex);
+		splittedString.push_back(val);
+	}
+	return splittedString;
+}
 int Ui::chooseUserTypeRegistration() {
 	int n = 0;
 	while (true) {
@@ -190,7 +207,7 @@ bool Ui::addBook() {
 	string tagi = "";
 	string kategoria="";
 	string egzemplarze="";
-	int d, m, r;
+	string dmr;
 
 	cout << "Podaj tytul\nTytul: ";
 	//uzywam getline, zeby pozwolic na spizywanie tytulow ze spacjami.
@@ -203,8 +220,8 @@ bool Ui::addBook() {
 	getline(cin, kategoria);
 	cout << "Podaj numery ISBN egzemplarzy. Jesli kilka, wpisywac ze znakami specjalnymi \" || \" pomiedzy. Przyklad: 978-83-246-3342-5||978-83-61040-85-9\nNumery: ";
 	getline(cin, egzemplarze);
-	cout << "Podaj date wydania (dd mm rrrr): ";
-	cin >> d >> m >> r;
+	cout << "Podaj date wydania (dd-mm-rrrr): ";
+	getline(cin, dmr);
 	if (tytul != "" && kategoria != "") {
 		//dodawanie nowej ksiazki do tabeli
 		sqlite3* db;
@@ -226,21 +243,33 @@ bool Ui::addBook() {
 			tagi + "','" +
 			kategoria + "','" +
 			egzemplarze + "','" +
-			to_string(d) + "-" +
-			to_string(m) + "-" +
-			to_string(r) +
+			dmr+
 			"'	);";
+		
 		sqlite3_exec(db, sql2.c_str(), NULL, NULL, &error);
 		if (error != SQLITE_OK) {
 			cout << "blad: " << error << endl;
 			system("pause");
+		}
+		
+		//splitowanie egzemplarzy na czesci
+		if (egzemplarze != "") {
+			vector<string> splittedString;
+			string delimeter = "||";
+
+			splittedString = split_string(egzemplarze, delimeter);
+			//dla kazdego egzemplarza wywolywana jest funkcja dodajaca go do bazy danych
+			for (int i = 0; i < splittedString.size(); i++) {
+				cout << "Dodawanie egzemplarza ksiazki o isbn " << splittedString[i];
+				addEgzemplarz2(splittedString[i], tytul);
+				system("CLS");
+			}
 		}
 	}
 	else {
 		cout << "Pola \'tytul\' i \'kategoria\' nie moga byc puste!" << endl;
 	}
 }
-
 int Ui::getBooks() {
 	system("CLS");
 	cout << "Przegladanie ksiazek\n" << endl;
@@ -349,7 +378,6 @@ int Ui::getBooks() {
 		sqlite3_finalize(stmt);
 		sqlite3_close(db);
 }
-
 int Ui::getNumberOfLentBooks(Czytelnik c) {
 	sqlite3* db;
 	sqlite3_stmt* stmt;
@@ -470,8 +498,6 @@ int Ui::addEgzemplarz() {
 
 }
 int Ui::addEgzemplarz2(string isbn, string tytul) {
-	system("CLS");
-	cout << "Dodawanie egzemplarza ksiazki" << endl;
 	sqlite3* db;
 	char* error;
 	sqlite3_open("main_db.db", &db);
@@ -484,22 +510,10 @@ int Ui::addEgzemplarz2(string isbn, string tytul) {
 	string wydawnictwo;
 	string query;
 
-	cout << "Podaj ilosc stron\nIlosc stron: ";
+	cout << "\nPodaj ilosc stron\nIlosc stron: ";
 	getline(cin, ilosc);
 	cout << "Podaj wydawnictwo \nWydawnictwo: ";
 	getline(cin, wydawnictwo);
-	/*
- ID				INT PRIMARY        KEY,	//id w bazie danych
- iloscStron		INT		NOT NULL;	//ilosc stron ksiazki
- numerISBN		TEXT	NOT NULL	//nr isbn ksiazki
- wydawnictwo	TEXT				//nazwa wydawnictwa
- osobaWyp		TEXT				//ID czytelnika, ktory wypozyczyl ksiazke (z bazy danych)
-dataWyp			DATE				//data, w ktorej czytelnik wypozyczyl ksiazke
-dataOdd			DATE				//data, do ktorej przedluzajacy ma oddac ksiazke
-przedluzony		BOOLEAN				//czy ksiazka jest przedluzona?
-przetrzymany	INT					//ilosc dni, ktora osoba wypozyczajaca przetrzymala ksiazke po zakonczeniu terminu
-ksiazka			TEXT				//tytul ksiazki
-*/
 	query = "INSERT INTO EGZEMPLARZE(iloscStron,numerISBN,wydawnictwo,osobaWyp,dataWyp,dataOdd,przedluzony,przetrzymany,ksiazka) "
 	"VALUES("+
 	ilosc + ","+// ilosc stron
@@ -512,6 +526,7 @@ ksiazka			TEXT				//tytul ksiazki
 	"0,"+ //przetrzymany
 	"'" + tytul + "' "+ //tytul
 	");";
+	
 	sqlite3_exec(db, query.c_str(), NULL, NULL, &error);
 	if (error != SQLITE_OK) {
 		cout << "blad: " << error << endl;
@@ -519,6 +534,7 @@ ksiazka			TEXT				//tytul ksiazki
 		sqlite3_close(db);
 		return -1;
 	}
+	
 	sqlite3_close(db);
 	return 1;
 }

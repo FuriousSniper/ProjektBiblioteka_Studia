@@ -4,7 +4,8 @@
 #include "..\headers\Autor.h";
 #include "..\headers\AdresZamieszkania.h";
 #include "../ProjektBiblioteka/Libraries/sqlite3/sqlite3.h";
-
+#include <sstream>
+#include <vector>
 using namespace std;
 
 int main() {
@@ -163,41 +164,8 @@ int main() {
 			break;
 		}
 	}
-	*/
-		ui.addEgzemplarz();
-		
-		printf("Performing query...\n");
-		sqlite3_prepare_v2(db, "select * from EGZEMPLARZE", -1, &stmt, NULL);
-		printf("Got results:\n");
-		bool done = false;
-		int row = 0;
-		int bytes;
-		const unsigned char* text;
-		while (!done) {
-			//printf("In select while\n");
-			switch (sqlite3_step(stmt)) {
-			case SQLITE_ROW:
-				//bytes = sqlite3_column_bytes(stmt, 0);
-				for (int i = 0; i < sqlite3_column_count(stmt); i++) {
-					cout << sqlite3_column_name(stmt, i) << ": ";
-					if (sqlite3_column_text(stmt, i) != NULL)
-						cout << sqlite3_column_text(stmt, i) << endl;
-				}
-				cout << endl;
+	*/	
 
-				row++;
-				break;
-
-			case SQLITE_DONE:
-				done = true;
-				break;
-
-			default:
-				fprintf(stderr, "Failed.\n");
-				return 1;
-			}
-		}
-		sqlite3_finalize(stmt);
 		sqlite3_close(db);
 		system("pause");
 	

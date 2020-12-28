@@ -8,6 +8,7 @@
 #include "../ProjektBiblioteka/Libraries/sqlite3/sqlite3.h";
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
 class Ui {
 private:
@@ -62,6 +63,10 @@ public:
 	int addEgzemplarz();
 	//metoda dodajaca egzemplarz danej ksiazki do bazy danych. jako parametr przyjmuje nr isbn dodawanej ksiazki, co pozwala na uproszczenie funkcji dodawania ksiazek.
 	int addEgzemplarz2(string isbn, string tytul);
+
+
+	//funkcja do splitowania stringa za pomoca delimitera. arg 1 - string do podzielenia. arg 2 - delimiter. zwraca vector (uzywany jako tablica do prostego przejscia i wykonania czegos)
+	std::vector<std::string> split_string(std::string stringToBeSplitted, std::string delimeter);
 };
 
 #endif
