@@ -64,7 +64,12 @@ public:
 	//metoda dodajaca egzemplarz danej ksiazki do bazy danych. jako parametr przyjmuje nr isbn dodawanej ksiazki, co pozwala na uproszczenie funkcji dodawania ksiazek.
 	int addEgzemplarz2(string isbn, string tytul);
 
-
+	//metoda pozwalajaca na dodawanie nowego autora (od zera)
+	int addAutor();
+	//dodawanie nowego autora od zera
+	int addAutor2(string imie, string ksiazka);
+	//aktualizacja, dodawanie nowego autora
+	int addAutor3(string imie, string ksiazka);
 	//funkcja do splitowania stringa za pomoca delimitera. arg 1 - string do podzielenia. arg 2 - delimiter. zwraca vector (uzywany jako tablica do prostego przejscia i wykonania czegos)
 	std::vector<std::string> split_string(std::string stringToBeSplitted, std::string delimeter);
 };

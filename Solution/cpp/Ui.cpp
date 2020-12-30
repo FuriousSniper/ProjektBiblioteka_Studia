@@ -538,3 +538,204 @@ int Ui::addEgzemplarz2(string isbn, string tytul) {
 	sqlite3_close(db);
 	return 1;
 }
+int Ui::addAutor() {
+	system("CLS");
+	cout << "Dodawanie autora" << endl;
+	sqlite3* db;
+	sqlite3_stmt* stmt;
+	char* error;
+	sqlite3_open("main_db.db", &db);
+	if (db == NULL)
+	{
+		printf("Blad przy otwieraniu bazy danych\n");
+		return -1;
+	}
+	string imie;
+	string nazwisko;
+	string dataUrodzenia;
+	string query;
+
+
+	cout << "Podaj imie autora\nImie: ";
+	getline(cin, imie);
+	cout << "Podaj nazwisko autora\nNazwisko: ";
+	getline(cin, nazwisko);
+	cout << "Podaj date urodzenia autora (dd-mm-rrrr)\nData urodzenia: ";
+	getline(cin, dataUrodzenia);
+
+
+	query = "INSERT INTO AUTOR(imie,nazwisko,dataUrodzenia,ksiazki) "
+		"VALUES('" +
+		imie + "','" + //isbn
+		nazwisko + "','" + //wydawnictwo
+		dataUrodzenia + "','" + //przedluzony
+		"'" +
+		");";
+	sqlite3_exec(db, query.c_str(), NULL, NULL, &error);
+	if (error != SQLITE_OK) {
+		cout << "blad: " << error << endl;
+		system("pause");
+		sqlite3_close(db);
+		return -1;
+	}
+	sqlite3_close(db);
+	return 1;
+}
+int Ui::addAutor2(string imie, string ksiazka) {
+	system("CLS");
+	cout << "Dodawanie autora" << endl;
+	sqlite3* db;
+	sqlite3_stmt* stmt;
+	char* error;
+	sqlite3_open("main_db.db", &db);
+	if (db == NULL)
+	{
+		printf("Blad przy otwieraniu bazy danych\n");
+		return -1;
+	}
+	string d = " ";
+	vector<string> sp = split_string(imie, d);
+	string imie2 = sp[0];
+	string nazwisko = sp[1];
+	string dataUrodzenia;
+	string query;
+
+
+	cout << "Podaj date urodzenia autora (dd-mm-rrrr)\nData urodzenia: ";
+	getline(cin, dataUrodzenia);
+
+
+	query = "INSERT INTO AUTOR(imie,nazwisko,dataUrodzenia,ksiazki) "
+		"VALUES('" +
+		imie2 + "','" + //imie
+		nazwisko + "','" + //nazwisko
+		dataUrodzenia + "','" + //data urodzenia
+		ksiazka + "'" +	//ksiazka
+		");";
+	sqlite3_exec(db, query.c_str(), NULL, NULL, &error);
+	if (error != SQLITE_OK) {
+		cout << "blad: " << error << endl;
+		system("pause");
+		sqlite3_close(db);
+		return -1;
+	}
+	sqlite3_close(db);
+	return 1;
+}
+int Ui::addAutor3(string imie, string ksiazka) {
+	sqlite3* db;
+	sqlite3_stmt* stmt;
+	char* error;
+	sqlite3_open("main_db.db", &db);
+	if (db == NULL)
+	{
+		printf("Blad przy otwieraniu bazy danych\n");
+		return -1;
+	}
+	string d = " ";
+	vector<string> sp = split_string(imie, d);
+	string imie2 = sp[0];
+	string nazwisko = sp[1];
+	string query;
+	bool exists = false;
+
+	query = "SELECT EXISTS(SELECT 1 from AUTOR WHERE imie='" + imie2 + "' AND nazwisko='" + nazwisko + "' LIMIT 1);";
+	sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, NULL);
+	bool done = false;
+	int row = 0;
+	//sprawdzanie, czy autor istnieje w bazie danych
+	while (!done) {
+		switch (sqlite3_step(stmt)) {
+		case SQLITE_ROW:
+			//bytes = sqlite3_column_bytes(stmt, 0);
+			for (int i = 0; i < sqlite3_column_count(stmt); i++) {
+				if (sqlite3_column_text(stmt, i)[0] == '1') {
+					exists = true;
+				}
+			}
+			row++;
+			break;
+
+		case SQLITE_DONE:
+			done = true;
+			break;
+
+		default:
+			fprintf(stderr, "Failed.\n");
+			return 1;
+		}
+	}
+	sqlite3_finalize(stmt);
+	//autor istnieje, wiec sprawdzamy, czy ksiazka, ktora przypisujemy jest juz przypisana. jesli nie, to ja przypisujemy. jesli tak, konczymy i wypisujemy, ze to juz jest
+	if (exists) {
+		query = "SELECT ksiazki from AUTOR WHERE imie='" + imie2 + "' AND nazwisko='" + nazwisko + "';";
+
+		//zmienna do ktorej tymczasowo wpisujemy wynik powyzszej kwerendy
+		string ksiazki_autora = "";
+		sqlite3_stmt* stmt2;
+
+		sqlite3_prepare_v2(db, query.c_str(), -1, &stmt2, NULL);
+		//zmienna, ktorej uzywamy, aby zapisac ksiazki, ktorymi aktualizujemy autora
+		string to_update = "";
+		//pobieramy ksiazki autora
+		done = false;
+		while (!done) {
+			switch (sqlite3_step(stmt2)) {
+			case SQLITE_ROW:
+				//bytes = sqlite3_column_bytes(stmt, 0);
+				for (int i = 0; i < sqlite3_column_count(stmt2); i++) {
+					//przypisujemy pobrane z bazy ksiazki autora (string typu "aaa aaa||bbbbbbb||cccc cc||gggg gg")
+					ksiazki_autora = string(reinterpret_cast<const char*>((sqlite3_column_text(stmt2, i))));
+				}
+				row++;
+				break;
+
+			case SQLITE_DONE:
+				done = true;
+				break;
+
+			default:
+				fprintf(stderr, "Failed.\n");
+				return 1;
+			}
+		}
+		sqlite3_finalize(stmt2);
+		//jesli nie istnieja, to bedzie to pierwsza ksiazka autora i przypisujemy mu ja
+		//cout << "Ksiazki autora: " << ksiazki_autora << endl;
+		if (ksiazki_autora == "") {
+			to_update = ksiazka;
+		}
+		else {
+			//splitujemy ksiazki autora pobrane z bazy
+			string d2 = "||";
+			vector<string> ksiazki_split = split_string(ksiazki_autora, d2);
+
+			//forem sprawdzamy, czy taka ksiazka nie jest juz do autora przypisana
+			for (int i = 0; i < ksiazki_split.size(); i++) {
+				if (ksiazki_split[i] == ksiazka) {
+					cout << "Ksiazka jest juz dopisana do autora" << endl;
+					return -1;
+				}
+			}
+			to_update = ksiazki_autora + "||" + ksiazka;
+		}
+		//updatujemy rekord wstawiajac zmienna to_update do kolumny "ksiazka"
+		query = "UPDATE AUTOR SET ksiazki='" + to_update + "' WHERE imie='" + imie2 + "' AND nazwisko='" + nazwisko + "';";
+		sqlite3_exec(db, query.c_str(), NULL, NULL, &error);
+		if (error != SQLITE_OK) {
+			cout << "blad: " << error << endl;
+			system("pause");
+			sqlite3_close(db);
+			return -1;
+		}
+		cout << "Przypisano ksiazke do autora" << endl;
+		sqlite3_close(db);
+		return 1;
+	}
+	//autor nie istnieje, wiec go dodajemy i przypisujemy mu ksiazke
+	else {
+		addAutor2(imie, ksiazka);
+	}
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+}
