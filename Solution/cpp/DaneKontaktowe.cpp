@@ -8,8 +8,6 @@ void DaneKontaktowe::printDaneKontaktowe() {
 	adres.printAdresZamieszkania();
 }
 
-DaneKontaktowe::DaneKontaktowe(string email, string telefon, AdresZamieszkania adres): email(email), telefon(telefon), adres(adres) {
-	cout << "Utworzono dane kontaktowe osoby" << endl;
-}
+DaneKontaktowe::DaneKontaktowe(string email, string telefon, AdresZamieszkania adres): email(email), telefon(telefon), adres(adres) {}
 
 DaneKontaktowe::DaneKontaktowe() : email("nie podano"), telefon("nie podano"), adres(AdresZamieszkania()) {}

@@ -31,6 +31,6 @@ int Data::setRok(int r) {
 int Data::getRok() {
 	return this->rok;
 }
-Data::Data():dzien(0),miesiac(NULL),rok(NULL),godzina(0),minuta(0) {}
+Data::Data():dzien(0),miesiac(0),rok(0),godzina(0),minuta(0) {}
 Data::Data(int dzien, int miesiac, int rok) : dzien(dzien), miesiac(miesiac), rok(rok), godzina(0), minuta(0) {}
 Data::Data(int dzien, int miesiac, int rok, int godzina, int minuta) : dzien(dzien), miesiac(miesiac), rok(rok), godzina(godzina), minuta(minuta) {}
