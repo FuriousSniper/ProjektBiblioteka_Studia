@@ -1,5 +1,6 @@
 #include "..\headers\Osoba.h"
 #include <iostream>
+#include <ctime>
 
 string Osoba::getNazwisko() {
 	return this->nazwisko;

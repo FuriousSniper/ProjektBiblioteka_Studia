@@ -23,7 +23,6 @@ public:
 	Bibliotekarz(string id, string haslo);
 
 	Bibliotekarz(string id, string haslo, string imie, string nazwisko);
-
 	
 };
 
