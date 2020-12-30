@@ -1,8 +1,7 @@
 #include "..\headers\Bibliotekarz.h"
-#include "..\headers\DaneKontaktowe.h"
 #include <string>
 using namespace std;
-
+/*
 void Bibliotekarz::zmienHaslo(string haslo) {
 	// TODO - implement Bibliotekarz::zmienHaslo
 	throw "Not yet implemented";
@@ -28,3 +27,4 @@ void Bibliotekarz::getBiblioteka() {
 	// TODO - implement Bibliotekarz::getBiblioteka
 	throw "Not yet implemented";
 }
+*/

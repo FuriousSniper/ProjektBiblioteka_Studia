@@ -1,10 +1,8 @@
 #ifndef CZYTELNIK_H
 #define CZYTELNIK_H
 using namespace std;
-#include "DaneKontaktowe.h"
 #include <string>
 #include "Data.h"
-
 #include "AdresZamieszkania.h"
 #include "Egzemplarz.h"
 #include "Osoba.h"
@@ -16,7 +14,7 @@ class Czytelnik: public Osoba {
 private:
 	//TUTAJ JEST BARDZO DZIWNY BLAD, NALEZY JESZCZE W DRUGIM PLIKU DOPISAC DO KONSTRUKTORA I WTEDY SIE ON POJAWIA
 	//DaneKontaktowe kontakt;
-	const string id;
+	const int id;
 	Egzemplarz** listaZaleglosci;
 	Data dataPierwszegoWypozyczenia;
 	int iloscWypozyczonychObecnie;
@@ -25,9 +23,11 @@ private:
 	Data dataDolaczenia;
 	AdresZamieszkania adres;
 	string haslo;
+	string email;
+	string telefon;
 
 public:
-	string getId();
+	const int getId();
 	Egzemplarz** getZaleglosci();
 	int setZaleglosci(Egzemplarz** egzemplarze);
 	Data getDataPierwszegoWypozyczenia();
@@ -43,15 +43,16 @@ public:
 	int zmienTerminOddania(Data termin);
 	int zarezerwujKsiazke(Egzemplarz* ksiazka);
 	Data getDataDolaczenia();
-	int setDaneKontaktowe(DaneKontaktowe dane);
-	DaneKontaktowe getKontakt();
+	void setDaneKontaktowe(string poczta, string telefon);
 	int setAdresZamieszkania(AdresZamieszkania newAdress);
-	Czytelnik(string imie, string nazwisko, int d, int m, int r);
+	Czytelnik(string imie, string nazwisko, int d, int m, int r,int ID);
 	Czytelnik(string imie, string nazwisko, int d, int m, int r, string* preferowaneTematy);
 	void printInfo();
 	void setHaslo(string newHaslo);
 	AdresZamieszkania getAdres();
 	string getHaslo();
+	string getTel();
+	string getEmail();
 };
 
 #endif

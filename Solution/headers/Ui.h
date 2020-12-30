@@ -23,7 +23,7 @@ public:
 
 	//funkcja do tworzenia obiektu klasy Czytelnik przez uzytkownika
 	//zwraca ona obiekt, ktory tworzy
-	Czytelnik createCzytelnik();
+	Czytelnik createCzytelnik(sqlite3* database);
 
 	//funkcja do tworzenia obiektu klasy Adres przez uzytkownika
 	//zwraca ona obiekt, ktory tworzy
@@ -47,6 +47,7 @@ public:
 	int chooseUserTypeRegistration();
 	bool confirmVerification();
 
+	bool addCzytelnik(Czytelnik new_user, sqlite3* database);
 	//funkcja dodajaca ksiazke do biblioteki.
 	//po callu wymagane jest wpisanie tytulu i kategorii, aby dodac ksiazke
 	bool addBook();

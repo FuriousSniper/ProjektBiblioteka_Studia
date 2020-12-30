@@ -143,7 +143,6 @@
     <ClInclude Include="..\headers\Autor.h" />
     <ClInclude Include="..\headers\Bibliotekarz.h" />
     <ClInclude Include="..\headers\Czytelnik.h" />
-    <ClInclude Include="..\headers\DaneKontaktowe.h" />
     <ClInclude Include="..\headers\Data.h" />
     <ClInclude Include="..\headers\Egzemplarz.h" />
     <ClInclude Include="..\headers\Ksiazka.h" />
@@ -158,7 +157,6 @@
     <ClCompile Include="..\cpp\Autor.cpp" />
     <ClCompile Include="..\cpp\Bibliotekarz.cpp" />
     <ClCompile Include="..\cpp\Czytelnik.cpp" />
-    <ClCompile Include="..\cpp\DaneKontaktowe.cpp" />
     <ClCompile Include="..\cpp\Data.cpp" />
     <ClCompile Include="..\cpp\Egzemplarz.cpp" />
     <ClCompile Include="..\cpp\Ksiazka.cpp" />

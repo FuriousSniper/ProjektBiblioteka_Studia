@@ -2,10 +2,10 @@
 #include <string>
 #include <iostream>
 #include "..\headers\Data.h"
-#include "..\headers\DaneKontaktowe.h"
 #include "..\headers\AdresZamieszkania.h"
+
 using namespace std;
-string Czytelnik::getId() {
+const int Czytelnik::getId() {
 	return id;
 }
 Egzemplarz** Czytelnik::getZaleglosci(){
@@ -72,18 +72,28 @@ int Czytelnik::setAdresZamieszkania(AdresZamieszkania newAdress) {
 void Czytelnik::printInfo() {
 	cout << "\nWyswietlanie informacji o uzytkowniku z ID: " << this->getId() << endl;
 	cout << this->getImie() << " " << this->getNazwisko() << ", wiek: " << this->getWiek()<<" lat" << endl;
-	cout << this->adres.ulica << "/" << this->adres.numerMieszkania << endl;
-	cout << this->adres.kodPocztowy << " " << this->adres.miasto << endl;
+	cout << this->adres.ulica;
+	if (this->adres.numerMieszkania != 0)cout << "/" << this->adres.numerMieszkania;
+	cout << endl << this->adres.kodPocztowy << " " << this->adres.miasto << endl;
 }
 void Czytelnik::setHaslo(string newHaslo) {
 	this->haslo = newHaslo;
 }
-
+void Czytelnik::setDaneKontaktowe(string poczta, string telefon) {
+	this->email = poczta;
+	this->telefon = telefon;
+}
 AdresZamieszkania Czytelnik::getAdres() {
 	return this->adres;
 }
 string Czytelnik::getHaslo() {
 	return this->haslo;
+}
+string Czytelnik::getEmail() {
+	return this->email;
+}
+string Czytelnik::getTel() {
+	return this->telefon;
 }
 /*
 int Czytelnik::setDaneKontaktowe(DaneKontaktowe dane) {
@@ -100,9 +110,9 @@ DaneKontaktowe Czytelnik::getKontakt() {
 }
 */
 //  ,kontakt("", "")
-Czytelnik::Czytelnik(string imie, string nazwisko, int d, int m, int r, string* preferowaneTematy):Osoba(imie,nazwisko, d, m,r),preferowaneTematy(preferowaneTematy),adres("","","",0) {
-}
+//Czytelnik::Czytelnik(string imie, string nazwisko, int d, int m, int r, string* preferowaneTematy):Osoba(imie,nazwisko, d, m,r),preferowaneTematy(preferowaneTematy),adres("","","",0) {
+//}
 //  ,kontakt("", "")
-Czytelnik::Czytelnik(string imie, string nazwisko, int d, int m, int r):Osoba(imie,nazwisko, d,m,r), adres("", "", "",0) {
+Czytelnik::Czytelnik(string imie, string nazwisko, int d, int m, int r,int ID):id(ID),Osoba(imie,nazwisko, d,m,r) {
 
 }

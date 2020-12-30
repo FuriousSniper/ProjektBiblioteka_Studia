@@ -3,6 +3,7 @@
 #include "..\headers\Ui.h";
 #include "..\headers\Autor.h";
 #include "..\headers\AdresZamieszkania.h";
+#include "..\headers\DaneKontaktowe.h";
 #include "../ProjektBiblioteka/Libraries/sqlite3/sqlite3.h";
 #include <sstream>
 #include <vector>
@@ -10,7 +11,7 @@ using namespace std;
 
 int main() {
 
-	/*
+	
 	Ui ui = Ui();
 	sqlite3* db;
 	sqlite3_stmt* stmt;
@@ -21,7 +22,7 @@ int main() {
 	{
 		printf("Failed to open DB\n");
 		return 1;
-	}
+	}/*
 	const char* sql;
 	sql = "INSERT INTO "
 		"CZYTELNIK("
@@ -94,7 +95,8 @@ int main() {
 		}
 	}
 	*/
-	/*
+	const char* sql = "CREATE TABLE CZYTELNIK(ID INTEGER PRIMARY        KEY      ,listaZaleglosci       TEXT     ,dataPierwszegoWypozyczenia     DATE     ,iloscWypozyczonychOdDolaczenia  INT             ,preferowaneTematy     TEXT             ,dataDolaczenia        DATE             ,miasto				   TEXT             ,kodPocztowy           TEXT             ,ulica                 TEXT             ,imie                  TEXT             ,nazwisko              TEXT             ,wiek                  TEXT             ,dataUrodzenia         DATE             ,haslo				   TEXT				,numerMieszkania       TEXT             , ksiazka1 TEXT, ksiazka2 TEXT, ksiazka3 TEXT)";
+	sqlite3_exec(db, sql, NULL, NULL, NULL);
 	for (;;) {
 		int tryb = ui.signInUpMenu();
 		if (tryb == 1) {
@@ -120,37 +122,20 @@ int main() {
 				continue;
 			else if (acc_type2 == 1) {
 				//REJESTRACJA CZYTELNIKA
-				Czytelnik new_user = ui.createCzytelnik();
+				Czytelnik new_user = ui.createCzytelnik(db);
 				new_user.setAdresZamieszkania(ui.createAdres());
 				new_user.printInfo();
 				//WERYFIKACJA POPRAWNOSCI WPROWADZONYCH DANYCH
 				if (ui.confirmVerification() == true) {
 					//DODANIE CZYTELNIKA DO BAZY DANYCH
-					string sql2;
-					sql2 = "INSERT INTO "
-						"CZYTELNIK "
-						"VALUES ("
-						"	'',"			
-						"	'',"			//RESZTA ZOSTAJE PUSTA
-						"	'',"			//BO UZYTKOWNIK NIC JESZCZE NIE WYPOZYCZYL
-						"	0,"
-						"	'',"
-						"	DATE(),'"+
-						new_user.getAdres().getMiasto()+"','"+
-						new_user.getAdres().getKodPocztowy()+"','"+
-						new_user.getAdres().getUlica()+"','"+
-						new_user.getImie()+"','"+
-						new_user.getNazwisko()+"','"+
-						to_string(new_user.getWiek())+"','"+
-						to_string(new_user.getDataUrodzenia().getDzien())+"-"+
-						to_string(new_user.getDataUrodzenia().getMiesiac())+"-"+ //DO UJEDNOLICENIA
-						to_string(new_user.getDataUrodzenia().getRok())+"','"+	 //FORMAT WYSWIETLANIA DATY
-						to_string(new_user.getAdres().getNumerMieszkania())+"','"+
-						new_user.getHaslo()+"'"
-						"	);";
-					sqlite3_exec(db, sql2.c_str(), NULL, NULL, &error);
-					if (error != SQLITE_OK) {
-						cout << "blad: " << error << endl;
+					if (ui.addCzytelnik(new_user, db) == true) {
+						system("cls");
+						cout << "Pomyslnie dodano uzytkownika!\nHaslo: " << new_user.getHaslo()
+						<< "\nLogin: " << new_user.getImie() << " " << new_user.getNazwisko() << endl;
+						system("pause");
+					}
+					else {
+						cout << "Blad przy dodawaniu uzytkownika do bazy danych.\n";
 						system("pause");
 					}
 				}
@@ -170,7 +155,6 @@ int main() {
 		
 	sqlite3_close(db);
 	system("pause");
-	*/
 
 	return 0;
 }

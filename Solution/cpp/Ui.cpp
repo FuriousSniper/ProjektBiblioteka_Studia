@@ -40,11 +40,46 @@ Autor Ui::createAutor() {
 	cout << "Pomyslnie utworzono: Autor" << endl;
 	return a;
 }
-Czytelnik Ui::createCzytelnik() {
+Czytelnik Ui::createCzytelnik(sqlite3* database) {
+	sqlite3_stmt* stmt;								//
 	cout << "Tworzenie nowego Czytelnika" << endl;
-	Osoba o = Ui::createOsoba();
-	Czytelnik c = Czytelnik(o.getImie(), o.getNazwisko(), o.getDataUrodzenia().getDzien(), o.getDataUrodzenia().getMiesiac(), o.getDataUrodzenia().getRok());
+		Osoba o = Ui::createOsoba();
+		int rc = sqlite3_prepare_v2(database, "select MAX(ID) from CZYTELNIK", -1, &stmt, NULL);
+		int temp = -1;
+		if (sqlite3_step(stmt) == SQLITE_ROW) {		//NOTOWANIE ID NA WYPADEK ZMIANY PLANOW
+			temp = sqlite3_column_int(stmt, 0);		//CO DO SPOSOBU LOGOWANIA LUB TYM PODOBNYCH
+		}
+	++temp;
+	Czytelnik c = Czytelnik(o.getImie(), o.getNazwisko(), o.getDataUrodzenia().getDzien(), o.getDataUrodzenia().getMiesiac(), o.getDataUrodzenia().getRok(), temp);
 	while (true) {
+		system("cls");
+		cout << "Podaj swoj email: " << endl;
+		string mail;
+		cin >> mail;
+		cin.clear();
+		cin.ignore();
+		cout << "Powtorz swoj email: " << endl;
+		string mail2;
+		cin >> mail2;
+		cin.clear();
+		cin.ignore();
+		if (mail == mail2) {
+			cout << "Podaj swoj nr telefonu: " << endl;
+			cin >> mail2;
+			cin.clear();
+			cin.ignore();
+			c.setDaneKontaktowe(mail, mail2);
+			break;
+		}
+		else {
+			system("cls");
+			cout << "Adresy email sie roznia! \n";
+			cin.clear();
+			cin.ignore();
+		}
+	}
+	while (true) {
+		system("cls");
 		cout << "Podaj haslo do swojego konta! " << endl;
 		string pass;
 		cin >> pass;
@@ -66,6 +101,40 @@ Czytelnik Ui::createCzytelnik() {
 			cin.ignore();
 		}
 	}
+}
+bool Ui::addCzytelnik(Czytelnik new_user, sqlite3* database) {
+	char* sql_error;
+	string sql2;
+	int temp = new_user.getId();
+	sql2 = "INSERT INTO CZYTELNIK"
+		"(listaZaleglosci,dataPierwszegoWypozyczenia,iloscWypozyczonychOdDolaczenia,preferowaneTematy,"
+		"dataDolaczenia,miasto,kodPocztowy,ulica,imie,nazwisko,wiek,dataUrodzenia,haslo,numerMieszkania,email,telefon)"
+		" VALUES ("
+		"	'',"
+		"	'',"
+		"	0,"
+		"	'',"
+		"	DATE(),'" +
+		new_user.getAdres().getMiasto() + "','" +
+		new_user.getAdres().getKodPocztowy() + "','" +
+		new_user.getAdres().getUlica() + "','" +
+		new_user.getImie() + "','" +
+		new_user.getNazwisko() + "','" +
+		to_string(new_user.getWiek()) + "','" +
+		to_string(new_user.getDataUrodzenia().getDzien()) + "-" +
+		to_string(new_user.getDataUrodzenia().getMiesiac()) + "-" +
+		to_string(new_user.getDataUrodzenia().getRok()) + "','" +
+		new_user.getHaslo() + "','" +
+		to_string(new_user.getAdres().getNumerMieszkania()) + "','"+
+		new_user.getEmail()+"','"+
+		new_user.getTel()+"'"
+		"	);";
+	sqlite3_exec(database, sql2.c_str(), NULL, NULL, &sql_error);
+	if (sql_error != SQLITE_OK) {
+		cout << "blad: " << sql_error << endl;
+		return false;
+	}
+	return true;
 }
 AdresZamieszkania Ui::createAdres() {
 	cout << "Tworzenie adresu" << endl;
