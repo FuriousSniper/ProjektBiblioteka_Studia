@@ -10,8 +10,9 @@ using namespace std;
 
 int main() {
 
-	/*
+	
 	Ui ui = Ui();
+	
 	sqlite3* db;
 	sqlite3_stmt* stmt;
 	char* error;
@@ -22,6 +23,7 @@ int main() {
 		printf("Failed to open DB\n");
 		return 1;
 	}
+	/*
 	const char* sql;
 	sql = "INSERT INTO "
 		"CZYTELNIK("
@@ -167,10 +169,12 @@ int main() {
 			break;
 		}
 	}
-		
+
+
+	sqlite3_close(db);
+	*/
+	
 	sqlite3_close(db);
 	system("pause");
-	*/
-
 	return 0;
 }
