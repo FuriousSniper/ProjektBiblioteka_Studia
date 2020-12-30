@@ -7,6 +7,8 @@ void AdresZamieszkania::printAdresZamieszkania() {
 
 AdresZamieszkania::AdresZamieszkania(string miasto, string kodPocztowy, string ulica, int numerMieszkania) : miasto(miasto), kodPocztowy(kodPocztowy), ulica(ulica), numerMieszkania(numerMieszkania) {};
 
+AdresZamieszkania::AdresZamieszkania() : miasto("nie podano"), kodPocztowy("nie podano"), ulica("nie podano"), numerMieszkania(0) {}
+
 string AdresZamieszkania::getKodPocztowy() {
 	return this->kodPocztowy;
 }

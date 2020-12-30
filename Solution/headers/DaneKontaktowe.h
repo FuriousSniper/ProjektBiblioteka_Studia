@@ -2,19 +2,21 @@
 #define DANEKONTAKTOWE_H
 #include <string>
 #include "Czytelnik.h"
+#include "AdresZamieszkania.h"
 class Czytelnik;
 using namespace std;
+
 class DaneKontaktowe {
 
 public:
+
 	string email;
 	string telefon;
+	AdresZamieszkania adres;
 
 	void printDaneKontaktowe();
-
-	Czytelnik* getCzytelnik();
-
-	DaneKontaktowe(string email, string telefon);
+	DaneKontaktowe(string email, string telefon, AdresZamieszkania adres);
+	DaneKontaktowe();
 };
 
 #endif
