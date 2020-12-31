@@ -12,7 +12,7 @@ public:
 	string ulica;
 	int numerMieszkania;
 
-	void printAdresZamieszkania();
+	void printAdresZamieszkania() const;
 	AdresZamieszkania(string, string, string, int);
 	AdresZamieszkania();
 	string getMiasto();

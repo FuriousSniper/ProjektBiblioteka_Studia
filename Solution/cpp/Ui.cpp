@@ -106,7 +106,7 @@ Czytelnik Ui::createCzytelnik(sqlite3* database) {
 bool Ui::addCzytelnik(Czytelnik new_user, sqlite3* database) {
 	char* sql_error;
 	string sql2;
-	int temp = new_user.getId();
+	int temp = new_user.getID();
 	sql2 = "INSERT INTO CZYTELNIK"
 		"(listaZaleglosci,dataPierwszegoWypozyczenia,iloscWypozyczonychOdDolaczenia,preferowaneTematy,"
 		"dataDolaczenia,miasto,kodPocztowy,ulica,imie,nazwisko,wiek,dataUrodzenia,haslo,numerMieszkania,email,telefon)"
@@ -116,9 +116,9 @@ bool Ui::addCzytelnik(Czytelnik new_user, sqlite3* database) {
 		"	0,"
 		"	'',"
 		"	DATE(),'" +
-		new_user.getAdres().getMiasto() + "','" +
-		new_user.getAdres().getKodPocztowy() + "','" +
-		new_user.getAdres().getUlica() + "','" +
+		new_user.getAdresZamieszkania().getMiasto() + "','" +
+		new_user.getAdresZamieszkania().getKodPocztowy() + "','" +
+		new_user.getAdresZamieszkania().getUlica() + "','" +
 		new_user.getImie() + "','" +
 		new_user.getNazwisko() + "','" +
 		to_string(new_user.getWiek()) + "','" +
@@ -126,9 +126,9 @@ bool Ui::addCzytelnik(Czytelnik new_user, sqlite3* database) {
 		to_string(new_user.getDataUrodzenia().getMiesiac()) + "-" +
 		to_string(new_user.getDataUrodzenia().getRok()) + "','" +
 		new_user.getHaslo() + "','" +
-		to_string(new_user.getAdres().getNumerMieszkania()) + "','"+
+		to_string(new_user.getAdresZamieszkania().getNumerMieszkania()) + "','"+
 		new_user.getEmail()+"','"+
-		new_user.getTel()+"'"
+		new_user.getTelefon()+"'"
 		"	);";
 	sqlite3_exec(database, sql2.c_str(), NULL, NULL, &sql_error);
 	if (sql_error != SQLITE_OK) {
