@@ -1,3 +1,5 @@
-﻿  Testy.cpp
-C:\Users\samix\Desktop\Jeszcze cos noweg\ProjektBiblioteka_Studia\Solution\headers\Ui.h(8,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-  Testy.vcxproj -> C:\Users\samix\Desktop\Jeszcze cos noweg\ProjektBiblioteka_Studia\Solution\Debug\Testy.dll
+﻿  pch.cpp
+  Testy.cpp
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\headers\Ui.h(9,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
+     Trwa tworzenie biblioteki C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\Debug\Testy.lib i obiektu C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\Debug\Testy.exp
+  Testy.vcxproj -> C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\Debug\Testy.dll

@@ -1,15 +1,36 @@
-﻿  Ui.cpp
-C:\Users\samix\Desktop\Jeszcze cos noweg\ProjektBiblioteka_Studia\Solution\headers\Ui.h(8,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\samix\Desktop\Jeszcze cos noweg\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(7,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\samix\Desktop\Jeszcze cos noweg\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(214,69): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
-C:\Users\samix\Desktop\Jeszcze cos noweg\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(220,17): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
-C:\Users\samix\Desktop\Jeszcze cos noweg\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(331,22): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
-C:\Users\samix\Desktop\Jeszcze cos noweg\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(297,17): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
-C:\Users\samix\Desktop\Jeszcze cos noweg\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(350,9): warning C4101: "error": lokalna zmienna, do której nie istnieje odwołanie
-C:\Users\samix\Desktop\Jeszcze cos noweg\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(523,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
-C:\Users\samix\Desktop\Jeszcze cos noweg\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(614,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
-C:\Users\samix\Desktop\Jeszcze cos noweg\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(657,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
-C:\Users\samix\Desktop\Jeszcze cos noweg\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(783,22): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
-C:\Users\samix\Desktop\Jeszcze cos noweg\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(341): warning C4715: "Ui::addBook”: niewszystkie ścieżki kodu zwracają wartość
-C:\Users\samix\Desktop\Jeszcze cos noweg\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(810): warning C4715: "Ui::addAutor3”: niewszystkie ścieżki kodu zwracają wartość
-  ProjektBiblioteka.vcxproj -> C:\Users\samix\Desktop\Jeszcze cos noweg\ProjektBiblioteka_Studia\Solution\Debug\ProjektBiblioteka.exe
+﻿  AdresZamieszkania.cpp
+  Autor.cpp
+  Bibliotekarz.cpp
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\headers\Bibliotekarz.h(14,26): error C4430: brak specyfikatora typu - założono, że int. Uwaga: C++ nie obsługuje domyślnie typu int
+  Czytelnik.cpp
+  Data.cpp
+  Egzemplarz.cpp
+  Ksiazka.cpp
+  Osoba.cpp
+  RejestrSpoznien.cpp
+  Ui.cpp
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\headers\Bibliotekarz.h(14,31): error C3646: "adres": nieznany specyfikator przesłonięcia
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\headers\Ui.h(9,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(7,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(215,69): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(221,17): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(332,22): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(298,17): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(351,9): warning C4101: "error": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(524,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(615,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(658,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
+  main.cpp
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(784,22): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(2,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(3,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\headers\Ui.h(9,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(4,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(5,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(6,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(7,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(18,8): warning C4101: "error": lokalna zmienna, do której nie istnieje odwołanie
+  Generowanie kodu...
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(17,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(342): warning C4715: "Ui::addBook”: niewszystkie ścieżki kodu zwracają wartość
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(811): warning C4715: "Ui::addAutor3”: niewszystkie ścieżki kodu zwracają wartość

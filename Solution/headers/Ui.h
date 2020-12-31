@@ -5,10 +5,12 @@
 #include "..\headers\Autor.h"
 #include "..\headers\Czytelnik.h"
 #include "..\headers\AdresZamieszkania.h"
+#include "..\headers\Bibliotekarz.h"
 #include "../ProjektBiblioteka/Libraries/sqlite3/sqlite3.h";
 #include <iostream>
 #include <string>
 #include <vector>
+
 using namespace std;
 class Ui {
 private:

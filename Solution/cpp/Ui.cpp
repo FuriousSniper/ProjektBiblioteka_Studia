@@ -102,6 +102,7 @@ Czytelnik Ui::createCzytelnik(sqlite3* database) {
 		}
 	}
 }
+
 bool Ui::addCzytelnik(Czytelnik new_user, sqlite3* database) {
 	char* sql_error;
 	string sql2;

@@ -16,8 +16,6 @@ private:
 
 public:
 
-	//Wywali³em settery do pól sta³ych (wczeœniej nie by³y w ogóle sta³e, a logika wskazuje, ¿e powinny byæ)
-
 	string getNazwisko();
 	string getImie();
 	int getWiek();
