@@ -80,7 +80,11 @@ adres(AdresZamieszkania()){
 Osoba::Osoba() : imie("nie podano"), nazwisko("nie podano"), email("nie podano"), telefon("nie podano"), dataUrodzenia(Data()), wiek(0),
 adres(AdresZamieszkania()){}
 
-Osoba::Osoba(string imie, string nazwisko, string email, string telefon) : imie(imie), nazwisko(nazwisko), email(email), telefon(telefon),
-dataUrodzenia(Data()), adres(AdresZamieszkania()), wiek(0) {}
+Osoba::Osoba(string imie, string nazwisko, string email, string telefon, int d, int m, int r, AdresZamieszkania adres) : imie(imie), nazwisko(nazwisko), email(email), telefon(telefon), dataUrodzenia(Data(d,m,r)), adres(adres) {
+	time_t t = time(NULL);
+	tm* buf = new tm;
+	localtime_s(buf,&t);
+	this->wiek = buf->tm_year + 1900 - r;
+}
 
 

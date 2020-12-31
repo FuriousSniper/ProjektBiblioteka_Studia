@@ -7,7 +7,6 @@
 #include "..\headers\AdresZamieszkania.h"
 #include "..\headers\Bibliotekarz.h"
 #include "..\ProjektBiblioteka\Libraries\sqlite3\sqlite3.h";
-#include <iostream>
 #include <string>
 #include <vector>
 
@@ -23,9 +22,13 @@ public:
 	//zwraca ona obiekt, ktory tworzy
 	Autor createAutor();
 
-	//funkcja do tworzenia obiektu klasy Czytelnik przez uzytkownika
+	//funkcja do tworzenia obiektu klasy Czytelnik
 	//zwraca ona obiekt, ktory tworzy
+
 	Czytelnik createCzytelnik(sqlite3* database);
+
+	//metoda do tworzenia obiektu klasy Bibliotekarz przez u¿ytkownika,
+	//zwraca utworzony obiekt.
 
 	//funkcja do tworzenia obiektu klasy Adres przez uzytkownika
 	//zwraca ona obiekt, ktory tworzy

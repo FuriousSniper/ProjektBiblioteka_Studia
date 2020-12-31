@@ -33,7 +33,7 @@ public:
 	int setWiek(int wiek);
 
 	Osoba(string imie, string nazwisko, int d, int m, int r);
-	Osoba(string imie, string nazwisko, string email, string telefon);
+	Osoba(string imie, string nazwisko, string email, string telefon, int d, int m, int r, AdresZamieszkania adres);
 	Osoba(string imie, string nazwisko);
 	Osoba();
 

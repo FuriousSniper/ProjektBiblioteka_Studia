@@ -43,7 +43,7 @@ public:
 	int zmienTerminOddania(Data termin);
 	int zarezerwujKsiazke(Egzemplarz* ksiazka);
 	Data getDataDolaczenia();
-	Czytelnik(string imie, string nazwisko, int d, int m, int r,int ID);
+	Czytelnik(string imie, string nazwisko, string email, string telefon, int d, int m, int r, AdresZamieszkania, int ID);
 	Czytelnik(string imie, string nazwisko, int d, int m, int r, string* preferowaneTematy);
 	void printInfo();
 	void setHaslo(string newHaslo);
