@@ -30,8 +30,11 @@ public:
 	//metoda do tworzenia obiektu klasy Bibliotekarz przez u¿ytkownika,
 	//zwraca utworzony obiekt.
 
+	Bibliotekarz createBibliotekarz(sqlite3* database);
+
 	//funkcja do tworzenia obiektu klasy Adres przez uzytkownika
 	//zwraca ona obiekt, ktory tworzy
+
 	AdresZamieszkania createAdres();
 	
 	//funkcja do wyboru pierwszej akcji uzytkownika. 
@@ -53,6 +56,7 @@ public:
 	bool confirmVerification();
 
 	bool addCzytelnik(Czytelnik new_user, sqlite3* database);
+	bool addBibliotekarz(Bibliotekarz new_user, sqlite3* database);
 	//funkcja dodajaca ksiazke do biblioteki.
 	//po callu wymagane jest wpisanie tytulu i kategorii, aby dodac ksiazke
 	bool addBook();

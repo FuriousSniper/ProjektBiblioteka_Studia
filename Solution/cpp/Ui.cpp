@@ -116,6 +116,48 @@ Czytelnik Ui::createCzytelnik(sqlite3* database) {
 	}
 }
 
+Bibliotekarz Ui::createBibliotekarz(sqlite3* database) {
+
+	// TODO: polaczyc ta metode z metoda createCzytelnik. Roznia sie drobnymi szczegolami.
+
+	sqlite3_stmt* stmt;
+	cout << "Tworzenie nowego Bibliotekarza" << endl;
+	Osoba o = Ui::createOsoba();
+	int rc = sqlite3_prepare_v2(database, "select MAX(ID) from BIBLIOTEKARZ", -1, &stmt, NULL);
+	int temp = -1;
+	if (sqlite3_step(stmt) == SQLITE_ROW) {		//NOTOWANIE ID NA WYPADEK ZMIANY PLANOW
+		temp = sqlite3_column_int(stmt, 0);		//CO DO SPOSOBU LOGOWANIA LUB TYM PODOBNYCH
+	}
+	++temp;
+
+	Bibliotekarz b = Bibliotekarz(o.getImie(), o.getNazwisko(), o.getEmail(), o.getTelefon(), o.getDataUrodzenia().getDzien(), o.getDataUrodzenia().getMiesiac(), o.getDataUrodzenia().getRok(), o.getAdresZamieszkania(), temp);
+
+
+	while (true) {
+		system("cls");
+		cout << "Podaj haslo do swojego konta! " << endl;
+		string pass;
+		cin >> pass;
+		cin.clear();
+		cin.ignore();
+		system("cls");
+		cout << "Potwierdz haslo do swojego konta!" << endl;
+		string pass2;
+		cin >> pass2;
+		if (pass == pass2) {
+			system("cls");
+			b.setHaslo(pass);
+			return b;
+		}
+		else {
+			system("cls");
+			cout << "Hasla nie sa zgodne!\n";
+			cin.clear();
+			cin.ignore();
+		}
+	}
+}
+
 bool Ui::addCzytelnik(Czytelnik new_user, sqlite3* database) {
 	char* sql_error;
 	string sql2;
@@ -149,6 +191,40 @@ bool Ui::addCzytelnik(Czytelnik new_user, sqlite3* database) {
 		return false;
 	}
 	return true;
+}
+
+bool Ui::addBibliotekarz(Bibliotekarz new_user, sqlite3* database) {
+
+	// TODO polaczyc z metoda addCzytelnik. Rozni sie jedynie zapytaniem.
+
+	char* sql_error;
+	string sql2;
+	int temp = new_user.getID();
+	sql2 = "INSERT INTO BIBLIOTEKARZ"
+		"(imie, nazwisko, wiek,"
+		"dataUrodzenia, haslo, email, telefon, miasto, kodPocztowy, ulica, numerMieszkania)"
+		" VALUES ('" +
+		new_user.getImie() + "','" +
+		new_user.getNazwisko() + "'," +
+		to_string(new_user.getWiek()) + ",'" +
+		to_string(new_user.getDataUrodzenia().getDzien()) + "-" +
+		to_string(new_user.getDataUrodzenia().getMiesiac()) + "-" +
+		to_string(new_user.getDataUrodzenia().getRok()) + "','" +
+		new_user.getHaslo() + "','" +
+		new_user.getEmail() + "','" +
+		new_user.getTelefon() + "','" +
+		new_user.getAdresZamieszkania().getMiasto() + "','" +
+		new_user.getAdresZamieszkania().getKodPocztowy() + "','" +
+		new_user.getAdresZamieszkania().getUlica() + "','" +
+		to_string(new_user.getAdresZamieszkania().getNumerMieszkania()) + "');";
+
+	sqlite3_exec(database, sql2.c_str(), NULL, NULL, &sql_error);
+	if (sql_error != SQLITE_OK) {
+		cout << "blad: " << sql_error << endl;
+		return false;
+	}
+	return true;
+
 }
 
 AdresZamieszkania Ui::createAdres() {

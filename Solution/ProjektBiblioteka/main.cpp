@@ -7,6 +7,7 @@
 #include "../ProjektBiblioteka/Libraries/sqlite3/sqlite3.h";
 #include <sstream>
 #include <vector>
+
 using namespace std;
 
 int main() {
@@ -128,7 +129,6 @@ int main() {
 			else if (acc_type2 == 1) {
 				//REJESTRACJA CZYTELNIKA
 				Czytelnik new_user = ui.createCzytelnik(db);
-				new_user.setAdresZamieszkania(ui.createAdres());
 				new_user.printInfo();
 				//WERYFIKACJA POPRAWNOSCI WPROWADZONYCH DANYCH
 				if (ui.confirmVerification() == true) {
@@ -148,8 +148,29 @@ int main() {
 					continue;
 				}
 			}
-			else {
+			else if (acc_type2 == 2) {
+
 				//REJESTRACJA BIBLIOTEKARZA
+
+				Bibliotekarz new_user = ui.createBibliotekarz(db);
+				new_user.printInfOBibliotekarzu();
+
+				if (ui.confirmVerification() == true) {
+
+					if (ui.addBibliotekarz(new_user, db) == true) {
+						system("cls");
+						cout << "Pomyslnie dodano bibliotekarza!\nHaslo: " << new_user.getHaslo() << "\nLogin: " << new_user.getImie() << " " << new_user.getNazwisko() << endl;
+						system("pause");
+					}
+						else {
+						cout << "Blad przy dodawaniu uzytkownika do bazy danych.\n";
+						system("pause");
+					}
+				}
+				else {
+					continue;
+				}
+			
 			}
 		}
 		else {

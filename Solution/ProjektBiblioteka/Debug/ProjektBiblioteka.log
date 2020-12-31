@@ -1,6 +1,4 @@
-﻿  Czytelnik.cpp
-  Egzemplarz.cpp
-  main.cpp
+﻿  main.cpp
 C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(2,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
 C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(3,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
 C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\headers\Ui.h(9,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
@@ -8,7 +6,6 @@ C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\ma
 C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(5,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
 C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(6,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
 C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(7,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(19,8): warning C4101: "error": lokalna zmienna, do której nie istnieje odwołanie
-  Generowanie kodu...
-C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(18,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(20,8): warning C4101: "error": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(19,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
   ProjektBiblioteka.vcxproj -> C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\Debug\ProjektBiblioteka.exe

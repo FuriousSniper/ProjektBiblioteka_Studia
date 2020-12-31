@@ -44,7 +44,7 @@ public:
 	int zarezerwujKsiazke(Egzemplarz* ksiazka);
 	Data getDataDolaczenia();
 	Czytelnik(string imie, string nazwisko, string email, string telefon, int d, int m, int r, AdresZamieszkania, int ID);
-	Czytelnik(string imie, string nazwisko, int d, int m, int r, string* preferowaneTematy);
+	Czytelnik(string imie, string nazwisko, int d, int m, int r, string* preferowaneTematy, int ID);
 	void printInfo();
 	void setHaslo(string newHaslo);
 	string getHaslo();

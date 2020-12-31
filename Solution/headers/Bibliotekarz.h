@@ -5,7 +5,7 @@
 #include "AdresZamieszkania.h"
 
 using namespace std;
-class Bibliotekarz : Osoba {
+class Bibliotekarz : public Osoba {
 
 private:
 
@@ -14,14 +14,14 @@ private:
 
 public:
 
-	void zmienHaslo(string haslo);
+	void setHaslo(string haslo);
 	string getHaslo();
 	int getID();
 
 	void printInfOBibliotekarzu();
 	void getBiblioteka();
-	Bibliotekarz(int id, string haslo);
-	Bibliotekarz(int id, string haslo, string imie, string nazwisko);
+	Bibliotekarz(string imie, string nazwisko, int ID);
+	Bibliotekarz(string imie, string nazwisko, string email, string telefon, int d, int m, int r, AdresZamieszkania adres, int ID);
 
 };
 

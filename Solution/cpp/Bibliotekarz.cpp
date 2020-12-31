@@ -4,9 +4,8 @@
 #include <iostream>
 using namespace std;
 
-void Bibliotekarz::zmienHaslo(string haslo) {
-	// TODO - implement Bibliotekarz::zmienHaslo
-	throw "Not yet implemented";
+void Bibliotekarz :: setHaslo(string haslo) {
+	this->haslo = haslo;
 }
 
 string Bibliotekarz::getHaslo() {
@@ -23,9 +22,9 @@ void Bibliotekarz::printInfOBibliotekarzu() {
 	cout << "\tID: " << this->ID << endl;
 }
 
-Bibliotekarz::Bibliotekarz(int id, string haslo) : ID(id), haslo(haslo), Osoba() {}
+Bibliotekarz::Bibliotekarz(string imie, string nazwisko, int ID) : Osoba(imie, nazwisko), ID(ID) {}
 
-Bibliotekarz::Bibliotekarz(int id, string haslo,string imie, string nazwisko) : Osoba(imie, nazwisko), ID(id), haslo(haslo) {}
+Bibliotekarz::Bibliotekarz(string imie, string nazwisko, string email, string telefon, int d, int m, int r, AdresZamieszkania adres, int ID) : Osoba(imie, nazwisko, email, telefon, d,m,r,adres), ID(ID) {}
 
 void Bibliotekarz::getBiblioteka() {
 	// TODO - implement Bibliotekarz::getBiblioteka
