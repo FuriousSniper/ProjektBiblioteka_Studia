@@ -16,7 +16,7 @@ private:
 	const Data dataUrodzenia;
 	string email;
 	string telefon;
-	const AdresZamieszkania adres;
+	AdresZamieszkania adres;
 
 public:
 
@@ -25,6 +25,7 @@ public:
 	string getEmail();
 	string getTelefon();
 	AdresZamieszkania getAdresZamieszkania();
+	void setAdresZamieszkania(AdresZamieszkania adres);
 	Data getDataUrodzenia();
 	int getWiek();
 

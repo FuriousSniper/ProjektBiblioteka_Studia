@@ -61,6 +61,10 @@ void Osoba::setDaneKontaktowe(string email, string telefon) {
 	this->telefon = telefon;
 }
 
+void Osoba :: setAdresZamieszkania(AdresZamieszkania adres) {
+	this->adres = adres;
+}
+
 Osoba::Osoba(string imie, string nazwisko, int d, int m, int r):imie(imie),nazwisko(nazwisko), dataUrodzenia(Data(d,m,r)), 
 adres(AdresZamieszkania()), email("nie podano"), telefon("nie podano"){
 	time_t t = time(NULL);

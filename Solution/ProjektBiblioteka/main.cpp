@@ -11,7 +11,7 @@ using namespace std;
 
 int main() {
 
-	/*
+	
 	
 	Ui ui = Ui();
 	sqlite3* db;
@@ -24,7 +24,7 @@ int main() {
 		printf("Failed to open DB\n");
 		return 1;
 	}
-	*/
+	
 	
 	/*
 	const char* sql;
@@ -100,7 +100,6 @@ int main() {
 	}
 	*/
 
-	/*
 	const char* sql = "CREATE TABLE CZYTELNIK(ID INTEGER PRIMARY        KEY      ,listaZaleglosci       TEXT     ,dataPierwszegoWypozyczenia     DATE     ,iloscWypozyczonychOdDolaczenia  INT             ,preferowaneTematy     TEXT             ,dataDolaczenia        DATE             ,miasto				   TEXT             ,kodPocztowy           TEXT             ,ulica                 TEXT             ,imie                  TEXT             ,nazwisko              TEXT             ,wiek                  TEXT             ,dataUrodzenia         DATE             ,haslo				   TEXT				,numerMieszkania       TEXT             , ksiazka1 TEXT, ksiazka2 TEXT, ksiazka3 TEXT)";
 	sqlite3_exec(db, sql, NULL, NULL, NULL);
 	for (;;) {
@@ -163,12 +162,7 @@ int main() {
 	
 	sqlite3_close(db);
 
-	*/
-
-
-
-Osoba* os1 = new Osoba();
-os1->printOsoba();
+	
 	system("pause");
 
 	return 0;
