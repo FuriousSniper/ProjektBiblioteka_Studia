@@ -26,81 +26,6 @@ int main() {
 		return 1;
 	}
 	
-	
-	/*
-	const char* sql;
-	sql = "INSERT INTO "
-		"CZYTELNIK("
-		"	ID,"
-		"	listaZaleglosci,"
-		"	dataPierwszegoWypozyczenia,"
-		"	iloscWypozyczonychOdDolaczenia,"
-		"	preferowaneTematy,"
-		"	dataDolaczenia,"
-		"	miasto,"
-		"	kodPocztowy,"
-		"	ulica,"
-		"	imie,"
-		"	nazwisko,"
-		"	wiek,"
-		"	dataUrodzenia,"
-		"	haslo,"
-		"	numerMieszkania"
-		") "
-		"VALUES ("
-		"	0002,"
-		"	'',"
-		"	'',"
-		"	0,"
-		"	'',"
-		"	DATE(),"
-		"		'Krakow',"
-		"		'31-356',"
-		"		'Dluga',"
-		"		'Niko',"
-		"		'Kovac',"
-		"		26,"
-		"		'1994 - 5 - 11',"
-		"		'Kovac',"
-		"		17"
-		"	);";
-	sqlite3_exec(db, sql, NULL, NULL, &error);
-	if (error != SQLITE_OK)
-		cout << "blad: "<<error << endl;
-
-	printf("Performing query...\n");
-	sqlite3_prepare_v2(db, "select * from CZYTELNIK", -1, &stmt, NULL);
-
-	printf("Got results:\n");
-	bool done = false;
-	int row = 0;
-	int bytes;
-	const unsigned char* text;
-	while (!done) {
-		//printf("In select while\n");
-		switch (sqlite3_step(stmt)) {
-		case SQLITE_ROW:
-			//bytes = sqlite3_column_bytes(stmt, 0);
-			for (int i= 0; i < sqlite3_column_count(stmt); i++) {
-				cout<<sqlite3_column_name(stmt, i) << ": ";
-				cout<<sqlite3_column_text(stmt, i)<<endl;
-			}
-			cout << endl;
-
-			row++;
-			break;
-
-		case SQLITE_DONE:
-			done = true;
-			break;
-
-		default:
-			fprintf(stderr, "Failed.\n");
-			return 1;
-		}
-	}
-	*/
-
 	const char* sql = "CREATE TABLE CZYTELNIK(ID INTEGER PRIMARY        KEY      ,listaZaleglosci       TEXT     ,dataPierwszegoWypozyczenia     DATE     ,iloscWypozyczonychOdDolaczenia  INT             ,preferowaneTematy     TEXT             ,dataDolaczenia        DATE             ,miasto				   TEXT             ,kodPocztowy           TEXT             ,ulica                 TEXT             ,imie                  TEXT             ,nazwisko              TEXT             ,wiek                  TEXT             ,dataUrodzenia         DATE             ,haslo				   TEXT				,numerMieszkania       TEXT             , ksiazka1 TEXT, ksiazka2 TEXT, ksiazka3 TEXT)";
 	sqlite3_exec(db, sql, NULL, NULL, NULL);
 	for (;;) {
@@ -179,11 +104,9 @@ int main() {
 		}
 	}
 		
-
 	
+
 	sqlite3_close(db);
-
-	
 	system("pause");
 
 	return 0;

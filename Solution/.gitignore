@@ -39,8 +39,3 @@ ipch/
 *.opensdf
 *.sdf
 *.cachefile
-
-#visual studio local db files
-.vs/Solution/v16/
-*.suo
-*.VC.*
