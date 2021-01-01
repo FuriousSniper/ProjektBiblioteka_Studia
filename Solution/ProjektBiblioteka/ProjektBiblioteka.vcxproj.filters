@@ -33,9 +33,6 @@
     <ClInclude Include="..\headers\Czytelnik.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="..\headers\DaneKontaktowe.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="..\headers\Data.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -72,9 +69,6 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="..\cpp\Czytelnik.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cpp\DaneKontaktowe.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="..\cpp\Data.cpp">

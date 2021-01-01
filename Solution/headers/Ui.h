@@ -5,10 +5,11 @@
 #include "..\headers\Autor.h"
 #include "..\headers\Czytelnik.h"
 #include "..\headers\AdresZamieszkania.h"
-#include "../ProjektBiblioteka/Libraries/sqlite3/sqlite3.h";
-#include <iostream>
+#include "..\headers\Bibliotekarz.h"
+#include "..\ProjektBiblioteka\Libraries\sqlite3\sqlite3.h";
 #include <string>
 #include <vector>
+
 using namespace std;
 class Ui {
 private:
@@ -21,12 +22,19 @@ public:
 	//zwraca ona obiekt, ktory tworzy
 	Autor createAutor();
 
-	//funkcja do tworzenia obiektu klasy Czytelnik przez uzytkownika
+	//funkcja do tworzenia obiektu klasy Czytelnik
 	//zwraca ona obiekt, ktory tworzy
-	Czytelnik createCzytelnik();
+
+	Czytelnik createCzytelnik(sqlite3* database);
+
+	//metoda do tworzenia obiektu klasy Bibliotekarz przez u¿ytkownika,
+	//zwraca utworzony obiekt.
+
+	Bibliotekarz createBibliotekarz(sqlite3* database);
 
 	//funkcja do tworzenia obiektu klasy Adres przez uzytkownika
 	//zwraca ona obiekt, ktory tworzy
+
 	AdresZamieszkania createAdres();
 	
 	//funkcja do wyboru pierwszej akcji uzytkownika. 
@@ -47,6 +55,8 @@ public:
 	int chooseUserTypeRegistration();
 	bool confirmVerification();
 
+	bool addCzytelnik(Czytelnik new_user, sqlite3* database);
+	bool addBibliotekarz(Bibliotekarz new_user, sqlite3* database);
 	//funkcja dodajaca ksiazke do biblioteki.
 	//po callu wymagane jest wpisanie tytulu i kategorii, aby dodac ksiazke
 	bool addBook();

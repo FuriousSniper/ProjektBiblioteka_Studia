@@ -1,4 +1,5 @@
 #include "..\headers\Osoba.h"
+#include "..\headers\AdresZamieszkania.h"
 #include <iostream>
 #include <ctime>
 
@@ -14,6 +15,18 @@ int Osoba::getWiek() {
 	return this->wiek;
 }
 
+AdresZamieszkania Osoba::getAdresZamieszkania() {
+	return this->adres;
+}
+
+string Osoba :: getEmail() {
+	return this->email;
+}
+
+string Osoba :: getTelefon() {
+	return this->telefon;
+}
+
 Data Osoba::getDataUrodzenia() {
 	return this->dataUrodzenia;
 }
@@ -25,20 +38,53 @@ int Osoba::setWiek(int age) {
 
 void Osoba::printOsoba() {
 	
-	//TODO: uwzglêdnienie drukowania wieku (na razie ze wzglêdu na brak inicjalizacji pola tego nie robi).
-
-	cout << this->imie << " " << this->nazwisko << ", data urodzenia: ";
+	cout << "Dane osobowe:" << endl;
+	cout << "\timie: " << this->imie << endl << "\tnazwisko: " << this->nazwisko << endl << "\tdata urodzenia: ";
 	dataUrodzenia.printData();
+	cout << "\twiek: ";
+
+	if (wiek == 0) {
+		cout << "nie podano" << endl;
+	}
+	else {
+		cout << this->wiek << endl;
+	}
+
+	cout << "\te-mail: " << this->email << endl;
+	cout << "\ttelefon: " << this->telefon << endl;
+	cout << "\tadres zamieszkania: ";
+	adres.printAdresZamieszkania();
 }
 
-Osoba::Osoba(string imie, string nazwisko, int d, int m, int r):imie(imie),nazwisko(nazwisko), dataUrodzenia(Data(d,m,r)){
+void Osoba::setDaneKontaktowe(string email, string telefon) {
+	this->email = email;
+	this->telefon = telefon;
+}
+
+void Osoba :: setAdresZamieszkania(AdresZamieszkania adres) {
+	this->adres = adres;
+}
+
+Osoba::Osoba(string imie, string nazwisko, int d, int m, int r):imie(imie),nazwisko(nazwisko), dataUrodzenia(Data(d,m,r)), 
+adres(AdresZamieszkania()), email("nie podano"), telefon("nie podano"){
 	time_t t = time(NULL);
 	tm* buf = new tm;
 	localtime_s(buf,&t);
 	this->wiek = buf->tm_year + 1900 - r;
 }
 
-Osoba::Osoba(string imie, string nazwisko) : imie(imie), nazwisko(nazwisko),dataUrodzenia(Data()), wiek(0) {
+Osoba::Osoba(string imie, string nazwisko) : imie(imie), nazwisko(nazwisko),dataUrodzenia(Data()), wiek(0), email("nie podano"),telefon("nie podano"),
+adres(AdresZamieszkania()){
+}
+
+Osoba::Osoba() : imie("nie podano"), nazwisko("nie podano"), email("nie podano"), telefon("nie podano"), dataUrodzenia(Data()), wiek(0),
+adres(AdresZamieszkania()){}
+
+Osoba::Osoba(string imie, string nazwisko, string email, string telefon, int d, int m, int r, AdresZamieszkania adres) : imie(imie), nazwisko(nazwisko), email(email), telefon(telefon), dataUrodzenia(Data(d,m,r)), adres(adres) {
+	time_t t = time(NULL);
+	tm* buf = new tm;
+	localtime_s(buf,&t);
+	this->wiek = buf->tm_year + 1900 - r;
 }
 
 

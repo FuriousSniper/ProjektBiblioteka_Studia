@@ -2,28 +2,27 @@
 #define BIBLIOTEKARZ_H
 #include "Osoba.h"
 #include <string>
-#include "DaneKontaktowe.h"
+#include "AdresZamieszkania.h"
+
 using namespace std;
-class Bibliotekarz : Osoba {
+class Bibliotekarz : public Osoba {
 
 private:
-	string id;
+
+	const int ID;
 	string haslo;
-	DaneKontaktowe kontakt;
 
 public:
-	void zmienHaslo(string haslo);
 
-	void zmienDaneKontaktowe(DaneKontaktowe kontakt);
+	void setHaslo(string haslo);
+	string getHaslo();
+	int getID();
 
 	void printInfOBibliotekarzu();
-
 	void getBiblioteka();
+	Bibliotekarz(string imie, string nazwisko, int ID);
+	Bibliotekarz(string imie, string nazwisko, string email, string telefon, int d, int m, int r, AdresZamieszkania adres, int ID);
 
-	Bibliotekarz(string id, string haslo);
-
-	Bibliotekarz(string id, string haslo, string imie, string nazwisko);
-	
 };
 
 #endif

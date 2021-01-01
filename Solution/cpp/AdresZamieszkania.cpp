@@ -1,7 +1,7 @@
 #include "..\headers\AdresZamieszkania.h"
 #include <iostream>
 
-void AdresZamieszkania::printAdresZamieszkania() {
+void AdresZamieszkania::printAdresZamieszkania() const {
 	cout << "ul. " << ulica << " " << numerMieszkania << " " << miasto << " " << kodPocztowy << endl;
 }
 
