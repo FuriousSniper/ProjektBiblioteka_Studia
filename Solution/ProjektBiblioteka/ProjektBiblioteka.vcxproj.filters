@@ -57,6 +57,9 @@
     <ClInclude Include="Libraries\sqlite3\sqlite3ext.h">
       <Filter>Libraries\sqlite3</Filter>
     </ClInclude>
+    <ClInclude Include="Statystyki.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\cpp\AdresZamieszkania.cpp">
@@ -97,6 +100,9 @@
     </ClCompile>
     <ClCompile Include="Libraries\sqlite3\sqlite3.c">
       <Filter>Libraries\sqlite3</Filter>
+    </ClCompile>
+    <ClCompile Include="Statystyki.cpp">
+      <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

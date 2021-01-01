@@ -151,6 +151,9 @@
     <ClInclude Include="..\headers\Ui.h" />
     <ClInclude Include="Libraries\sqlite3\sqlite3.h" />
     <ClInclude Include="Libraries\sqlite3\sqlite3ext.h" />
+    <ClInclude Include="Statystyki.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">False</ExcludedFromBuild>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\cpp\AdresZamieszkania.cpp" />
@@ -166,6 +169,7 @@
     <ClCompile Include="Libraries\sqlite3\shell.c" />
     <ClCompile Include="Libraries\sqlite3\sqlite3.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Statystyki.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Testy\Testy.vcxproj">

@@ -7,17 +7,7 @@ C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(389,17): 
 C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(456,9): warning C4101: "error": lokalna zmienna, do której nie istnieje odwołanie
 C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(625,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
 C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(714,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
-  main.cpp
 C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(756,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
-C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(2,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(3,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\headers\Ui.h(9,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(4,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(5,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(6,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(7,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(20,8): warning C4101: "error": lokalna zmienna, do której nie istnieje odwołanie
-  Generowanie kodu...
-C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(19,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
 C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(447): warning C4715: "Ui::addBook”: niewszystkie ścieżki kodu zwracają wartość
+LINK : warning LNK4067: niejednoznaczny punkt wejťcia; wybrano ämainCRTStartupö
   ProjektBiblioteka.vcxproj -> C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\x64\Debug\ProjektBiblioteka.exe

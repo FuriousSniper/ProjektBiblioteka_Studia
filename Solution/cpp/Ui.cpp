@@ -944,22 +944,22 @@ bool Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
 		if (tryb == 1) {
 			zapytanie = "SELECT imie, nazwisko, haslo "
 				"FROM Czytelnik "
-				"WHERE imie == '" + 
+				"WHERE imie == '" +
 				imie + "' AND nazwisko == '" +
-				nazwisko + "' AND haslo == '" + 
+				nazwisko + "' AND haslo == '" +
 				haslo + "';";
 		}
 		else if (tryb == 2) {
 			zapytanie = "SELECT imie, nazwisko, haslo "
 				"FROM Bibliotekarz "
-				"WHERE imie == '" + 
-				imie + "' AND nazwisko == '" + 
-				nazwisko + "' AND haslo == '" + 
+				"WHERE imie == '" +
+				imie + "' AND nazwisko == '" +
+				nazwisko + "' AND haslo == '" +
 				haslo + "';";
 		}
 
-		sqlite3_stmt * stmt = NULL;
-		
+		sqlite3_stmt* stmt = NULL;
+
 		sqlite3_prepare_v2(bazaDanych, zapytanie.c_str(), -1, &stmt, NULL);
 		ret = sqlite3_step(stmt);
 		sqlite3_finalize(stmt);
@@ -980,6 +980,7 @@ bool Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
 			//Jest dostepny wiersz do oczytu czyli czytelnik znajduje sie w bazie.
 
 			cout << "Pomyslnie zalogowano!" << endl;
+
 			system("pause");
 			return 1;
 		}
@@ -1001,6 +1002,7 @@ bool Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
 			if (wybor == 0) {
 				return 0;
 			}
-		}	
+		}
 	}
 }
+

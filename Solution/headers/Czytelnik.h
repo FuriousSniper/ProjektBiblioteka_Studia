@@ -7,32 +7,31 @@ using namespace std;
 #include "AdresZamieszkania.h"
 #include "Egzemplarz.h"
 #include "Osoba.h"
+#include "Statystyki.h"
 
 class Egzemplarz;
 class Osoba;
+
 class Czytelnik: public Osoba {
 
 private:
+
 	//TUTAJ JEST BARDZO DZIWNY BLAD, NALEZY JESZCZE W DRUGIM PLIKU DOPISAC DO KONSTRUKTORA I WTEDY SIE ON POJAWIA
 	//DaneKontaktowe kontakt;
 
+	//Kazdy Czytelnik, ktory zalega z oddanie posiada swoje ID w rejestrze spoznien. Jezeli nie zalega to jest
+	//to ustawione na -1.
+
+	int idRejestrSpoznien;
 	const int ID;
-	Egzemplarz** listaZaleglosci;
-	Data dataPierwszegoWypozyczenia;
-	int iloscWypozyczonychObecnie;
-	int iloscWypozyczonychOdDolaczenia;
 	string* preferowaneTematy;
-	Data dataDolaczenia;
 	string haslo;
+	Statystyki statystyki;
 
 public:
 
 	const int getID();
-	Egzemplarz** getZaleglosci();
-	int setZaleglosci(Egzemplarz** egzemplarze);
-	Data getDataPierwszegoWypozyczenia();
 	string getOfertySpecjalne();
-	int getIloscWypozyczonychOdDolaczenia();
 	string* getPreferowaneTematy();
 	int setPreferowaneTematy(string* tematy);
 	int wypozyczKsiazke(Egzemplarz* ksiazka);
@@ -42,7 +41,6 @@ public:
 	Data sprawdzTerminOddania(Egzemplarz* ksiazka);
 	int zmienTerminOddania(Data termin);
 	int zarezerwujKsiazke(Egzemplarz* ksiazka);
-	Data getDataDolaczenia();
 	Czytelnik(string imie, string nazwisko, string email, string telefon, int d, int m, int r, AdresZamieszkania, int ID);
 	Czytelnik(string imie, string nazwisko, int d, int m, int r, string* preferowaneTematy, int ID);
 	void printInfo();
