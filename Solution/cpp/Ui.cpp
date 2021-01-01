@@ -960,8 +960,7 @@ bool Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
 
 		sqlite3_stmt * stmt = NULL;
 		
-		const char* errormsg;
-		sqlite3_prepare_v2(bazaDanych, zapytanie.c_str(), -1, &stmt, &errormsg);
+		sqlite3_prepare_v2(bazaDanych, zapytanie.c_str(), -1, &stmt, NULL);
 		ret = sqlite3_step(stmt);
 		sqlite3_finalize(stmt);
 
@@ -985,8 +984,6 @@ bool Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
 			return 1;
 		}
 		else {
-
-			cout << errormsg << endl;
 
 			int wybor = -1;
 

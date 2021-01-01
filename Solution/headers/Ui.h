@@ -57,7 +57,6 @@ public:
 
 	//Metoda pozwalajaca zalogowac sie na konto uzytkownikowi (zarowno bibliotekarzowi jak i czytelnikowi)
 	//do metody przekazywany jest tryb okreslajacy osobe ktora sie loguje.
-	//Aby zalogowac sie jako czytelnik nalezy mode == 1, jako biblitekarz mode == 2.
 
 	bool zaloguj(int tryb, sqlite3* bazaDanych);
 
