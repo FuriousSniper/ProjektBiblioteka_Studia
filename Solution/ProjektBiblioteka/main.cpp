@@ -38,10 +38,20 @@ int main() {
 			else if (acc_type == 0)
 				break;
 			else if (acc_type == 1) {
-				//LOGOWANIE CZYTELNIKA
+				bool statusLogowania = ui.zaloguj(1, db);
+
+				if (statusLogowania == 0) continue;
+				else {
+					//Dodac menu uzytkownika po zalogowaniu (wyswietlanie dostepnych ksiazek, wypozyczonych, ofert specjalnych itd.
+				}
 			}
 			else {
-				//LOGOWANIE BIBLIOTEKARZA
+				bool statusLogowania = ui.zaloguj(2, db);
+
+				if (statusLogowania == 0) continue;
+				else {
+					//Dodac menu uzytkownika po zalogowaniu.
+				}
 			}
 		}
 		else if (tryb == 2) {

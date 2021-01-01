@@ -908,3 +908,102 @@ int Ui::addAutor3(string imie, string ksiazka) {
 		return 1;
 	}
 }
+
+bool Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
+	
+	//tryb == 1 - logowanie czytelnika
+	//tryb == 2 - logowanie bibliotekarza
+
+	//z zalozenia do metody przekazywany jest wskaznik na otwarta juz baze.
+	//mozna tego nie robic i otwierac wewnatrz tej metody.
+
+	while (true) {
+
+		system("CLS");
+
+		string imie;
+		string nazwisko;
+		string haslo;
+		int ret;      //Do przypisania wartosci zwracanej przez funkcje sqlite3_step(...).
+
+		cout << "Logowanie do systemu biblioteki." << endl;
+		cout << "Podaj imie: ";
+		cin >> imie;
+		cout << "Podaj nazwisko: ";
+		cin >> nazwisko;
+		cout << "Podaj haslo: ";
+		cin >> haslo;
+
+		string zapytanie;     //zapytanie sql
+
+		//Jedyna roznica w logowaniu bibliotekarza i czytelnika jest zapytanie.
+
+		//Nie bawilem sie w sprawdzanie istnienia za pomoca SQL (WHERE EXISTS) bo nie wiem jak zinterpretowac zwracana wartosc funkcj¹
+		//w bibliotece sqlite3
+
+		if (tryb == 1) {
+			zapytanie = "SELECT imie, nazwisko, haslo "
+				"FROM Czytelnik "
+				"WHERE imie == '" + 
+				imie + "' AND nazwisko == '" +
+				nazwisko + "' AND haslo == '" + 
+				haslo + "';";
+		}
+		else if (tryb == 2) {
+			zapytanie = "SELECT imie, nazwisko, haslo "
+				"FROM Bibliotekarz "
+				"WHERE imie == '" + 
+				imie + "' AND nazwisko == '" + 
+				nazwisko + "' AND haslo == '" + 
+				haslo + "';";
+		}
+
+		sqlite3_stmt * stmt = NULL;
+		
+		const char* errormsg;
+		sqlite3_prepare_v2(bazaDanych, zapytanie.c_str(), -1, &stmt, &errormsg);
+		ret = sqlite3_step(stmt);
+		sqlite3_finalize(stmt);
+
+		//SQLITE_ROW jest zwracane przez sqlite3_step(...) jezeli jest dostepny wiersz do odczytu.
+		//Zakladam, ze w bazie nie moze byc jednoczesnie dwoch rekordow o takich samych: imieniu, nazwisku i hasle
+
+		//Czyli nie moze zajsc taka sytuacja, ze w tabeli sa dwa rekordy:
+		//Rekord 1: imie = Adam nazwisko = Ligaj haslo = admin
+		//Rekord2: imie = Adam nazwisko = Ligaj haslo = admin
+		//Wiadomym jest, ze moze byc dwoch uzytkownikow o takim samym imieniu i nazwisku. Jest to praktycznie
+		//niemozliwe ze stworza konta o takim samym hasle...
+
+		//A wiec powinien byc tylko jeden wiersz do odczytu (pod warunkiem, ze istnieje i nie wystapily bledy).
+
+		if (ret == SQLITE_ROW) {
+
+			//Jest dostepny wiersz do oczytu czyli czytelnik znajduje sie w bazie.
+
+			cout << "Pomyslnie zalogowano!" << endl;
+			system("pause");
+			return 1;
+		}
+		else {
+
+			cout << errormsg << endl;
+
+			int wybor = -1;
+
+			//Jezeli logowanie sie nie powiodlo tj. SQLITE_ROW nie zostalo zwrocone przez funkcje (z roznego powodu),
+			//sygnalizujemy wystapienie problemu i oferujemy mozliwosc ponownego logowania.
+
+			//Przyczyna niepowodzenia logowania moze byc np. brak czytelnika w bazie danych, czyli wymagana jest
+			//rejestracja.
+
+			cout << "Logowanie sie nie powiodlo. Mozliwe ze uzytkownik o podanych danych nie istnieje." << endl;
+			cout << "Jezeli chcesz wrocic do menu glownego wybierz 0." << endl;
+			cout << "Jezeli chcesz sprobowac zalogowac sie ponownie, wybierz liczbe inna niz 0: ";
+			cin >> wybor;
+
+			if (wybor == 0) {
+				return 0;
+			}
+		}	
+	}
+}
