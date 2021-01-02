@@ -1113,7 +1113,7 @@ void Ui :: wyborWMenuCzytelnika(int wybor) {
 	system("pause");
 }
 
-int Ui :: menuPoZalogowaniuBibliotekarza(Bibliotekarz*bibliotekarz) {
+int Ui :: menuPoZalogowaniuBibliotekarza(Bibliotekarz*bibliotekarz, sqlite3*bazaDanych) {
 
 	//Proste menu wyswietlane po zalogowaniu bibliotekarza.
 	//Po wyborze umozliwia dalsze operacje np. sprawdzenie rejestru spoznien.
@@ -1134,11 +1134,11 @@ int Ui :: menuPoZalogowaniuBibliotekarza(Bibliotekarz*bibliotekarz) {
 		if (wybor == 0) {
 			return 0;
 		}
-		wyborWMenuBibliotekarza(wybor, bibliotekarz);
+		wyborWMenuBibliotekarza(wybor, bibliotekarz, bazaDanych);
 	}
 }
 
-void Ui :: wyborWMenuBibliotekarza(int wybor, Bibliotekarz*bibliotekarz) {
+void Ui :: wyborWMenuBibliotekarza(int wybor, Bibliotekarz*bibliotekarz, sqlite3*bazaDanych) {
 
 	//Wyswietlna odpowienie informacje w zaleznosci od wyboru w menu.
 	//Wybor odpowiedniej opcji w menu pozwala rowniez dokonac roznych akcji np. wyslanie powiadomienia
@@ -1147,29 +1147,46 @@ void Ui :: wyborWMenuBibliotekarza(int wybor, Bibliotekarz*bibliotekarz) {
 	system("CLS");
 	switch (wybor) {
 	case 1:
+	{
 		//TODO: dodac wyswietlanie danych o bibliotece.
 		cout << "Dane o bibliotece." << endl;
 		break;
+	}
 	case 2:
-		//TODO: dodac wyswietlanie danych o koncie.
+	{
 		cout << "Dane o koncie." << endl;
 		bibliotekarz->printInfOBibliotekarzu();
+		cout << endl;
+		int wybor1;
+		cout << "Aby zmienic dane wprowadz 1. Inaczej wprowadz dowolna liczbe poza 1." << endl;
+		cout << "Wybor: ";
+		cin >> wybor1;
+		cout << endl;
+		if (wybor1 == 1) {
+			zmienDaneBibliotekarza(bibliotekarz, bazaDanych);
+		}
 		break;
-		//Po wyswietlniu ma miec mozliwosc modyfikacji niektorych danych.
+	}
 	case 3:
+	{
 		//TODO: dodac wyswietlanie listy dostepnych do wypozyczenia ksiazek.
 		cout << "Lista dostepnych ksiazek." << endl;
 		//Po wyswietleniu ma miec mozliwosc wypozyczenia ksiazki.
 		break;
+	}
 	case 4:
+	{
 		//TODO: dodac liste wypozyczonych ksiazek.
 		cout << "Lista osob z zaleglosciami" << endl;
 		//Po wyswietleniu ma miec mozliwosc wyslania powiadomienia o zaleglosciach.
 		break;
+	}
 	default:
+	{
 		cout << "Niewlasciwa opcja. Sprobuj ponownie" << endl;
 		//Obsluga bledow.
 		break;
+	}
 	}
 	system("pause");
 }
@@ -1244,6 +1261,97 @@ Data Ui :: konwersjaNaData(string napis) {
 	return Data(stoi(podzielony[0]), stoi(podzielony[1]), stoi(podzielony[2]));
 }
 
+void Ui :: zmienDaneBibliotekarza(Bibliotekarz* bibliotekarz, sqlite3*bazaDanych) {
+
+	while (true) {
+
+		int wybor;
+		system("CLS");
+		cout << "Wybierz co chcesz zmienic." << endl;
+		cout << "Pamietaj, ze nie mozna zmienic niektorych danych za pomoca systemu. ";
+		cout << "W sprawie ich zmiany skontaktuj sie z dyrekcja biblioteki." << endl;
+		cout << "1: Zmiana hasla" << endl;
+		cout << "2: Zmiana adresu e-mail" << endl;
+		cout << "3: Zmiana numeru telefonu" << endl;
+		cout << "0: Przerwanie dokonywania zmian" << endl;
+		cin >> wybor;
+
+		string zapytanie;
+		sqlite3_stmt* stmt = NULL;
+
+		switch (wybor) {
+		case 0:
+			return;
+		case 1:
+		{
+			while (true) {
+				string haslo1;
+				string haslo2;
+				cout << "Podaj nowe haslo: ";
+				cin >> haslo1;
+				cout << "Powtorz haslo: ";
+				cin >> haslo2;
+
+				if (haslo1 != haslo2) {
+					int wybor1 = -1;
+					cout << "Hasla nie sa zgodne. Sprobuj ponownie albo zakoncz (0).";
+					cin >> wybor1;
+					if (wybor1 == 0) {
+						break;
+					}
+				}
+				else {
+					zapytanie = "UPDATE Bibliotekarz "
+						"SET haslo = '" +
+						haslo1 + "' WHERE ID == " + to_string(bibliotekarz->getID()) + ";";
+					sqlite3_exec(bazaDanych, zapytanie.c_str(), NULL, NULL, NULL);
+					bibliotekarz->setHaslo(haslo1);
+					cout << "Pomyslnie zmieniono haslo" << endl;
+					system("pause");
+					break;
+				}
+			}
+			break;
+		}
+		case 2:
+		{
+			string email;
+			cout << "Podaj nowy adres email: ";
+			cin >> email;
+
+			zapytanie = "UPDATE Bibliotekarz "
+				"SET email = '" +
+				email + "' WHERE ID == " + to_string(bibliotekarz->getID()) + ";";
+			sqlite3_exec(bazaDanych, zapytanie.c_str(), NULL, NULL, NULL);
+			bibliotekarz->setEmail(email);
+			cout << "Pomyslnie zmieniono adres e-mail" << endl;
+			system("pause");
+			break;
+		}
+		case 3:
+		{
+			string telefon;
+			cout << "Podaj nowy nr. telefonu: ";
+			cin >> telefon;
+
+			zapytanie = "UPDATE Bibliotekarz "
+				"SET telefon = '" +
+				telefon + "' WHERE ID == " + to_string(bibliotekarz->getID()) + ";";
+			sqlite3_exec(bazaDanych, zapytanie.c_str(), NULL, NULL, NULL);
+			bibliotekarz->setTelefon(telefon);
+			cout << "Pomyslnie zmieniono nr. telefonu" << endl;
+			system("pause");
+			break;
+		}
+		default:
+		{
+			cout << "Niewlasciwa opcja. Sprobuj ponownie." << endl;
+			system("pause");
+			break;
+		}
+		}
+	}
+}
 
 
 

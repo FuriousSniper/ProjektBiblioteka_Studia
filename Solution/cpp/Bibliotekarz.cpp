@@ -7,7 +7,6 @@ using namespace std;
 void Bibliotekarz :: setHaslo(string haslo) {
 	this->haslo = haslo;
 }
-
 string Bibliotekarz::getHaslo() {
 	return this->haslo;
 }

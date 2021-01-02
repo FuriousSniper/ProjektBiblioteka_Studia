@@ -51,7 +51,7 @@ int main() {
 				Bibliotekarz* osZalogowana = reinterpret_cast<Bibliotekarz*>(ui.zaloguj(2, db));
 				if (osZalogowana == NULL) continue;
 				else {
-					ui.menuPoZalogowaniuBibliotekarza(osZalogowana);		
+					ui.menuPoZalogowaniuBibliotekarza(osZalogowana,db);		
 				}
 			}
 		}
