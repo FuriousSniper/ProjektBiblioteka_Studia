@@ -1,8 +1,10 @@
-#pragma once
+#ifndef STATYSTYKI_H
+#define STATYSTYKI_H
+
 #include "..\headers\Data.h"
 
 
-class Statystyki{
+class Statystyki {
 
 	//Statystyki odnosnie konta czytelnika.
 
@@ -16,4 +18,7 @@ public:
 	Statystyki(Data, int, string*, Data);
 	Statystyki();
 };
+
+#endif
+
 

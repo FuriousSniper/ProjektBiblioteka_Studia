@@ -69,3 +69,5 @@ Egzemplarz::Egzemplarz(int iloscStron, string nrISBN, string wydawnictwo, Data d
 Egzemplarz::Egzemplarz(int iloscStron, string nrISBN, string wydawnictwo) : iloscStron(iloscStron), numerISBN(nrISBN), wydawnictwo(wydawnictwo) {
 	//TODO
 }
+
+Egzemplarz::Egzemplarz() : iloscStron(0), numerISBN("brak"), wydawnictwo("brak") {} 

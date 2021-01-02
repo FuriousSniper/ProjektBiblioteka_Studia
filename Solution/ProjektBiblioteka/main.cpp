@@ -39,18 +39,20 @@ int main() {
 				break;
 			else if (acc_type == 1) {
 				bool statusLogowania = ui.zaloguj(1, db);
-
-				if (statusLogowania == 0) continue;
+				if (!statusLogowania) continue;
 				else {
-					//Dodac menu uzytkownika po zalogowaniu (wyswietlanie dostepnych ksiazek, wypozyczonych, ofert specjalnych itd.
+					int wybor = ui.menuPoZalogowaniuCzytelnika();
+					if (wybor == 0) continue;
+					ui.wyborWMenuCzytelnika(wybor);
 				}
 			}
 			else {
 				bool statusLogowania = ui.zaloguj(2, db);
-
-				if (statusLogowania == 0) continue;
+				if (!statusLogowania) continue;
 				else {
-					//Dodac menu uzytkownika po zalogowaniu.
+					int wybor = ui.menuPoZalogowaniuBibliotekarza();
+					if (wybor == 0) continue;
+					ui.wyborWMenuBibliotekarza(wybor);
 				}
 			}
 		}
@@ -113,7 +115,7 @@ int main() {
 			break;
 		}
 	}
-		
+
 	
 
 	sqlite3_close(db);

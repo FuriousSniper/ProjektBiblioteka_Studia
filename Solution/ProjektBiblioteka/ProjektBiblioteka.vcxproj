@@ -148,12 +148,10 @@
     <ClInclude Include="..\headers\Ksiazka.h" />
     <ClInclude Include="..\headers\Osoba.h" />
     <ClInclude Include="..\headers\RejestrSpoznien.h" />
+    <ClInclude Include="..\headers\Statystyki.h" />
     <ClInclude Include="..\headers\Ui.h" />
     <ClInclude Include="Libraries\sqlite3\sqlite3.h" />
     <ClInclude Include="Libraries\sqlite3\sqlite3ext.h" />
-    <ClInclude Include="Statystyki.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">False</ExcludedFromBuild>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\cpp\AdresZamieszkania.cpp" />

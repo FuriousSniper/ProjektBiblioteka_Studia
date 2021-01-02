@@ -9,6 +9,7 @@
 #include <exception>
 #include <iostream>
 
+
 using namespace std;
 
 Osoba Ui::createOsoba() {
@@ -962,7 +963,6 @@ bool Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
 
 		sqlite3_prepare_v2(bazaDanych, zapytanie.c_str(), -1, &stmt, NULL);
 		ret = sqlite3_step(stmt);
-		sqlite3_finalize(stmt);
 
 		//SQLITE_ROW jest zwracane przez sqlite3_step(...) jezeli jest dostepny wiersz do odczytu.
 		//Zakladam, ze w bazie nie moze byc jednoczesnie dwoch rekordow o takich samych: imieniu, nazwisku i hasle
@@ -981,8 +981,10 @@ bool Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
 
 			cout << "Pomyslnie zalogowano!" << endl;
 
+			//TODO: Tworzenie obiektu w pamieci (czytelnika/bibliotekarza) na podstawie rekordu.
+
 			system("pause");
-			return 1;
+			return 1 ;
 		}
 		else {
 
@@ -1006,3 +1008,113 @@ bool Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
 	}
 }
 
+int Ui :: menuPoZalogowaniuCzytelnika() {
+
+	//Proste menu wyswietlane po zalogowaniu.
+	//Po wyborze umozliwia dalsze operacje np. wypozyczenie ksiazki, aktualizacja danych itd.
+
+	system("CLS");
+	int wybor = 0;
+	cout << "Wprowadz odpowiednia liczbe aby kontynuowac." << endl;
+	cout << "1: Wyswietl dane o bibliotece" << endl;
+	cout << "2: Wyswietl dane o koncie" << endl;
+	cout << "3: Wyswietl liste dostepnych ksiazek." << endl;
+	cout << "4: Wyswietl liste wypozyczonych ksiazek." << endl;
+	cout << "5: Wyswietl liste zaleglosci." << endl;
+	cout << "0: Wyloguj i wroc do menu glownego." << endl;
+	cout << "Wybor: ";
+	cin >> wybor;
+	return wybor;	
+}
+
+void Ui :: wyborWMenuCzytelnika(int wybor) {
+
+	//Wyswietla odpowiednie informacje w zaleznosci od wyboru w menu czytelnika po zalogowaniu.
+	//Wybor pozwala na wykonywanie odpowiednich czynnosci np. zmiana danych konta, wypozyczenie/oddanie ksiazki.
+
+	system("CLS");
+	switch (wybor) {
+	case 1:
+		//TODO: dodac wyswietlanie danych o bibliotece.
+		cout << "Dane o bibliotece." << endl;
+		break;
+	case 2:
+		//TODO: dodac wyswietlanie danych o koncie.
+		cout << "Dane o koncie." << endl;
+		break;
+		//Po wyswietleniu ma miec mozliwosc modyfikacji niektorych danych.
+	case 3:
+		//TODO: dodac wyswietlanie listy dostepnych do wypozyczenia ksiazek.
+		cout << "Lista dostepnych ksiazek." << endl;
+		//Po wyswietleniu ma miec mozliwosc wypozyczenia ksiazki.
+		break;
+	case 4:
+		//TODO: dodac liste wypozyczonych ksiazek.
+		cout << "Lista wypozyczonych ksiazek." << endl;
+		//Po wyswietleniu ma miec mozliwosc oddania ksiazki.
+		break;
+	case 5:
+		//TODO: dodac wyswietlanie listy zaleglosci.
+		cout << "Lista zaleglosci." << endl;
+		//Po wyswietleniu ma miec mozliwosc oddania ksiazki.
+		break;
+	default:
+		cout << "Niewlasciwa opcja";
+		//Obsluga bledow.
+		break;
+	}
+	system("pause");
+}
+
+int Ui :: menuPoZalogowaniuBibliotekarza() {
+
+	//Proste menu wyswietlane po zalogowaniu bibliotekarza.
+	//Po wyborze umozliwia dalsze operacje np. sprawdzenie rejestru spoznien.
+
+	system("CLS");
+	int wybor = 0;
+	cout << "Wprowadz odpowiednia liczbe aby kontynuowac." << endl;
+	cout << "1: Wyswietl dane o bibliotece" << endl;
+	cout << "2: Wyswietl dane o koncie" << endl;
+	cout << "3: Wyswietl liste dostepnych ksiazek." << endl;
+	cout << "4: Wyswietl liste osob zalegajacych z oddaniem ksiazki." << endl;
+	cout << "0: Wyloguj i wroc do menu glownego." << endl;
+	cout << "Wybor: ";
+	cin >> wybor;
+	return wybor;
+}
+
+void Ui :: wyborWMenuBibliotekarza(int wybor) {
+
+	//Wyswietlna odpowienie informacje w zaleznosci od wyboru w menu.
+	//Wybor odpowiedniej opcji w menu pozwala rowniez dokonac roznych akcji np. wyslanie powiadomienia
+	//o zaleganiu z oddanie ksiazek.
+
+	system("CLS");
+	switch (wybor) {
+	case 1:
+		//TODO: dodac wyswietlanie danych o bibliotece.
+		cout << "Dane o bibliotece." << endl;
+		break;
+	case 2:
+		//TODO: dodac wyswietlanie danych o koncie.
+		cout << "Dane o koncie." << endl;
+		break;
+		//Po wyswietlniu ma miec mozliwosc modyfikacji niektorych danych.
+	case 3:
+		//TODO: dodac wyswietlanie listy dostepnych do wypozyczenia ksiazek.
+		cout << "Lista dostepnych ksiazek." << endl;
+		//Po wyswietleniu ma miec mozliwosc wypozyczenia ksiazki.
+		break;
+	case 4:
+		//TODO: dodac liste wypozyczonych ksiazek.
+		cout << "Lista osob z zaleglosciami" << endl;
+		//Po wyswietleniu ma miec mozliwosc wyslania powiadomienia o zaleglosciach.
+		break;
+	default:
+		cout << "Niewlasciwa opcja";
+		//Obsluga bledow.
+		break;
+	}
+	system("pause");
+}
