@@ -10,10 +10,7 @@
 
 using namespace std;
 
-int main() {
-
-	
-	
+int main() {	
 	Ui ui = Ui();
 	sqlite3* db;
 	sqlite3_stmt* stmt;
@@ -26,8 +23,9 @@ int main() {
 		return 1;
 	}
 	
-	const char* sql = "CREATE TABLE CZYTELNIK(ID INTEGER PRIMARY        KEY      ,listaZaleglosci       TEXT     ,dataPierwszegoWypozyczenia     DATE     ,iloscWypozyczonychOdDolaczenia  INT             ,preferowaneTematy     TEXT             ,dataDolaczenia        DATE             ,miasto				   TEXT             ,kodPocztowy           TEXT             ,ulica                 TEXT             ,imie                  TEXT             ,nazwisko              TEXT             ,wiek                  TEXT             ,dataUrodzenia         DATE             ,haslo				   TEXT				,numerMieszkania       TEXT             , ksiazka1 TEXT, ksiazka2 TEXT, ksiazka3 TEXT)";
-	sqlite3_exec(db, sql, NULL, NULL, NULL);
+	//const char* sql = "CREATE TABLE CZYTELNIK(ID INTEGER PRIMARY        KEY      ,listaZaleglosci       TEXT     ,dataPierwszegoWypozyczenia     DATE     ,iloscWypozyczonychOdDolaczenia  INT             ,preferowaneTematy     TEXT             ,dataDolaczenia        DATE             ,miasto				   TEXT             ,kodPocztowy           TEXT             ,ulica                 TEXT             ,imie                  TEXT             ,nazwisko              TEXT             ,wiek                  TEXT             ,dataUrodzenia         DATE             ,haslo				   TEXT				,numerMieszkania       TEXT             , ksiazka1 TEXT, ksiazka2 TEXT, ksiazka3 TEXT)";
+	//sqlite3_exec(db, sql, NULL, NULL, NULL);
+	/*
 	for (;;) {
 		int tryb = ui.signInUpMenu();
 		if (tryb == 1) {
@@ -115,8 +113,75 @@ int main() {
 			break;
 		}
 	}
-
+	*/
 	
+	Czytelnik c = Czytelnik("Cezary", "Baryka", 5);
+
+	ui.lendBook(c, "Przewodnik przyrodniczy");
+
+	printf("Performing query...\n");
+	sqlite3_prepare_v2(db, "select * from CZYTELNIK", -1, &stmt, NULL);
+	printf("Got results:\n");
+	bool done = false;
+	int row = 0;
+	while (!done) {
+		//printf("In select while\n");
+		switch (sqlite3_step(stmt)) {
+		case SQLITE_ROW:
+			//bytes = sqlite3_column_bytes(stmt, 0);
+			for (int i = 0; i < sqlite3_column_count(stmt); i++) {
+				cout << sqlite3_column_name(stmt, i) << ": ";
+				if (sqlite3_column_text(stmt, i) != NULL)
+					cout << sqlite3_column_text(stmt, i) << endl;
+			}
+			cout << endl;
+
+			row++;
+			break;
+
+		case SQLITE_DONE:
+			done = true;
+			break;
+
+		default:
+			fprintf(stderr, "Failed.\n");
+			return 1;
+		}
+	}
+	sqlite3_finalize(stmt);
+
+	sqlite3_stmt* stmt2;
+	done = false;
+	printf("Performing query...\n");
+	sqlite3_prepare_v2(db, "select * from EGZEMPLARZE", -1, &stmt2, NULL);
+	printf("Got results:\n");
+	done = false;
+	row = 0;
+	while (!done) {
+		//printf("In select while\n");
+		switch (sqlite3_step(stmt2)) {
+		case SQLITE_ROW:
+			//bytes = sqlite3_column_bytes(stmt, 0);
+			for (int i = 0; i < sqlite3_column_count(stmt2); i++) {
+				cout << sqlite3_column_name(stmt2, i) << ": ";
+				if (sqlite3_column_text(stmt2, i) != NULL)
+					cout << sqlite3_column_text(stmt2, i) << endl;
+			}
+			cout << endl;
+
+			row++;
+			break;
+
+		case SQLITE_DONE:
+			done = true;
+			break;
+
+		default:
+			fprintf(stderr, "Failed.\n");
+			return 1;
+		}
+	}
+	sqlite3_finalize(stmt2);
 
 	sqlite3_close(db);
 	system("pause");

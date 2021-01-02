@@ -65,8 +65,9 @@ string Czytelnik::getHaslo() {
 	return this->haslo;
 }
 
-
+Czytelnik::Czytelnik(string imie, string nazwisko, int id) : Osoba(imie, nazwisko),ID(id) {}
 Czytelnik::Czytelnik(string imie, string nazwisko, int d, int m, int r, string* preferowaneTematy, int ID): Osoba(imie,nazwisko, d, m,r),
 preferowaneTematy(preferowaneTematy), ID(ID) {}  
 
 Czytelnik::Czytelnik(string imie, string nazwisko, string email, string telefon, int d, int m, int r, AdresZamieszkania adres, int ID): ID(ID), Osoba(imie,nazwisko, email, telefon, d,m,r, adres) {}
+

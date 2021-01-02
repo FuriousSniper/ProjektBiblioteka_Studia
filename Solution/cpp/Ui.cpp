@@ -576,7 +576,7 @@ int Ui::getNumberOfLentBooks(Czytelnik c) {
 	sqlite3_finalize(stmt);
 	return counter;
 }
-int Ui::lendBook(Czytelnik c,string isbn) {
+int Ui::lendBook(Czytelnik c,string tytul) {
 	int l = getNumberOfLentBooks(c);
 	if (l < 3) {
 		sqlite3* db;
@@ -584,6 +584,7 @@ int Ui::lendBook(Czytelnik c,string isbn) {
 		char* error;
 		//Czytelnik c jest zalogowanym czytelnikiem, wiec pola, ktorych uzywamy w getterach sa w pamieci.
 		string query = "SELECT ksiazka1, ksiazka2, ksiazka3 from CZYTELNIK WHERE imie='" + c.getImie() + "' AND nazwisko='" + c.getNazwisko() + "';";
+		//zmienna, w ktorej zapisujemy wolna kolumne
 		int counter = 1;
 		sqlite3_open("main_db.db", &db);
 		if (db == NULL)
@@ -593,30 +594,54 @@ int Ui::lendBook(Czytelnik c,string isbn) {
 		}
 		sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, NULL);
 		sqlite3_step(stmt);
-		//wynikiem jest 1 rpw, w ktorym odczytujemy wszystkie 3 kolumny, ktore pobralismy. jesli sa one nullem, to nie zwiekszamy licznika.
+		//wynikiem jest 1 row, w ktorym odczytujemy wszystkie 3 kolumny, ktore pobralismy. jesli sa one nullem, to nie zwiekszamy licznika.
 		int num_cols = sqlite3_column_count(stmt);
 		//znajdujemy kolumne w tabeli odpowiadajaca za "pusta ksiazke". w tamtym miejscu zapisujemy ISBN wypozyczanego egzemplarza
 		for (int i = 0; i < num_cols; i++) {
-			if (sqlite3_column_text(stmt, i) != NULL)
+			if (sqlite3_column_text(stmt, i) == NULL)
 				break;
 			else
 				counter++;
 		}
 		sqlite3_finalize(stmt);
+
+		//sprawdzamy, czy jakies egzemplarze ksiazki sa dostepne
+		string isbn = checkEgzemplarze(tytul);
+		//jesli nie, to zwracamy bledy
+		if (isbn == "false") {
+			cout << "Ksiazka o tym tytule nie znajduje sie w bazie" << endl;
+			return -1;
+		}
+		if (isbn == "NOT_AVAILABLE") {
+			cout << "Wszystkie ksiazki o tym tytule zostaly wypozyczone" << endl;
+			return -1;
+		}
+
 		//updatujemy row, czyli konkretniej - kolumne gdzie zapisujemy nowo wypozyczona ksiazke danego czytelnika
-		query = "UPDATE CZYTELNIK SET ksiazka"+to_string(counter)+"='"+isbn+"' WHERE imie='" + c.getImie() + "' AND nazwisko='" + c.getNazwisko() + "';";
+		query = "UPDATE CZYTELNIK SET ksiazka" + to_string(counter) + "='" + isbn + "' WHERE imie='" + c.getImie() + "' AND nazwisko='" + c.getNazwisko() + "';";
 		int rc = sqlite3_exec(db, query.c_str(), NULL, NULL, &error);
 		if (rc != SQLITE_OK) {
 			cout << error << endl;
 			sqlite3_free(error);
+			return -1;
 		}
-		else
-			std::cout << "Wypozyczono" << std::endl;
+
+		//koniecznie - updatujemy wypozyczany egzemplarz. zmieniamy date wypozyczenia oraz osobe
+		query = "UPDATE EGZEMPLARZE SET osobaWyp='" + c.getImie() + " " + c.getNazwisko() + "', dataWyp=(DATETIME('now')), dataOdd=(DATETIME('now','+1 month')) WHERE numerISBN='" + isbn + "';";
+		rc = sqlite3_exec(db, query.c_str(), NULL, NULL, &error);
+		if (rc != SQLITE_OK) {
+			cout << error << endl;
+			sqlite3_free(error);
+			return -1;
+		}
+		std::cout << "Wypozyczono" << std::endl;
+
 		//sukces, zwracamy 1
 		return 1;
 	}
 	else
 		//zwracamy blad, bo user nie moze wypozyczyc wiecej niz 3 ksiazek
+		cout << "Czytelnik wypozyczyl maksymalna ilosc ksiazek" << endl;
 		return -1;
 }
 int Ui::addEgzemplarz() {
@@ -909,6 +934,91 @@ int Ui::addAutor3(string imie, string ksiazka) {
 		return 1;
 	}
 }
+string Ui::checkEgzemplarze(string tytul) {
+	sqlite3* db;
+	sqlite3_stmt* stmt;
+	char* error;
+	sqlite3_open("main_db.db", &db);
+	if (db == NULL)
+	{
+		printf("Blad przy otwieraniu bazy danych\n");
+		return "false";
+	}
+	string query;
+	//resultat z bazy danych - egzemplarze ksiazek
+	string egzemplarze;
+	//zmienna, ktora zwracamy. defaultowo ustawiamy "kod" bledu jako NOT_AVAILABLE
+	string to_return = "NOT_AVAILABLE";
+	query = "SELECT egzemplarze from KSIAZKA WHERE tytul='" + tytul + "' LIMIT 1;";
+	sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, NULL);
+	bool done = false;
+	int row = 0;
+
+	//pobranie egzemplarzy ksiazki z tabeli
+	while (!done) {
+		switch (sqlite3_step(stmt)) {
+		case SQLITE_ROW:
+			for (int i = 0; i < sqlite3_column_count(stmt); i++) {
+				egzemplarze = string(reinterpret_cast<const char*>((sqlite3_column_text(stmt, i))));
+			}
+			row++;
+			break;
+
+		case SQLITE_DONE:
+			done = true;
+			break;
+
+		default:
+			fprintf(stderr, "Failed.\n");
+			to_return = "false";
+			return to_return;
+		}
+	}
+	sqlite3_finalize(stmt);
+
+	//dzielenie egzemplarzy
+	string delimit_1 = "||";
+	vector<string> split_egz = split_string(egzemplarze, delimit_1);
+
+	//dla kazdego spradzamy dostepnosc
+	for (int i = 0; i < split_egz.size(); i++) {
+		sqlite3_stmt* stmt2;
+		query = "SELECT dataWyp from EGZEMPLARZE WHERE numerISBN='" + split_egz[i] + "' LIMIT 1;";
+
+		sqlite3_prepare_v2(db, query.c_str(), -1, &stmt2, NULL);
+		done = false;
+		int row = 0;
+		
+		//pobranie daty w celu sprawdzenia, czy ksiazka jest dostepna
+		while (!done) {
+			switch (sqlite3_step(stmt2)) {
+			case SQLITE_ROW:
+				//zasada dostepnosci - data wypozyczenia jest rowna "". jesli jest inaczej, to egzemplarz nie zostala jeszcze zwrocona
+				for (int k = 0; k < sqlite3_column_count(stmt); k++) {
+					string row = string(reinterpret_cast<const char*>((sqlite3_column_text(stmt2, k))));
+					if (row == "") {
+						sqlite3_finalize(stmt2);
+						to_return = split_egz[i];
+						return to_return;
+					}
+				}
+				row++;
+				break;
+
+			case SQLITE_DONE:
+				done = true;
+				break;
+
+			default:
+				fprintf(stderr, "Failed.\n");
+				to_return = "error";
+				return to_return;
+			}
+		}
+		sqlite3_finalize(stmt2);
+	}
+	return to_return;
+}
 
 bool Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
 	
@@ -1118,3 +1228,4 @@ void Ui :: wyborWMenuBibliotekarza(int wybor) {
 	}
 	system("pause");
 }
+

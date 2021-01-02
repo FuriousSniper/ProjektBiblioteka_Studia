@@ -71,8 +71,8 @@ public:
 	//funkcja do zliczania ilosci wypozyczonych ksiazek przez czytelnika
 	int getNumberOfLentBooks(Czytelnik c);
 
-	//metoda do wypozyczania ksiazek. jako argumenty przyjmuje obiekt zalogowanego czytelnika oraz nr isbn wypozyczanej ksiazki. zwraca wartosc odpowiadajaca kodowi bledu (1 - sukces)
-	int lendBook(Czytelnik c, string isbn);
+	//metoda do wypozyczania ksiazek. jako argumenty przyjmuje obiekt zalogowanego czytelnika oraz tytul wypozyczanej ksiazki. zwraca wartosc odpowiadajaca kodowi bledu (1 - sukces), (-1 - blad)
+	int lendBook(Czytelnik c, string tytul);
 
 	//metoda dodajaca egzemplarz danej ksiazki do bazy danych
 	int addEgzemplarz();
@@ -87,7 +87,8 @@ public:
 	int addAutor3(string imie, string ksiazka);
 	//funkcja do splitowania stringa za pomoca delimitera. arg 1 - string do podzielenia. arg 2 - delimiter. zwraca vector (uzywany jako tablica do prostego przejscia i wykonania czegos)
 	std::vector<std::string> split_string(std::string stringToBeSplitted, std::string delimeter);
-
+	//metoda do sprawdzania, czy jakies egzemplarze ksiazki da sie wypozyczyc. parametr - tytul ksiazki do sprawdzenia. zwraca nr isbn egzemplarza gotowego do wypozyczenia
+	string checkEgzemplarze(string tytul);
 	//Metody wykorzystywane w menu po zalogowaniu czytelnika/bibliotekarza.
 
 	int menuPoZalogowaniuCzytelnika();
