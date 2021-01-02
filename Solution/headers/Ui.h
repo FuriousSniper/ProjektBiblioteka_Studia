@@ -59,7 +59,7 @@ public:
 	//do metody przekazywany jest tryb okreslajacy osobe ktora sie loguje.
 	//Zwraca wskaznik na obiekt typu Czytelnik lub Bibliotekarz w zaleznosci od trybu.
 
-	Osoba* zaloguj(int tryb, sqlite3* bazaDanych);
+	bool zaloguj(int tryb, sqlite3* bazaDanych);
 
 	bool addCzytelnik(Czytelnik new_user, sqlite3* database);
 	bool addBibliotekarz(Bibliotekarz new_user, sqlite3* database);
