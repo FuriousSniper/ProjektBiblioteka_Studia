@@ -10,7 +10,8 @@
 
 using namespace std;
 
-int main() {	
+int main() {
+	
 	Ui ui = Ui();
 	sqlite3* db;
 	sqlite3_stmt* stmt;
@@ -36,21 +37,22 @@ int main() {
 			else if (acc_type == 0)
 				break;
 			else if (acc_type == 1) {
-				bool statusLogowania = ui.zaloguj(1, db);
-				if (!statusLogowania) continue;
+				//Logowanie czytelnika.
+				//do zmodyfikowania po zaimplementowaniu ladowania czytelnika do pamieci 
+				//(podobnie jak w bibliotekarzu).
+				Czytelnik* osZalogowana = reinterpret_cast<Czytelnik*>(ui.zaloguj(1, db));
+				if (osZalogowana == NULL) continue;
 				else {
-					int wybor = ui.menuPoZalogowaniuCzytelnika();
-					if (wybor == 0) continue;
-					ui.wyborWMenuCzytelnika(wybor);
+					ui.menuPoZalogowaniuCzytelnika(osZalogowana);
 				}
 			}
 			else {
-				bool statusLogowania = ui.zaloguj(2, db);
-				if (!statusLogowania) continue;
+				//Logowanie bibliotekarza.
+				//metoda zaloguj zwraca wskaznik na Osob? wiec konwertujemy.
+				Bibliotekarz* osZalogowana = reinterpret_cast<Bibliotekarz*>(ui.zaloguj(2, db));
+				if (osZalogowana == NULL) continue;
 				else {
-					int wybor = ui.menuPoZalogowaniuBibliotekarza();
-					if (wybor == 0) continue;
-					ui.wyborWMenuBibliotekarza(wybor);
+					ui.menuPoZalogowaniuBibliotekarza(osZalogowana);		
 				}
 			}
 		}
@@ -113,77 +115,11 @@ int main() {
 			break;
 		}
 	}
-	*/
+
 	
-	Czytelnik c = Czytelnik("Cezary", "Baryka", 5);
-
-	ui.lendBook(c, "Przewodnik przyrodniczy");
-
-	printf("Performing query...\n");
-	sqlite3_prepare_v2(db, "select * from CZYTELNIK", -1, &stmt, NULL);
-	printf("Got results:\n");
-	bool done = false;
-	int row = 0;
-	while (!done) {
-		//printf("In select while\n");
-		switch (sqlite3_step(stmt)) {
-		case SQLITE_ROW:
-			//bytes = sqlite3_column_bytes(stmt, 0);
-			for (int i = 0; i < sqlite3_column_count(stmt); i++) {
-				cout << sqlite3_column_name(stmt, i) << ": ";
-				if (sqlite3_column_text(stmt, i) != NULL)
-					cout << sqlite3_column_text(stmt, i) << endl;
-			}
-			cout << endl;
-
-			row++;
-			break;
-
-		case SQLITE_DONE:
-			done = true;
-			break;
-
-		default:
-			fprintf(stderr, "Failed.\n");
-			return 1;
-		}
-	}
-	sqlite3_finalize(stmt);
-
-	sqlite3_stmt* stmt2;
-	done = false;
-	printf("Performing query...\n");
-	sqlite3_prepare_v2(db, "select * from EGZEMPLARZE", -1, &stmt2, NULL);
-	printf("Got results:\n");
-	done = false;
-	row = 0;
-	while (!done) {
-		//printf("In select while\n");
-		switch (sqlite3_step(stmt2)) {
-		case SQLITE_ROW:
-			//bytes = sqlite3_column_bytes(stmt, 0);
-			for (int i = 0; i < sqlite3_column_count(stmt2); i++) {
-				cout << sqlite3_column_name(stmt2, i) << ": ";
-				if (sqlite3_column_text(stmt2, i) != NULL)
-					cout << sqlite3_column_text(stmt2, i) << endl;
-			}
-			cout << endl;
-
-			row++;
-			break;
-
-		case SQLITE_DONE:
-			done = true;
-			break;
-
-		default:
-			fprintf(stderr, "Failed.\n");
-			return 1;
-		}
-	}
-	sqlite3_finalize(stmt2);
 
 	sqlite3_close(db);
+
 	system("pause");
 
 	return 0;

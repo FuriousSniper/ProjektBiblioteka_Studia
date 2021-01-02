@@ -57,8 +57,9 @@ public:
 
 	//Metoda pozwalajaca zalogowac sie na konto uzytkownikowi (zarowno bibliotekarzowi jak i czytelnikowi)
 	//do metody przekazywany jest tryb okreslajacy osobe ktora sie loguje.
+	//Zwraca wskaznik na obiekt typu Czytelnik lub Bibliotekarz w zaleznosci od trybu.
 
-	bool zaloguj(int tryb, sqlite3* bazaDanych);
+	Osoba* zaloguj(int tryb, sqlite3* bazaDanych);
 
 	bool addCzytelnik(Czytelnik new_user, sqlite3* database);
 	bool addBibliotekarz(Bibliotekarz new_user, sqlite3* database);
@@ -91,10 +92,24 @@ public:
 	string checkEgzemplarze(string tytul);
 	//Metody wykorzystywane w menu po zalogowaniu czytelnika/bibliotekarza.
 
-	int menuPoZalogowaniuCzytelnika();
-	int menuPoZalogowaniuBibliotekarza();
+	int menuPoZalogowaniuCzytelnika(Czytelnik* czytelnik);
+	int menuPoZalogowaniuBibliotekarza(Bibliotekarz*bibliotekarz);
 	void wyborWMenuCzytelnika(int wybor);
-	void wyborWMenuBibliotekarza(int wybor);
+	void wyborWMenuBibliotekarza(int wybor, Bibliotekarz*bibliotekarz);
+
+private:
+
+	//Metody prywatne, bo sa wykorzystywane tylko wewnatrz klasy (wewnatrz innych metod klasy).
+
+	//Konwertuje string'a (WAZNE: musi byc to data pobrana z bazy danych) na obiekt typu Data.
+	Data konwersjaNaData(string napis);
+
+	//Konwertuje wskaznik (const unsigned char*) zwracany przez funkcje sqlite3_column_text
+	//na string (const char*).
+	string konwersjaNaString(const unsigned char*);
+
+	//Tworzy Bibliotekarza na podstawie danych w rekordzie tabeli Bibliotekarz.
+	Bibliotekarz* wczytywanieBibliotekarza(sqlite3_stmt*);
 
 };
 

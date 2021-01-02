@@ -51,7 +51,7 @@ int Czytelnik::zarezerwujKsiazke(Egzemplarz* ksiazka) {
 
 void Czytelnik::printInfo() {
 
-	//TODO: dopisaæ inne informacje (np. preferowane tematy itd..)
+	//TODO: dopisa? inne informacje (np. preferowane tematy itd..)
 
 	printOsoba();
 	cout << "Dane charakterystyczne dla czytelnika: " << endl;
