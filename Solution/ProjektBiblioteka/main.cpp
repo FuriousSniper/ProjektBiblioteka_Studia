@@ -24,8 +24,9 @@ int main() {
 		return 1;
 	}
 	
-	const char* sql = "CREATE TABLE CZYTELNIK(ID INTEGER PRIMARY        KEY      ,listaZaleglosci       TEXT     ,dataPierwszegoWypozyczenia     DATE     ,iloscWypozyczonychOdDolaczenia  INT             ,preferowaneTematy     TEXT             ,dataDolaczenia        DATE             ,miasto				   TEXT             ,kodPocztowy           TEXT             ,ulica                 TEXT             ,imie                  TEXT             ,nazwisko              TEXT             ,wiek                  TEXT             ,dataUrodzenia         DATE             ,haslo				   TEXT				,numerMieszkania       TEXT             , ksiazka1 TEXT, ksiazka2 TEXT, ksiazka3 TEXT)";
-	sqlite3_exec(db, sql, NULL, NULL, NULL);
+	//const char* sql = "CREATE TABLE CZYTELNIK(ID INTEGER PRIMARY        KEY      ,listaZaleglosci       TEXT     ,dataPierwszegoWypozyczenia     DATE     ,iloscWypozyczonychOdDolaczenia  INT             ,preferowaneTematy     TEXT             ,dataDolaczenia        DATE             ,miasto				   TEXT             ,kodPocztowy           TEXT             ,ulica                 TEXT             ,imie                  TEXT             ,nazwisko              TEXT             ,wiek                  TEXT             ,dataUrodzenia         DATE             ,haslo				   TEXT				,numerMieszkania       TEXT             , ksiazka1 TEXT, ksiazka2 TEXT, ksiazka3 TEXT)";
+	//sqlite3_exec(db, sql, NULL, NULL, NULL);
+	/*
 	for (;;) {
 		int tryb = ui.signInUpMenu();
 		if (tryb == 1) {
@@ -47,7 +48,7 @@ int main() {
 			}
 			else {
 				//Logowanie bibliotekarza.
-				//metoda zaloguj zwraca wskaznik na Osobê wiec konwertujemy.
+				//metoda zaloguj zwraca wskaznik na Osob? wiec konwertujemy.
 				Bibliotekarz* osZalogowana = reinterpret_cast<Bibliotekarz*>(ui.zaloguj(2, db));
 				if (osZalogowana == NULL) continue;
 				else {
@@ -114,6 +115,9 @@ int main() {
 			break;
 		}
 	}
+	*/
+	
+	ui.addBook();
 
 	sqlite3_close(db);
 

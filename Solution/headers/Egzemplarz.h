@@ -50,7 +50,7 @@ public:
  iloscStron		INT		NOT NULL;	//ilosc stron ksiazki
  numerISBN		TEXT	NOT NULL	//nr isbn ksiazki
  wydawnictwo	TEXT				//nazwa wydawnictwa
- osobaWyp		TEXT				//ID czytelnika, ktory wypozyczyl ksiazke (z bazy danych)
+ osobaWyp		TEXT				//imie i nazwisko czytelnika, ktory wypozyczyl ksiazke (z bazy danych)
 dataWyp			DATE				//data, w ktorej czytelnik wypozyczyl ksiazke
 dataOdd			DATE				//data, do ktorej przedluzajacy ma oddac ksiazke
 przedluzony		BOOLEAN				//czy ksiazka jest przedluzona?
