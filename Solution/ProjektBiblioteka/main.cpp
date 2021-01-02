@@ -115,8 +115,9 @@ int main() {
 			break;
 		}
 	}
-
+	*/
 	
+	ui.addBook();
 
 	sqlite3_close(db);
 
