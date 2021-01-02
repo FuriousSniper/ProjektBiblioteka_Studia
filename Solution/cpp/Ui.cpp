@@ -1020,7 +1020,7 @@ string Ui::checkEgzemplarze(string tytul) {
 	return to_return;
 }
 
-bool Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
+Osoba* Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
 	
 	//tryb == 1 - logowanie czytelnika
 	//tryb == 2 - logowanie bibliotekarza
@@ -1298,7 +1298,6 @@ void Ui :: wyborWMenuBibliotekarza(int wybor, Bibliotekarz*bibliotekarz, sqlite3
 		break;
 	}
 	}
-	system("pause");
 }
 
 Bibliotekarz* Ui :: wczytywanieBibliotekarza(sqlite3_stmt*stmt) {
