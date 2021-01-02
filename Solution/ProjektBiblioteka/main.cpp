@@ -11,8 +11,6 @@
 using namespace std;
 
 int main() {
-
-	
 	
 	Ui ui = Ui();
 	sqlite3* db;
@@ -38,21 +36,22 @@ int main() {
 			else if (acc_type == 0)
 				break;
 			else if (acc_type == 1) {
-				bool statusLogowania = ui.zaloguj(1, db);
-				if (!statusLogowania) continue;
+				//Logowanie czytelnika.
+				//do zmodyfikowania po zaimplementowaniu ladowania czytelnika do pamieci 
+				//(podobnie jak w bibliotekarzu).
+				Czytelnik* osZalogowana = reinterpret_cast<Czytelnik*>(ui.zaloguj(1, db));
+				if (osZalogowana == NULL) continue;
 				else {
-					int wybor = ui.menuPoZalogowaniuCzytelnika();
-					if (wybor == 0) continue;
-					ui.wyborWMenuCzytelnika(wybor);
+					ui.menuPoZalogowaniuCzytelnika(osZalogowana);
 				}
 			}
 			else {
-				bool statusLogowania = ui.zaloguj(2, db);
-				if (!statusLogowania) continue;
+				//Logowanie bibliotekarza.
+				//metoda zaloguj zwraca wskaznik na Osobê wiec konwertujemy.
+				Bibliotekarz* osZalogowana = reinterpret_cast<Bibliotekarz*>(ui.zaloguj(2, db));
+				if (osZalogowana == NULL) continue;
 				else {
-					int wybor = ui.menuPoZalogowaniuBibliotekarza();
-					if (wybor == 0) continue;
-					ui.wyborWMenuBibliotekarza(wybor);
+					ui.menuPoZalogowaniuBibliotekarza(osZalogowana);		
 				}
 			}
 		}
@@ -116,9 +115,8 @@ int main() {
 		}
 	}
 
-	
-
 	sqlite3_close(db);
+
 	system("pause");
 
 	return 0;

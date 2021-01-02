@@ -910,7 +910,7 @@ int Ui::addAutor3(string imie, string ksiazka) {
 	}
 }
 
-bool Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
+Osoba* Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
 	
 	//tryb == 1 - logowanie czytelnika
 	//tryb == 2 - logowanie bibliotekarza
@@ -939,7 +939,7 @@ bool Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
 
 		//Jedyna roznica w logowaniu bibliotekarza i czytelnika jest zapytanie.
 
-		//Nie bawilem sie w sprawdzanie istnienia za pomoca SQL (WHERE EXISTS) bo nie wiem jak zinterpretowac zwracana wartosc funkcj¹
+		//Nie bawilem sie w sprawdzanie istnienia za pomoca SQL (WHERE EXISTS) bo nie wiem jak zinterpretowac zwracana wartosc funkcja
 		//w bibliotece sqlite3
 
 		if (tryb == 1) {
@@ -963,6 +963,7 @@ bool Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
 
 		sqlite3_prepare_v2(bazaDanych, zapytanie.c_str(), -1, &stmt, NULL);
 		ret = sqlite3_step(stmt);
+		sqlite3_finalize(stmt);
 
 		//SQLITE_ROW jest zwracane przez sqlite3_step(...) jezeli jest dostepny wiersz do odczytu.
 		//Zakladam, ze w bazie nie moze byc jednoczesnie dwoch rekordow o takich samych: imieniu, nazwisku i hasle
@@ -981,10 +982,49 @@ bool Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
 
 			cout << "Pomyslnie zalogowano!" << endl;
 
-			//TODO: Tworzenie obiektu w pamieci (czytelnika/bibliotekarza) na podstawie rekordu.
+			if (tryb == 1) {
+				//TODO ladowanie otrzymanego rekordu do pamieci (tworzenie obiektu typu Czytelnik).
+				//(Brak metody wczytywanieCzytelnika).
 
-			system("pause");
-			return 1 ;
+				//Tym razem pobieramy wszystkie kolumny (do wczytania).
+
+				zapytanie = zapytanie = "SELECT * "
+					"FROM Czytelnik "
+					"WHERE imie == '" +
+					imie + "' AND nazwisko == '" +
+					nazwisko + "' AND haslo == '" +
+					haslo + "';";
+
+				sqlite3_prepare_v2(bazaDanych, zapytanie.c_str(), -1, &stmt, NULL);
+				sqlite3_step(stmt);
+
+				//To bedzie wykorzystywac metode wczytywanieCzytelnika a nie konsturktor domyslny.
+
+				Czytelnik* czytelnik = new Czytelnik();
+				sqlite3_finalize(stmt);
+				system("pause");
+				return czytelnik;
+			}
+			else if (tryb == 2) {
+
+				//Metoda wczytywanieBibliotekarza zwraca wskaznik na obiekt dynamiczny typu Bibliotekarz utworzony na
+				//podstawie zawartosci rekordu.
+
+				zapytanie =  "SELECT * "
+					"FROM Bibliotekarz "
+					"WHERE imie == '" +
+					imie + "' AND nazwisko == '" +
+					nazwisko + "' AND haslo == '" +
+					haslo + "';";
+
+				sqlite3_prepare_v2(bazaDanych, zapytanie.c_str(),-1, &stmt, NULL);
+				sqlite3_step(stmt);
+
+				Bibliotekarz* bibliotekarz = wczytywanieBibliotekarza(stmt);
+				sqlite3_finalize(stmt);
+				system("pause");
+				return bibliotekarz;
+			}
 		}
 		else {
 
@@ -1002,29 +1042,36 @@ bool Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
 			cin >> wybor;
 
 			if (wybor == 0) {
-				return 0;
+				return NULL;
 			}
 		}
 	}
 }
 
-int Ui :: menuPoZalogowaniuCzytelnika() {
+int Ui :: menuPoZalogowaniuCzytelnika(Czytelnik*czytelnik) {
 
 	//Proste menu wyswietlane po zalogowaniu.
 	//Po wyborze umozliwia dalsze operacje np. wypozyczenie ksiazki, aktualizacja danych itd.
 
-	system("CLS");
-	int wybor = 0;
-	cout << "Wprowadz odpowiednia liczbe aby kontynuowac." << endl;
-	cout << "1: Wyswietl dane o bibliotece" << endl;
-	cout << "2: Wyswietl dane o koncie" << endl;
-	cout << "3: Wyswietl liste dostepnych ksiazek." << endl;
-	cout << "4: Wyswietl liste wypozyczonych ksiazek." << endl;
-	cout << "5: Wyswietl liste zaleglosci." << endl;
-	cout << "0: Wyloguj i wroc do menu glownego." << endl;
-	cout << "Wybor: ";
-	cin >> wybor;
-	return wybor;	
+	while (true) {
+		system("CLS");
+		int wybor = 0;
+		cout << "Wprowadz odpowiednia liczbe aby kontynuowac." << endl;
+		cout << "1: Wyswietl dane o bibliotece" << endl;
+		cout << "2: Wyswietl dane o koncie" << endl;
+		cout << "3: Wyswietl liste dostepnych ksiazek." << endl;
+		cout << "4: Wyswietl liste wypozyczonych ksiazek." << endl;
+		cout << "5: Wyswietl liste zaleglosci." << endl;
+		cout << "0: Wyloguj i wroc do menu glownego." << endl;
+		cout << "Wybor: ";
+		cin >> wybor;
+		
+		if (wybor == 0) {
+			return 0;
+		}
+
+		wyborWMenuCzytelnika(wybor);
+	}
 }
 
 void Ui :: wyborWMenuCzytelnika(int wybor) {
@@ -1059,32 +1106,39 @@ void Ui :: wyborWMenuCzytelnika(int wybor) {
 		//Po wyswietleniu ma miec mozliwosc oddania ksiazki.
 		break;
 	default:
-		cout << "Niewlasciwa opcja";
+		cout << "Niewlasciwa opcja. Sprobuj ponownie" << endl;
 		//Obsluga bledow.
 		break;
 	}
 	system("pause");
 }
 
-int Ui :: menuPoZalogowaniuBibliotekarza() {
+int Ui :: menuPoZalogowaniuBibliotekarza(Bibliotekarz*bibliotekarz) {
 
 	//Proste menu wyswietlane po zalogowaniu bibliotekarza.
 	//Po wyborze umozliwia dalsze operacje np. sprawdzenie rejestru spoznien.
 
-	system("CLS");
-	int wybor = 0;
-	cout << "Wprowadz odpowiednia liczbe aby kontynuowac." << endl;
-	cout << "1: Wyswietl dane o bibliotece" << endl;
-	cout << "2: Wyswietl dane o koncie" << endl;
-	cout << "3: Wyswietl liste dostepnych ksiazek." << endl;
-	cout << "4: Wyswietl liste osob zalegajacych z oddaniem ksiazki." << endl;
-	cout << "0: Wyloguj i wroc do menu glownego." << endl;
-	cout << "Wybor: ";
-	cin >> wybor;
-	return wybor;
+	while (true) {
+
+		system("CLS");
+		int wybor = 0;
+		cout << "Wprowadz odpowiednia liczbe aby kontynuowac." << endl;
+		cout << "1: Wyswietl dane o bibliotece" << endl;
+		cout << "2: Wyswietl dane o koncie" << endl;
+		cout << "3: Wyswietl liste dostepnych ksiazek." << endl;
+		cout << "4: Wyswietl liste osob zalegajacych z oddaniem ksiazki." << endl;
+		cout << "0: Wyloguj i wroc do menu glownego." << endl;
+		cout << "Wybor: ";
+		cin >> wybor;
+
+		if (wybor == 0) {
+			return 0;
+		}
+		wyborWMenuBibliotekarza(wybor, bibliotekarz);
+	}
 }
 
-void Ui :: wyborWMenuBibliotekarza(int wybor) {
+void Ui :: wyborWMenuBibliotekarza(int wybor, Bibliotekarz*bibliotekarz) {
 
 	//Wyswietlna odpowienie informacje w zaleznosci od wyboru w menu.
 	//Wybor odpowiedniej opcji w menu pozwala rowniez dokonac roznych akcji np. wyslanie powiadomienia
@@ -1099,6 +1153,7 @@ void Ui :: wyborWMenuBibliotekarza(int wybor) {
 	case 2:
 		//TODO: dodac wyswietlanie danych o koncie.
 		cout << "Dane o koncie." << endl;
+		bibliotekarz->printInfOBibliotekarzu();
 		break;
 		//Po wyswietlniu ma miec mozliwosc modyfikacji niektorych danych.
 	case 3:
@@ -1112,9 +1167,83 @@ void Ui :: wyborWMenuBibliotekarza(int wybor) {
 		//Po wyswietleniu ma miec mozliwosc wyslania powiadomienia o zaleglosciach.
 		break;
 	default:
-		cout << "Niewlasciwa opcja";
+		cout << "Niewlasciwa opcja. Sprobuj ponownie" << endl;
 		//Obsluga bledow.
 		break;
 	}
 	system("pause");
 }
+
+Bibliotekarz* Ui :: wczytywanieBibliotekarza(sqlite3_stmt*stmt) {
+
+	//Baza danych musi byc otwarta.
+	//Do metody przekazuje siê obiekt typu stmt (ju¿ przygotowany, utworzony).
+	//Z zalozenia jest to metoda do wykorzystania w metodzie logujacej Bibliotekarza.
+	//dlatego tez, wiersze w tabeli Czytelnik sa juz gotowe do odczytu (przygotowanie jest robione w 
+	//metodzie logujacej).
+
+	int id = sqlite3_column_int(stmt, 0);
+	string imie = konwersjaNaString(sqlite3_column_text(stmt, 1));
+	string nazwisko = konwersjaNaString(sqlite3_column_text(stmt, 2));
+	int wiek = sqlite3_column_int(stmt, 3);
+	Data dataUrodzenia = konwersjaNaData(konwersjaNaString(sqlite3_column_text(stmt,4)));
+	string haslo = konwersjaNaString(sqlite3_column_text(stmt, 5));
+	string email = konwersjaNaString(sqlite3_column_text(stmt, 6));
+	string telefon = konwersjaNaString(sqlite3_column_text(stmt, 7));
+	string miasto = konwersjaNaString(sqlite3_column_text(stmt, 8));
+	string kodPocztowy = konwersjaNaString(sqlite3_column_text(stmt, 9));
+	string ulica = konwersjaNaString(sqlite3_column_text(stmt, 10));
+	int numerMieszkania = sqlite3_column_int(stmt, 11);
+
+	AdresZamieszkania adres = AdresZamieszkania(miasto, kodPocztowy, ulica, numerMieszkania);
+
+	Bibliotekarz* bibliotekarz = new Bibliotekarz(imie, nazwisko, email, telefon, dataUrodzenia.getDzien(), dataUrodzenia.getMiesiac(), dataUrodzenia.getRok(), adres, id);
+	bibliotekarz->setHaslo(haslo);
+
+	return bibliotekarz;
+}
+
+//==============================================================================================================
+
+//Te metody nie sa scisle zwiazane z funkcjonalnosciami interfejsu. Mozna je zdefiniowac np. jako funkcje globalne.
+
+string Ui :: konwersjaNaString(const unsigned char* var) {
+
+	//Konwersja const unsigned char* na const char* (string).
+	//Jezeli wskaznik jest NULL'em, zwraca pustego stringa.
+
+	if (var == NULL) {
+		return "";
+	}
+	else {
+		return reinterpret_cast<const char*>(var);
+	}
+}
+
+Data Ui :: konwersjaNaData(string napis) {
+
+	//Jezeli w danym rekordzie kolumna o typie danych DATA jest pusta to sqlite3_column_text(...) zwraca NULLA.
+	//W innej metodzie (konwersjaNaString) zwracana wartosc konwertowana jest na string (zwracana wartosc jest typu
+	//const unsigned char*).
+	//Jezeli zwracana wartosc == NULL to jest konwertowana na "".
+	//W takim przypadku zwracany jest obiekt utworzony konstruktorem domyslnym.
+
+	if (napis == "") {
+		return Data();
+	}
+
+	//W przeciwnym razie stringa dzieli sie na 3 czesci (d,m,r) oddzielone delimiterem "-" (taki jest format zapisu
+	//dat w bazie).
+
+	//Zakladam, ze nie moze zajsc sytuacja, w ktorej rozmiar tego vectora jest rozny od 3. Tzn. data zapisywana
+	//w bazie zawsze slada sie z 3 czesci: dnia, miesiaca oraz roku albo nie ma jej wcale (patrz wy¿ej).
+
+	//Jezeli moze zajsc sytuacja w ktorej rozmiar vectora moze byc rozny od 3, nalezy dodac tu wiecej warunkow.
+
+	vector<string> podzielony = split_string(napis, "-");
+	return Data(stoi(podzielony[0]), stoi(podzielony[1]), stoi(podzielony[2]));
+}
+
+
+
+

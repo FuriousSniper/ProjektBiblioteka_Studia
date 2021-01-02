@@ -70,3 +70,5 @@ Czytelnik::Czytelnik(string imie, string nazwisko, int d, int m, int r, string* 
 preferowaneTematy(preferowaneTematy), ID(ID) {}  
 
 Czytelnik::Czytelnik(string imie, string nazwisko, string email, string telefon, int d, int m, int r, AdresZamieszkania adres, int ID): ID(ID), Osoba(imie,nazwisko, email, telefon, d,m,r, adres) {}
+
+Czytelnik::Czytelnik() : Osoba(), ID(0), preferowaneTematy(NULL) {}
