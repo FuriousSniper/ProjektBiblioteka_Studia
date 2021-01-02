@@ -39,6 +39,7 @@ public:
 	string getWydawnictwo();
 	Egzemplarz(int iloscStron, string nrISBN, string wydawnictwo, Data dataZakupu);
 	Egzemplarz(int iloscStron, string nrISBN, string wydawnictwo);
+	Egzemplarz();
 
 };
 

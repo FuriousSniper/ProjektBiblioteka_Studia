@@ -9,6 +9,7 @@
 #include <exception>
 #include <iostream>
 
+
 using namespace std;
 
 Osoba Ui::createOsoba() {
@@ -907,4 +908,213 @@ int Ui::addAutor3(string imie, string ksiazka) {
 		cout << "dodano i powracamy" << endl;
 		return 1;
 	}
+}
+
+bool Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
+	
+	//tryb == 1 - logowanie czytelnika
+	//tryb == 2 - logowanie bibliotekarza
+
+	//z zalozenia do metody przekazywany jest wskaznik na otwarta juz baze.
+	//mozna tego nie robic i otwierac wewnatrz tej metody.
+
+	while (true) {
+
+		system("CLS");
+
+		string imie;
+		string nazwisko;
+		string haslo;
+		int ret;      //Do przypisania wartosci zwracanej przez funkcje sqlite3_step(...).
+
+		cout << "Logowanie do systemu biblioteki." << endl;
+		cout << "Podaj imie: ";
+		cin >> imie;
+		cout << "Podaj nazwisko: ";
+		cin >> nazwisko;
+		cout << "Podaj haslo: ";
+		cin >> haslo;
+
+		string zapytanie;     //zapytanie sql
+
+		//Jedyna roznica w logowaniu bibliotekarza i czytelnika jest zapytanie.
+
+		//Nie bawilem sie w sprawdzanie istnienia za pomoca SQL (WHERE EXISTS) bo nie wiem jak zinterpretowac zwracana wartosc funkcj¹
+		//w bibliotece sqlite3
+
+		if (tryb == 1) {
+			zapytanie = "SELECT imie, nazwisko, haslo "
+				"FROM Czytelnik "
+				"WHERE imie == '" +
+				imie + "' AND nazwisko == '" +
+				nazwisko + "' AND haslo == '" +
+				haslo + "';";
+		}
+		else if (tryb == 2) {
+			zapytanie = "SELECT imie, nazwisko, haslo "
+				"FROM Bibliotekarz "
+				"WHERE imie == '" +
+				imie + "' AND nazwisko == '" +
+				nazwisko + "' AND haslo == '" +
+				haslo + "';";
+		}
+
+		sqlite3_stmt* stmt = NULL;
+
+		sqlite3_prepare_v2(bazaDanych, zapytanie.c_str(), -1, &stmt, NULL);
+		ret = sqlite3_step(stmt);
+
+		//SQLITE_ROW jest zwracane przez sqlite3_step(...) jezeli jest dostepny wiersz do odczytu.
+		//Zakladam, ze w bazie nie moze byc jednoczesnie dwoch rekordow o takich samych: imieniu, nazwisku i hasle
+
+		//Czyli nie moze zajsc taka sytuacja, ze w tabeli sa dwa rekordy:
+		//Rekord 1: imie = Adam nazwisko = Ligaj haslo = admin
+		//Rekord2: imie = Adam nazwisko = Ligaj haslo = admin
+		//Wiadomym jest, ze moze byc dwoch uzytkownikow o takim samym imieniu i nazwisku. Jest to praktycznie
+		//niemozliwe ze stworza konta o takim samym hasle...
+
+		//A wiec powinien byc tylko jeden wiersz do odczytu (pod warunkiem, ze istnieje i nie wystapily bledy).
+
+		if (ret == SQLITE_ROW) {
+
+			//Jest dostepny wiersz do oczytu czyli czytelnik znajduje sie w bazie.
+
+			cout << "Pomyslnie zalogowano!" << endl;
+
+			//TODO: Tworzenie obiektu w pamieci (czytelnika/bibliotekarza) na podstawie rekordu.
+
+			system("pause");
+			return 1 ;
+		}
+		else {
+
+			int wybor = -1;
+
+			//Jezeli logowanie sie nie powiodlo tj. SQLITE_ROW nie zostalo zwrocone przez funkcje (z roznego powodu),
+			//sygnalizujemy wystapienie problemu i oferujemy mozliwosc ponownego logowania.
+
+			//Przyczyna niepowodzenia logowania moze byc np. brak czytelnika w bazie danych, czyli wymagana jest
+			//rejestracja.
+
+			cout << "Logowanie sie nie powiodlo. Mozliwe ze uzytkownik o podanych danych nie istnieje." << endl;
+			cout << "Jezeli chcesz wrocic do menu glownego wybierz 0." << endl;
+			cout << "Jezeli chcesz sprobowac zalogowac sie ponownie, wybierz liczbe inna niz 0: ";
+			cin >> wybor;
+
+			if (wybor == 0) {
+				return 0;
+			}
+		}
+	}
+}
+
+int Ui :: menuPoZalogowaniuCzytelnika() {
+
+	//Proste menu wyswietlane po zalogowaniu.
+	//Po wyborze umozliwia dalsze operacje np. wypozyczenie ksiazki, aktualizacja danych itd.
+
+	system("CLS");
+	int wybor = 0;
+	cout << "Wprowadz odpowiednia liczbe aby kontynuowac." << endl;
+	cout << "1: Wyswietl dane o bibliotece" << endl;
+	cout << "2: Wyswietl dane o koncie" << endl;
+	cout << "3: Wyswietl liste dostepnych ksiazek." << endl;
+	cout << "4: Wyswietl liste wypozyczonych ksiazek." << endl;
+	cout << "5: Wyswietl liste zaleglosci." << endl;
+	cout << "0: Wyloguj i wroc do menu glownego." << endl;
+	cout << "Wybor: ";
+	cin >> wybor;
+	return wybor;	
+}
+
+void Ui :: wyborWMenuCzytelnika(int wybor) {
+
+	//Wyswietla odpowiednie informacje w zaleznosci od wyboru w menu czytelnika po zalogowaniu.
+	//Wybor pozwala na wykonywanie odpowiednich czynnosci np. zmiana danych konta, wypozyczenie/oddanie ksiazki.
+
+	system("CLS");
+	switch (wybor) {
+	case 1:
+		//TODO: dodac wyswietlanie danych o bibliotece.
+		cout << "Dane o bibliotece." << endl;
+		break;
+	case 2:
+		//TODO: dodac wyswietlanie danych o koncie.
+		cout << "Dane o koncie." << endl;
+		break;
+		//Po wyswietleniu ma miec mozliwosc modyfikacji niektorych danych.
+	case 3:
+		//TODO: dodac wyswietlanie listy dostepnych do wypozyczenia ksiazek.
+		cout << "Lista dostepnych ksiazek." << endl;
+		//Po wyswietleniu ma miec mozliwosc wypozyczenia ksiazki.
+		break;
+	case 4:
+		//TODO: dodac liste wypozyczonych ksiazek.
+		cout << "Lista wypozyczonych ksiazek." << endl;
+		//Po wyswietleniu ma miec mozliwosc oddania ksiazki.
+		break;
+	case 5:
+		//TODO: dodac wyswietlanie listy zaleglosci.
+		cout << "Lista zaleglosci." << endl;
+		//Po wyswietleniu ma miec mozliwosc oddania ksiazki.
+		break;
+	default:
+		cout << "Niewlasciwa opcja";
+		//Obsluga bledow.
+		break;
+	}
+	system("pause");
+}
+
+int Ui :: menuPoZalogowaniuBibliotekarza() {
+
+	//Proste menu wyswietlane po zalogowaniu bibliotekarza.
+	//Po wyborze umozliwia dalsze operacje np. sprawdzenie rejestru spoznien.
+
+	system("CLS");
+	int wybor = 0;
+	cout << "Wprowadz odpowiednia liczbe aby kontynuowac." << endl;
+	cout << "1: Wyswietl dane o bibliotece" << endl;
+	cout << "2: Wyswietl dane o koncie" << endl;
+	cout << "3: Wyswietl liste dostepnych ksiazek." << endl;
+	cout << "4: Wyswietl liste osob zalegajacych z oddaniem ksiazki." << endl;
+	cout << "0: Wyloguj i wroc do menu glownego." << endl;
+	cout << "Wybor: ";
+	cin >> wybor;
+	return wybor;
+}
+
+void Ui :: wyborWMenuBibliotekarza(int wybor) {
+
+	//Wyswietlna odpowienie informacje w zaleznosci od wyboru w menu.
+	//Wybor odpowiedniej opcji w menu pozwala rowniez dokonac roznych akcji np. wyslanie powiadomienia
+	//o zaleganiu z oddanie ksiazek.
+
+	system("CLS");
+	switch (wybor) {
+	case 1:
+		//TODO: dodac wyswietlanie danych o bibliotece.
+		cout << "Dane o bibliotece." << endl;
+		break;
+	case 2:
+		//TODO: dodac wyswietlanie danych o koncie.
+		cout << "Dane o koncie." << endl;
+		break;
+		//Po wyswietlniu ma miec mozliwosc modyfikacji niektorych danych.
+	case 3:
+		//TODO: dodac wyswietlanie listy dostepnych do wypozyczenia ksiazek.
+		cout << "Lista dostepnych ksiazek." << endl;
+		//Po wyswietleniu ma miec mozliwosc wypozyczenia ksiazki.
+		break;
+	case 4:
+		//TODO: dodac liste wypozyczonych ksiazek.
+		cout << "Lista osob z zaleglosciami" << endl;
+		//Po wyswietleniu ma miec mozliwosc wyslania powiadomienia o zaleglosciach.
+		break;
+	default:
+		cout << "Niewlasciwa opcja";
+		//Obsluga bledow.
+		break;
+	}
+	system("pause");
 }

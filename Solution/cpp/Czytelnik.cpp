@@ -8,22 +8,11 @@ using namespace std;
 const int Czytelnik::getID() {
 	return ID;
 }
-Egzemplarz** Czytelnik::getZaleglosci(){
-	return listaZaleglosci;
-}
-int Czytelnik::setZaleglosci(Egzemplarz** egzemplarze) {
-	return 1;
-}
-Data Czytelnik::getDataPierwszegoWypozyczenia() {
-	return dataPierwszegoWypozyczenia;
-}
 string Czytelnik::getOfertySpecjalne() {
 	//TODO
 	throw "not implemented";
 }
-int Czytelnik::getIloscWypozyczonychOdDolaczenia() {
-	return iloscWypozyczonychOdDolaczenia;
-}
+
 string* Czytelnik::getPreferowaneTematy() {
 	return preferowaneTematy;
 }
@@ -58,9 +47,6 @@ int Czytelnik::zmienTerminOddania(Data termin) {
 int Czytelnik::zarezerwujKsiazke(Egzemplarz* ksiazka) {
 	//TODO
 	throw "not implemented";
-}
-Data Czytelnik::getDataDolaczenia() {
-	return dataDolaczenia;
 }
 
 void Czytelnik::printInfo() {

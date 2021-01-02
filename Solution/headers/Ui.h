@@ -55,6 +55,11 @@ public:
 	int chooseUserTypeRegistration();
 	bool confirmVerification();
 
+	//Metoda pozwalajaca zalogowac sie na konto uzytkownikowi (zarowno bibliotekarzowi jak i czytelnikowi)
+	//do metody przekazywany jest tryb okreslajacy osobe ktora sie loguje.
+
+	bool zaloguj(int tryb, sqlite3* bazaDanych);
+
 	bool addCzytelnik(Czytelnik new_user, sqlite3* database);
 	bool addBibliotekarz(Bibliotekarz new_user, sqlite3* database);
 	//funkcja dodajaca ksiazke do biblioteki.
@@ -82,6 +87,14 @@ public:
 	int addAutor3(string imie, string ksiazka);
 	//funkcja do splitowania stringa za pomoca delimitera. arg 1 - string do podzielenia. arg 2 - delimiter. zwraca vector (uzywany jako tablica do prostego przejscia i wykonania czegos)
 	std::vector<std::string> split_string(std::string stringToBeSplitted, std::string delimeter);
+
+	//Metody wykorzystywane w menu po zalogowaniu czytelnika/bibliotekarza.
+
+	int menuPoZalogowaniuCzytelnika();
+	int menuPoZalogowaniuBibliotekarza();
+	void wyborWMenuCzytelnika(int wybor);
+	void wyborWMenuBibliotekarza(int wybor);
+
 };
 
 #endif

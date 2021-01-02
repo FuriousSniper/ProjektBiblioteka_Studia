@@ -38,10 +38,22 @@ int main() {
 			else if (acc_type == 0)
 				break;
 			else if (acc_type == 1) {
-				//LOGOWANIE CZYTELNIKA
+				bool statusLogowania = ui.zaloguj(1, db);
+				if (!statusLogowania) continue;
+				else {
+					int wybor = ui.menuPoZalogowaniuCzytelnika();
+					if (wybor == 0) continue;
+					ui.wyborWMenuCzytelnika(wybor);
+				}
 			}
 			else {
-				//LOGOWANIE BIBLIOTEKARZA
+				bool statusLogowania = ui.zaloguj(2, db);
+				if (!statusLogowania) continue;
+				else {
+					int wybor = ui.menuPoZalogowaniuBibliotekarza();
+					if (wybor == 0) continue;
+					ui.wyborWMenuBibliotekarza(wybor);
+				}
 			}
 		}
 		else if (tryb == 2) {
@@ -103,7 +115,7 @@ int main() {
 			break;
 		}
 	}
-		
+
 	
 
 	sqlite3_close(db);
