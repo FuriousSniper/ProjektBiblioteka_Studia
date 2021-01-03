@@ -76,6 +76,13 @@ public:
 	//metoda do wypozyczania ksiazek. jako argumenty przyjmuje obiekt zalogowanego czytelnika oraz tytul wypozyczanej ksiazki. zwraca wartosc odpowiadajaca kodowi bledu (1 - sukces), (-1 - blad)
 	int lendBook(Czytelnik c, string tytul);
 
+	//metoda pozwalajaca na wyswietlenie ksiazek wypozyczonych przez czytelnika c
+	int getUserBooks(Czytelnik c);
+
+	//metoda do zwracania ksiazek. Czytelnik c - zalogowany czytelnik. pobieramy z niego imie i nazwisko potrzebne do zwracania.
+	//isbn - nr ksiazki do zwrocenia
+	int returnBook(Czytelnik c, string isbn);
+
 	//metoda dodajaca egzemplarz danej ksiazki do bazy danych
 	int addEgzemplarz();
 	//metoda dodajaca egzemplarz danej ksiazki do bazy danych. jako parametr przyjmuje nr isbn dodawanej ksiazki, co pozwala na uproszczenie funkcji dodawania ksiazek.

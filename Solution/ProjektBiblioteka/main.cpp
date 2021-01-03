@@ -128,8 +128,16 @@ int main() {
 		}
 	}
 	
+<<<<<<< HEAD
 	
 	//ui.addBook();
+=======
+	//ui.addBook();
+	Czytelnik c = Czytelnik("Gabriel", "Rojek", 5);
+	ui.getUserBooks(c);
+
+	
+>>>>>>> 27e78250655edacce0daf65b68ae0ec90099d8fd
 
 	sqlite3_close(db);
 
