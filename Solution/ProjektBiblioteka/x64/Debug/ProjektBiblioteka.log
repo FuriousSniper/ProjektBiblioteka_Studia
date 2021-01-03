@@ -1,11 +1,10 @@
-﻿  main.cpp
-C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(2,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(3,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(4,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(5,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(6,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(7,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(8,10): warning C4067: nieoczekiwane tokeny występujące po dyrektywie preprocesora - oczekiwano nowego wiersza
-C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(21,8): warning C4101: "error": lokalna zmienna, do której nie istnieje odwołanie
-C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\ProjektBiblioteka\main.cpp(20,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
+﻿  Ui.cpp
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(376,17): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(443,9): warning C4101: "error": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(696,8): warning C4101: "error": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(807,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(896,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(938,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(1096,8): warning C4101: "error": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(434): warning C4715: "Ui::addBook”: niewszystkie ścieżki kodu zwracają wartość
   ProjektBiblioteka.vcxproj -> C:\Users\komputer\Desktop\ProjektBiblioteka_Studia\Solution\x64\Debug\ProjektBiblioteka.exe

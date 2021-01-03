@@ -1181,23 +1181,24 @@ Osoba* Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
 	//tryb == 1 - logowanie czytelnika
 	//tryb == 2 - logowanie bibliotekarza
 
-	//z zalozenia do metody przekazywany jest wskaznik na otwarta juz baze.
-	//mozna tego nie robic i otwierac wewnatrz tej metody.
+	if (bazaDanych == NULL) {
+		sqlite3_open("..\\ProjektBiblioteka\\main_db.db", &bazaDanych);
+		if (bazaDanych == NULL) {
+			return NULL;
+		}
+	}
 
 	while (true) {
 
 		system("CLS");
 
-		string imie;
-		string nazwisko;
+		string email;
 		string haslo;
 		int ret;      //Do przypisania wartosci zwracanej przez funkcje sqlite3_step(...).
 
 		cout << "Logowanie do systemu biblioteki." << endl;
-		cout << "Podaj imie: ";
-		cin >> imie;
-		cout << "Podaj nazwisko: ";
-		cin >> nazwisko;
+		cout << "Podaj adres e-mail konta: ";
+		cin >> email;
 		cout << "Podaj haslo: ";
 		cin >> haslo;
 
@@ -1211,17 +1212,15 @@ Osoba* Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
 		if (tryb == 1) {
 			zapytanie = "SELECT imie, nazwisko, haslo "
 				"FROM Czytelnik "
-				"WHERE imie == '" +
-				imie + "' AND nazwisko == '" +
-				nazwisko + "' AND haslo == '" +
+				"WHERE email == '" +
+				email + "' AND haslo == '" +
 				haslo + "';";
 		}
 		else if (tryb == 2) {
 			zapytanie = "SELECT imie, nazwisko, haslo "
 				"FROM Bibliotekarz "
-				"WHERE imie == '" +
-				imie + "' AND nazwisko == '" +
-				nazwisko + "' AND haslo == '" +
+				"WHERE email == '" +
+				email + "' AND haslo == '" +
 				haslo + "';";
 		}
 
@@ -1232,16 +1231,12 @@ Osoba* Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
 		sqlite3_finalize(stmt);
 
 		//SQLITE_ROW jest zwracane przez sqlite3_step(...) jezeli jest dostepny wiersz do odczytu.
-		//Zakladam, ze w bazie nie moze byc jednoczesnie dwoch rekordow o takich samych: imieniu, nazwisku i hasle
+		//Zakladam, ze w bazie nie moze byc jednoczesnie dwoch rekordow o takich samych: emailu i hasle
 
 		//Czyli nie moze zajsc taka sytuacja, ze w tabeli sa dwa rekordy:
-		//Rekord 1: imie = Adam nazwisko = Ligaj haslo = admin
-		//Rekord2: imie = Adam nazwisko = Ligaj haslo = admin
-		//Wiadomym jest, ze moze byc dwoch uzytkownikow o takim samym imieniu i nazwisku. Jest to praktycznie
-		//niemozliwe ze stworza konta o takim samym hasle...
-
-		//A wiec powinien byc tylko jeden wiersz do odczytu (pod warunkiem, ze istnieje i nie wystapily bledy).
-
+		//Rekord 1: email = roj@gmail.com haslo = admin
+		//Rekord 2: email = roj@gmail.com haslo = admin
+	
 		if (ret == SQLITE_ROW) {
 
 			//Jest dostepny wiersz do oczytu czyli czytelnik znajduje sie w bazie.
@@ -1256,9 +1251,8 @@ Osoba* Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
 
 				zapytanie = zapytanie = "SELECT * "
 					"FROM Czytelnik "
-					"WHERE imie == '" +
-					imie + "' AND nazwisko == '" +
-					nazwisko + "' AND haslo == '" +
+					"WHERE email == '" +
+					email + "' AND haslo == '" +
 					haslo + "';";
 
 				sqlite3_prepare_v2(bazaDanych, zapytanie.c_str(), -1, &stmt, NULL);
@@ -1278,9 +1272,8 @@ Osoba* Ui :: zaloguj(int tryb, sqlite3* bazaDanych) {
 
 				zapytanie =  "SELECT * "
 					"FROM Bibliotekarz "
-					"WHERE imie == '" +
-					imie + "' AND nazwisko == '" +
-					nazwisko + "' AND haslo == '" +
+					"WHERE email == '" +
+					email + "' AND haslo == '" +
 					haslo + "';";
 
 				sqlite3_prepare_v2(bazaDanych, zapytanie.c_str(),-1, &stmt, NULL);
