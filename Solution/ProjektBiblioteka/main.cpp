@@ -2,16 +2,19 @@
 #include "..\headers\Osoba.h";
 #include "..\headers\Ui.h";
 #include "..\headers\Autor.h";
-#include "..\headers\AdresZamieszkania.h";
+#include "..\headers\Adres.h";
 #include "..\headers\DaneKontaktowe.h";
-#include "../ProjektBiblioteka/Libraries/sqlite3/sqlite3.h";
+#include "..\ProjektBiblioteka\Libraries\sqlite3\sqlite3.h";
+#include "..\headers\Biblioteka.h";
 #include <sstream>
 #include <vector>
 
 using namespace std;
 
 int main() {
+
 	
+
 	Ui ui = Ui();
 	sqlite3* db;
 	sqlite3_stmt* stmt;
@@ -27,9 +30,16 @@ int main() {
 	//const char* sql = "CREATE TABLE CZYTELNIK(ID INTEGER PRIMARY        KEY      ,listaZaleglosci       TEXT     ,dataPierwszegoWypozyczenia     DATE     ,iloscWypozyczonychOdDolaczenia  INT             ,preferowaneTematy     TEXT             ,dataDolaczenia        DATE             ,miasto				   TEXT             ,kodPocztowy           TEXT             ,ulica                 TEXT             ,imie                  TEXT             ,nazwisko              TEXT             ,wiek                  TEXT             ,dataUrodzenia         DATE             ,haslo				   TEXT				,numerMieszkania       TEXT             , ksiazka1 TEXT, ksiazka2 TEXT, ksiazka3 TEXT)";
 	//sqlite3_exec(db, sql, NULL, NULL, NULL);
 	
-	/*
 
+	Biblioteka* biblioteka = ui.wczytywanieBiblioteki(db);
+
+	if (biblioteka == NULL) {
+		cout << "Nie udalo sie utworzyc obiektu biblioteka." << endl;
+		return -1;
+	}
+	
 	for (;;) {
+
 		int tryb = ui.signInUpMenu();
 		if (tryb == 1) {
 			//TRYB LOGOWANIA
@@ -54,7 +64,7 @@ int main() {
 				Bibliotekarz* osZalogowana = reinterpret_cast<Bibliotekarz*>(ui.zaloguj(2, db));
 				if (osZalogowana == NULL) continue;
 				else {
-					ui.menuPoZalogowaniuBibliotekarza(osZalogowana,db);		
+					ui.menuPoZalogowaniuBibliotekarza(osZalogowana, biblioteka, db);		
 				}
 			}
 		}
@@ -117,12 +127,13 @@ int main() {
 			break;
 		}
 	}
-	*/
 	
-	ui.addBook();
+	
+	//ui.addBook();
 
 	sqlite3_close(db);
 
+	
 	system("pause");
 
 	return 0;

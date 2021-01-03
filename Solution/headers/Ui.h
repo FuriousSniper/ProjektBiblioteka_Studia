@@ -4,9 +4,10 @@
 #include "..\headers\Data.h"
 #include "..\headers\Autor.h"
 #include "..\headers\Czytelnik.h"
-#include "..\headers\AdresZamieszkania.h"
+#include "..\headers\Adres.h"
 #include "..\headers\Bibliotekarz.h"
-#include "..\ProjektBiblioteka\Libraries\sqlite3\sqlite3.h";
+#include "..\headers\Biblioteka.h"
+#include "..\ProjektBiblioteka\Libraries\sqlite3\sqlite3.h"
 #include <string>
 #include <vector>
 
@@ -35,7 +36,7 @@ public:
 	//funkcja do tworzenia obiektu klasy Adres przez uzytkownika
 	//zwraca ona obiekt, ktory tworzy
 
-	AdresZamieszkania createAdres();
+	Adres createAdres();
 	
 	//funkcja do wyboru pierwszej akcji uzytkownika. 
 	//umozliwia wybranie logowania lub rejestracji
@@ -86,27 +87,15 @@ public:
 	int addAutor2(string imie, string ksiazka);
 	//aktualizacja, dodawanie nowego autora
 	int addAutor3(string imie, string ksiazka);
-	//funkcja do splitowania stringa za pomoca delimitera. arg 1 - string do podzielenia. arg 2 - delimiter. zwraca vector (uzywany jako tablica do prostego przejscia i wykonania czegos)
-	std::vector<std::string> split_string(std::string stringToBeSplitted, std::string delimeter);
+
 	//metoda do sprawdzania, czy jakies egzemplarze ksiazki da sie wypozyczyc. parametr - tytul ksiazki do sprawdzenia. zwraca nr isbn egzemplarza gotowego do wypozyczenia
 	string checkEgzemplarze(string tytul);
 	//Metody wykorzystywane w menu po zalogowaniu czytelnika/bibliotekarza.
 
 	int menuPoZalogowaniuCzytelnika(Czytelnik* czytelnik);
-	int menuPoZalogowaniuBibliotekarza(Bibliotekarz*bibliotekarz, sqlite3*bazaDanych);
+	int menuPoZalogowaniuBibliotekarza(Bibliotekarz*bibliotekarz, Biblioteka*biblioteka, sqlite3*bazaDanych);
 	void wyborWMenuCzytelnika(int wybor);
-	void wyborWMenuBibliotekarza(int wybor, Bibliotekarz*bibliotekarz, sqlite3*bazaDanych);
-
-private:
-
-	//Metody prywatne, bo sa wykorzystywane tylko wewnatrz klasy (wewnatrz innych metod klasy).
-
-	//Konwertuje string'a (WAZNE: musi byc to data pobrana z bazy danych) na obiekt typu Data.
-	Data konwersjaNaData(string napis);
-
-	//Konwertuje wskaznik (const unsigned char*) zwracany przez funkcje sqlite3_column_text
-	//na string (const char*).
-	string konwersjaNaString(const unsigned char*);
+	void wyborWMenuBibliotekarza(int wybor, Bibliotekarz*bibliotekarz, Biblioteka*biblioteka, sqlite3*bazaDanych);
 
 	//Tworzy Bibliotekarza na podstawie danych w rekordzie tabeli Bibliotekarz.
 	Bibliotekarz* wczytywanieBibliotekarza(sqlite3_stmt*);
@@ -115,6 +104,10 @@ private:
 
 	void zmienDaneBibliotekarza(Bibliotekarz* bibliotekarz, sqlite3* bazaDanych);
 
+	//wczytywanie biblioteki do pamieci.
+
+	Biblioteka* wczytywanieBiblioteki(sqlite3* bazaDanych);
+	
 };
 
 #endif

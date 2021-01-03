@@ -3,8 +3,10 @@
 #include "..\headers\Data.h"
 #include "..\headers\Autor.h"
 #include "..\headers\Czytelnik.h"
-#include "..\headers\AdresZamieszkania.h"
-#include "../ProjektBiblioteka/Libraries/sqlite3/sqlite3.h";
+#include "..\headers\Adres.h"
+#include "..\headers\Biblioteka.h"
+#include "..\headers\ElementyPomocnicze.h"
+#include "../ProjektBiblioteka/Libraries/sqlite3/sqlite3.h"
 #include <string>
 #include <exception>
 #include <iostream>
@@ -21,7 +23,7 @@ Osoba Ui::createOsoba() {
 	int rok;
 	string email;
 	string telefon;
-	AdresZamieszkania adres;
+	Adres adres;
 
 	//czyszczenie ekranu
 	system("CLS");
@@ -228,7 +230,7 @@ bool Ui::addBibliotekarz(Bibliotekarz new_user, sqlite3* database) {
 
 }
 
-AdresZamieszkania Ui::createAdres() {
+Adres Ui::createAdres() {
 	cout << "Tworzenie adresu" << endl;
 	system("CLS");
 	string miasto;
@@ -245,7 +247,7 @@ AdresZamieszkania Ui::createAdres() {
 	cout << "Podaj numer Twojego mieszkania (opcjonalne): ";
 	int numerMieszkania;
 	cin >> numerMieszkania;
-	AdresZamieszkania a = AdresZamieszkania(miasto,kod,ulica, numerMieszkania);
+	Adres a = Adres(miasto,kod,ulica, numerMieszkania);
 	cout<< "Pomyslnie utworzono: Adres" << endl;
 	return a;
 }
@@ -300,23 +302,7 @@ int Ui::chooseUserType() {
 	return n;
 }
 Ui::Ui() {}
-std::vector<std::string> Ui::split_string(std::string stringToBeSplitted, std::string delimeter) {
-	std::vector<std::string> splittedString;
-	int startIndex = 0;
-	int  endIndex = 0;
-	while ((endIndex = stringToBeSplitted.find(delimeter, startIndex)) < stringToBeSplitted.size())
-	{
-		std::string val = stringToBeSplitted.substr(startIndex, endIndex - startIndex);
-		splittedString.push_back(val);
-		startIndex = endIndex + delimeter.size();
-	}
-	if (startIndex < stringToBeSplitted.size())
-	{
-		std::string val = stringToBeSplitted.substr(startIndex);
-		splittedString.push_back(val);
-	}
-	return splittedString;
-}
+
 int Ui::chooseUserTypeRegistration() {
 	int n = 0;
 	while (true) {
@@ -398,7 +384,7 @@ bool Ui::addBook() {
 		//podzielenie autorow i wywolanie funkcji dodajacej/sprawdzajacej czy autor istnieje dla kazdego autora
 		if (autorzy.find("||") != string::npos) {
 			string delimit = "||";
-			vector<string> autors_splitted = split_string(autorzy, delimit);
+			vector<string> autors_splitted = ElementyPomocnicze :: split_string(autorzy, delimit);
 			for (int i = 0; i < autors_splitted.size(); i++) {
 				//metoda sprawdzajaca czy autor istnieje i dodaje go/updatuje jego ksiazki
 				addAutor3(autors_splitted[i], tytul);
@@ -433,7 +419,7 @@ bool Ui::addBook() {
 			vector<string> splittedString;
 			string delimeter = "||";
 
-			splittedString = split_string(egzemplarze, delimeter);
+			splittedString = ElementyPomocnicze :: split_string(egzemplarze, delimeter);
 			//dla kazdego egzemplarza wywolywana jest funkcja dodajaca go do bazy danych
 			for (int i = 0; i < splittedString.size(); i++) {
 				cout << "Dodawanie egzemplarza ksiazki o isbn " << splittedString[i];
@@ -788,7 +774,7 @@ int Ui::addAutor2(string imie, string ksiazka) {
 		return -1;
 	}
 	string d = " ";
-	vector<string> sp = split_string(imie, d);
+	vector<string> sp = ElementyPomocnicze :: split_string(imie, d);
 	string imie2 = sp[0];
 	string nazwisko = sp[1];
 	string dataUrodzenia;
@@ -828,7 +814,7 @@ int Ui::addAutor3(string imie, string ksiazka) {
 	}
 	//rozdzielanie imienia i nazwiska autora
 	string d = " ";
-	vector<string> sp = split_string(imie, d);
+	vector<string> sp = ElementyPomocnicze :: split_string(imie, d);
 	string imie2 = sp[0];
 	string nazwisko = sp[1];
 	string query;
@@ -903,7 +889,7 @@ int Ui::addAutor3(string imie, string ksiazka) {
 		else {
 			//splitujemy ksiazki autora pobrane z bazy
 			string d2 = "||";
-			vector<string> ksiazki_split = split_string(ksiazki_autora, d2);
+			vector<string> ksiazki_split = ElementyPomocnicze :: split_string(ksiazki_autora, d2);
 
 			//forem sprawdzamy, czy taka ksiazka nie jest juz do autora przypisana
 			for (int i = 0; i < ksiazki_split.size(); i++) {
@@ -978,7 +964,7 @@ string Ui::checkEgzemplarze(string tytul) {
 
 	//dzielenie egzemplarzy
 	string delimit_1 = "||";
-	vector<string> split_egz = split_string(egzemplarze, delimit_1);
+	vector<string> split_egz = ElementyPomocnicze :: split_string(egzemplarze, delimit_1);
 
 	//dla kazdego spradzamy dostepnosc
 	for (int i = 0; i < split_egz.size(); i++) {
@@ -1223,7 +1209,7 @@ void Ui :: wyborWMenuCzytelnika(int wybor) {
 	system("pause");
 }
 
-int Ui :: menuPoZalogowaniuBibliotekarza(Bibliotekarz*bibliotekarz, sqlite3*bazaDanych) {
+int Ui :: menuPoZalogowaniuBibliotekarza(Bibliotekarz*bibliotekarz, Biblioteka*biblioteka, sqlite3*bazaDanych) {
 
 	//Proste menu wyswietlane po zalogowaniu bibliotekarza.
 	//Po wyborze umozliwia dalsze operacje np. sprawdzenie rejestru spoznien.
@@ -1244,13 +1230,13 @@ int Ui :: menuPoZalogowaniuBibliotekarza(Bibliotekarz*bibliotekarz, sqlite3*baza
 		if (wybor == 0) {
 			return 0;
 		}
-		wyborWMenuBibliotekarza(wybor, bibliotekarz, bazaDanych);
+		wyborWMenuBibliotekarza(wybor, bibliotekarz, biblioteka, bazaDanych);
 	}
 }
 
-void Ui :: wyborWMenuBibliotekarza(int wybor, Bibliotekarz*bibliotekarz, sqlite3*bazaDanych) {
+void Ui :: wyborWMenuBibliotekarza(int wybor, Bibliotekarz*bibliotekarz, Biblioteka*biblioteka, sqlite3*bazaDanych) {
 
-	//Wyswietlna odpowienie informacje w zaleznosci od wyboru w menu.
+	//Wyswietla odpowienie informacje w zaleznosci od wyboru w menu.
 	//Wybor odpowiedniej opcji w menu pozwala rowniez dokonac roznych akcji np. wyslanie powiadomienia
 	//o zaleganiu z oddanie ksiazek.
 
@@ -1258,8 +1244,9 @@ void Ui :: wyborWMenuBibliotekarza(int wybor, Bibliotekarz*bibliotekarz, sqlite3
 	switch (wybor) {
 	case 1:
 	{
-		//TODO: dodac wyswietlanie danych o bibliotece.
-		cout << "Dane o bibliotece." << endl;
+		biblioteka->printInfo();
+		cout << endl;
+		cout << "Nie posiadasz uprawnien do zmiany tych danych." << endl;
 		break;
 	}
 	case 2:
@@ -1298,6 +1285,7 @@ void Ui :: wyborWMenuBibliotekarza(int wybor, Bibliotekarz*bibliotekarz, sqlite3
 		break;
 	}
 	}
+	system("pause");
 }
 
 Bibliotekarz* Ui :: wczytywanieBibliotekarza(sqlite3_stmt*stmt) {
@@ -1309,65 +1297,24 @@ Bibliotekarz* Ui :: wczytywanieBibliotekarza(sqlite3_stmt*stmt) {
 	//metodzie logujacej).
 
 	int id = sqlite3_column_int(stmt, 0);
-	string imie = konwersjaNaString(sqlite3_column_text(stmt, 1));
-	string nazwisko = konwersjaNaString(sqlite3_column_text(stmt, 2));
+	string imie = ElementyPomocnicze :: konwersjaNaString(sqlite3_column_text(stmt, 1));
+	string nazwisko = ElementyPomocnicze :: konwersjaNaString(sqlite3_column_text(stmt, 2));
 	int wiek = sqlite3_column_int(stmt, 3);
-	Data dataUrodzenia = konwersjaNaData(konwersjaNaString(sqlite3_column_text(stmt,4)));
-	string haslo = konwersjaNaString(sqlite3_column_text(stmt, 5));
-	string email = konwersjaNaString(sqlite3_column_text(stmt, 6));
-	string telefon = konwersjaNaString(sqlite3_column_text(stmt, 7));
-	string miasto = konwersjaNaString(sqlite3_column_text(stmt, 8));
-	string kodPocztowy = konwersjaNaString(sqlite3_column_text(stmt, 9));
-	string ulica = konwersjaNaString(sqlite3_column_text(stmt, 10));
+	Data dataUrodzenia = ElementyPomocnicze :: konwersjaNaData(ElementyPomocnicze :: konwersjaNaString(sqlite3_column_text(stmt,4)));
+	string haslo = ElementyPomocnicze :: konwersjaNaString(sqlite3_column_text(stmt, 5));
+	string email = ElementyPomocnicze :: konwersjaNaString(sqlite3_column_text(stmt, 6));
+	string telefon = ElementyPomocnicze :: konwersjaNaString(sqlite3_column_text(stmt, 7));
+	string miasto = ElementyPomocnicze :: konwersjaNaString(sqlite3_column_text(stmt, 8));
+	string kodPocztowy = ElementyPomocnicze :: konwersjaNaString(sqlite3_column_text(stmt, 9));
+	string ulica = ElementyPomocnicze :: konwersjaNaString(sqlite3_column_text(stmt, 10));
 	int numerMieszkania = sqlite3_column_int(stmt, 11);
 
-	AdresZamieszkania adres = AdresZamieszkania(miasto, kodPocztowy, ulica, numerMieszkania);
+	Adres adres = Adres(miasto, kodPocztowy, ulica, numerMieszkania);
 
 	Bibliotekarz* bibliotekarz = new Bibliotekarz(imie, nazwisko, email, telefon, dataUrodzenia.getDzien(), dataUrodzenia.getMiesiac(), dataUrodzenia.getRok(), adres, id);
 	bibliotekarz->setHaslo(haslo);
 
 	return bibliotekarz;
-}
-
-//==============================================================================================================
-
-//Te metody nie sa scisle zwiazane z funkcjonalnosciami interfejsu. Mozna je zdefiniowac np. jako funkcje globalne.
-
-string Ui :: konwersjaNaString(const unsigned char* var) {
-
-	//Konwersja const unsigned char* na const char* (string).
-	//Jezeli wskaznik jest NULL'em, zwraca pustego stringa.
-
-	if (var == NULL) {
-		return "";
-	}
-	else {
-		return reinterpret_cast<const char*>(var);
-	}
-}
-
-Data Ui :: konwersjaNaData(string napis) {
-
-	//Jezeli w danym rekordzie kolumna o typie danych DATA jest pusta to sqlite3_column_text(...) zwraca NULLA.
-	//W innej metodzie (konwersjaNaString) zwracana wartosc konwertowana jest na string (zwracana wartosc jest typu
-	//const unsigned char*).
-	//Jezeli zwracana wartosc == NULL to jest konwertowana na "".
-	//W takim przypadku zwracany jest obiekt utworzony konstruktorem domyslnym.
-
-	if (napis == "") {
-		return Data();
-	}
-
-	//W przeciwnym razie stringa dzieli sie na 3 czesci (d,m,r) oddzielone delimiterem "-" (taki jest format zapisu
-	//dat w bazie).
-
-	//Zakladam, ze nie moze zajsc sytuacja, w ktorej rozmiar tego vectora jest rozny od 3. Tzn. data zapisywana
-	//w bazie zawsze slada sie z 3 czesci: dnia, miesiaca oraz roku albo nie ma jej wcale (patrz wy¿ej).
-
-	//Jezeli moze zajsc sytuacja w ktorej rozmiar vectora moze byc rozny od 3, nalezy dodac tu wiecej warunkow.
-
-	vector<string> podzielony = split_string(napis, "-");
-	return Data(stoi(podzielony[0]), stoi(podzielony[1]), stoi(podzielony[2]));
 }
 
 void Ui :: zmienDaneBibliotekarza(Bibliotekarz* bibliotekarz, sqlite3*bazaDanych) {
@@ -1461,6 +1408,49 @@ void Ui :: zmienDaneBibliotekarza(Bibliotekarz* bibliotekarz, sqlite3*bazaDanych
 		}
 	}
 }
+
+Biblioteka* Ui :: wczytywanieBiblioteki(sqlite3* bazaDanych) {
+
+	//Wczytuje biblioteke do bazy danych. 
+
+	if (bazaDanych == NULL) {
+
+		//Na wypadek gdyby przekazano NULL'a.
+
+		sqlite3_open("..\\ProjektBiblioteka\\main_db.db", &bazaDanych);
+
+		if (bazaDanych == NULL) {
+
+			//Nie udalo sie otworzyc bazy danych.
+
+			return NULL;
+		}
+	}
+
+	string zapytanie = "SELECT * FROM BIBLIOTEKA;";
+	sqlite3_stmt* stmt = NULL;
+	sqlite3_prepare_v2(bazaDanych, zapytanie.c_str(), -1, &stmt, NULL);
+	sqlite3_step(stmt);
+
+	string emailKontaktowy = ElementyPomocnicze :: konwersjaNaString(sqlite3_column_text(stmt, 0));
+	string telefonKontaktowy = ElementyPomocnicze :: konwersjaNaString(sqlite3_column_text(stmt, 1));
+	string miasto = ElementyPomocnicze :: konwersjaNaString(sqlite3_column_text(stmt, 2));
+	string kodPocztowy = ElementyPomocnicze :: konwersjaNaString(sqlite3_column_text(stmt, 3));
+	string ulica = ElementyPomocnicze :: konwersjaNaString(sqlite3_column_text(stmt, 4));
+	int numer = sqlite3_column_int(stmt, 5);
+	int iloscEgzemplarzy = sqlite3_column_int(stmt, 6);
+	map<string, string> godzinyOtwarcia = Biblioteka :: wczytywanieGodzin(bazaDanych);
+
+	Adres adres = Adres(miasto, kodPocztowy, ulica, numer);
+
+	sqlite3_finalize(stmt);
+
+	Biblioteka* biblioteka = new Biblioteka(emailKontaktowy, telefonKontaktowy, adres, godzinyOtwarcia, iloscEgzemplarzy);
+
+	return biblioteka;
+}
+
+
 
 
 
