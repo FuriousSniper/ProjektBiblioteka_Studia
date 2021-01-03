@@ -119,7 +119,11 @@ int main() {
 	}
 	*/
 	
-	ui.addBook();
+	//ui.addBook();
+	Czytelnik c = Czytelnik("Gabriel", "Rojek", 5);
+	ui.getUserBooks(c);
+
+	
 
 	sqlite3_close(db);
 

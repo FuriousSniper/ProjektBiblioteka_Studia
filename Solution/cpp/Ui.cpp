@@ -644,6 +644,176 @@ int Ui::lendBook(Czytelnik c,string tytul) {
 		cout << "Czytelnik wypozyczyl maksymalna ilosc ksiazek" << endl;
 		return -1;
 }
+int Ui::returnBook(Czytelnik c, string isbn) {
+	string imie = c.getImie();
+	string nazwisko = c.getNazwisko();
+	sqlite3* db;
+	sqlite3_stmt* stmt;
+	string query;
+	char* error;
+	sqlite3_open("main_db.db", &db);
+	if (db == NULL)
+	{
+		printf("Blad przy otwieraniu bazy danych\n");
+		return -1;
+	}
+	query = "SELECT EXISTS(SELECT 1 from EGZEMPLARZE WHERE numerISBN='" + isbn + "' LIMIT 1);";
+	sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, NULL);
+	bool done = false;
+	int row = 0;
+	bool exists = false;
+	//sprawdzanie, czy autor istnieje w bazie danych
+	while (!done) {
+		switch (sqlite3_step(stmt)) {
+		case SQLITE_ROW:
+			for (int i = 0; i < sqlite3_column_count(stmt); i++) {
+				if (sqlite3_column_text(stmt, i)[0] == '1') {
+					exists = true;
+				}
+			}
+			row++;
+			break;
+
+		case SQLITE_DONE:
+			done = true;
+			break;
+
+		default:
+			fprintf(stderr, "Failed.\n");
+			return 1;
+		}
+	}
+	sqlite3_finalize(stmt);
+	if (exists) {
+		//updatowanie egzemplarza. clearowanie pol ustawianych przy wypozyczeniu
+		query = "UPDATE EGZEMPLARZ SET dataWyp='', dataOdd='', osobaWyp='' WHERE numerISBN='" + isbn + "';";
+		sqlite3_exec(db, query.c_str(), NULL, NULL, &error);
+		if (error != SQLITE_OK) {
+			cout << "blad: " << error << endl;
+			system("pause");
+			sqlite3_close(db);
+			return -1;
+		}
+		//do dodania - update czytelnika
+	}
+	else {
+		cout << "Ksiazka o podanym numerze ISBN nie istnieje" << endl;
+		return -1;
+	}
+	return 0;
+}
+int Ui::getUserBooks(Czytelnik c) {
+	string imie = c.getImie();
+	string nazwisko = c.getNazwisko();
+	sqlite3* db;
+	sqlite3_stmt* stmt;
+	char* error;
+	
+	sqlite3_open("main_db.db", &db);
+	if (db == NULL)
+	{
+		printf("Blad przy otwieraniu bazy danych\n");
+		return -1;
+	}
+	//numery isbn ksiazek, ktore czytelnik wypozyczyl
+	string k1 = "";
+	string k2 = "";
+	string k3 = "";
+	string query;
+	query = "SELECT ksiazka1, ksiazka2, ksiazka3 from CZYTELNIK WHERE imie='" + imie + "' AND nazwisko='"+nazwisko+"';";
+	sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, NULL);
+	bool done = false;
+	int row = 0;
+	
+	//pobranie egzemplarzy ksiazki z tabeli
+	while (!done) {
+		switch (sqlite3_step(stmt)) {
+		case SQLITE_ROW:
+			for (int i = 0; i < sqlite3_column_count(stmt); i++) {				
+				if (i == 0) {
+					if(sqlite3_column_text(stmt, i)!=NULL)
+						k1 = string(reinterpret_cast<const char*>((sqlite3_column_text(stmt, i))));
+				}
+				if (i == 1) {
+					if (sqlite3_column_text(stmt, i) != NULL)
+						k2 = string(reinterpret_cast<const char*>((sqlite3_column_text(stmt, i))));
+				}
+				if (i == 2){
+					if (sqlite3_column_text(stmt, i) != NULL)
+						k3 = string(reinterpret_cast<const char*>((sqlite3_column_text(stmt, i))));
+				}
+					
+			}
+			row++;
+			break;
+
+		case SQLITE_DONE:
+			done = true;
+			break;
+
+		default:
+			fprintf(stderr, "Failed.\n");
+			return -1;
+		}
+	}
+	sqlite3_finalize(stmt);
+	//drabinka przypadkow, w celu utworzenia poprawnego query do bazy danych
+	if (k1 == "" && k2 == "" && k3 == "") {	//000
+		cout << "Brak wypozyczonych ksiazek" << endl;
+		return 1;
+	}
+
+	if (k1 != "" && k2 == "" && k3 == "") {	//100
+		query = "SELECT ksiazka, numerISBN FROM EGZEMPLARZE WHERE numerISBN='" + k1 + "';";
+	}
+	if (k1 == "" && k2 != "" && k3 == "") {	//010
+		query = "SELECT ksiazka, numerISBN FROM EGZEMPLARZE WHERE numerISBN='" + k2 + "';";
+	}
+	if (k1 == "" && k2 == "" && k3 != "") { //001
+		query = "SELECT ksiazka, numerISBN FROM EGZEMPLARZE WHERE numerISBN='" + k3 + "';";
+	}
+
+	if (k1 != "" && k2 != "" && k3 == "") { //110
+		query = "SELECT ksiazka, numerISBN FROM EGZEMPLARZE WHERE numerISBN='" + k1 + "' OR numerISBN='" + k2 + "';";
+	}
+	if (k1 != "" && k2 == "" && k3 != "") { //101
+		query = "SELECT ksiazka, numerISBN FROM EGZEMPLARZE WHERE numerISBN='" + k1 + "' OR numerISBN='" + k3 + "';";
+	}
+	if (k1 == "" && k2 != "" && k3 != "") { //011
+		query = "SELECT ksiazka, numerISBN FROM EGZEMPLARZE WHERE numerISBN='" + k2 + "' OR numerISBN='" + k3 + "';";
+	}
+
+	if (k1 != "" && k2 != "" && k3 != "") { //111
+		query = "SELECT ksiazka, numerISBN FROM EGZEMPLARZE WHERE numerISBN='" + k1 + "' OR numerISBN='" + k2 + "' OR numerISBN='" + k3 + "';";
+	}
+	sqlite3_stmt* stmt2;
+	done = false;
+	row = 0;
+	//wypisywanie na ekran ksiazek i numerow isbn ksiazek
+	cout << "Ksiazki Czytelnika " << imie << " " << nazwisko <<": "<< endl;
+	sqlite3_prepare_v2(db, query.c_str(), -1, &stmt2, NULL);
+	while (!done) {
+		switch (sqlite3_step(stmt2)) {
+		case SQLITE_ROW:
+			if (sqlite3_column_text(stmt2, 0) != NULL)
+				cout <<"tytul: "<< sqlite3_column_text(stmt, 0) << endl;
+			if (sqlite3_column_text(stmt2, 1) != NULL)
+				cout <<"numer ISBN: "<< sqlite3_column_text(stmt2, 1) << endl<<endl;
+			row++;
+			break;
+
+		case SQLITE_DONE:
+			done = true;
+			break;
+
+		default:
+			fprintf(stderr, "Failed.\n");
+			return -1;
+		}
+	}
+	sqlite3_finalize(stmt2);
+	return 1;
+}
 int Ui::addEgzemplarz() {
 	system("CLS");
 	cout << "Dodawanie egzemplarza ksiazki" << endl;
@@ -1334,7 +1504,6 @@ Bibliotekarz* Ui :: wczytywanieBibliotekarza(sqlite3_stmt*stmt) {
 //Te metody nie sa scisle zwiazane z funkcjonalnosciami interfejsu. Mozna je zdefiniowac np. jako funkcje globalne.
 
 string Ui :: konwersjaNaString(const unsigned char* var) {
-
 	//Konwersja const unsigned char* na const char* (string).
 	//Jezeli wskaznik jest NULL'em, zwraca pustego stringa.
 
