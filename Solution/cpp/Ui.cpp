@@ -1487,49 +1487,7 @@ Bibliotekarz* Ui :: wczytywanieBibliotekarza(sqlite3_stmt*stmt) {
 	return bibliotekarz;
 }
 
-<<<<<<< HEAD
-=======
-//==============================================================================================================
 
-//Te metody nie sa scisle zwiazane z funkcjonalnosciami interfejsu. Mozna je zdefiniowac np. jako funkcje globalne.
-
-string Ui :: konwersjaNaString(const unsigned char* var) {
-	//Konwersja const unsigned char* na const char* (string).
-	//Jezeli wskaznik jest NULL'em, zwraca pustego stringa.
-
-	if (var == NULL) {
-		return "";
-	}
-	else {
-		return reinterpret_cast<const char*>(var);
-	}
-}
-
-Data Ui :: konwersjaNaData(string napis) {
-
-	//Jezeli w danym rekordzie kolumna o typie danych DATA jest pusta to sqlite3_column_text(...) zwraca NULLA.
-	//W innej metodzie (konwersjaNaString) zwracana wartosc konwertowana jest na string (zwracana wartosc jest typu
-	//const unsigned char*).
-	//Jezeli zwracana wartosc == NULL to jest konwertowana na "".
-	//W takim przypadku zwracany jest obiekt utworzony konstruktorem domyslnym.
-
-	if (napis == "") {
-		return Data();
-	}
-
-	//W przeciwnym razie stringa dzieli sie na 3 czesci (d,m,r) oddzielone delimiterem "-" (taki jest format zapisu
-	//dat w bazie).
-
-	//Zakladam, ze nie moze zajsc sytuacja, w ktorej rozmiar tego vectora jest rozny od 3. Tzn. data zapisywana
-	//w bazie zawsze slada sie z 3 czesci: dnia, miesiaca oraz roku albo nie ma jej wcale (patrz wy¿ej).
-
-	//Jezeli moze zajsc sytuacja w ktorej rozmiar vectora moze byc rozny od 3, nalezy dodac tu wiecej warunkow.
-
-	vector<string> podzielony = split_string(napis, "-");
-	return Data(stoi(podzielony[0]), stoi(podzielony[1]), stoi(podzielony[2]));
-}
-
->>>>>>> 27e78250655edacce0daf65b68ae0ec90099d8fd
 void Ui :: zmienDaneBibliotekarza(Bibliotekarz* bibliotekarz, sqlite3*bazaDanych) {
 
 	while (true) {
