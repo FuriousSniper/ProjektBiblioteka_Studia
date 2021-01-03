@@ -36,6 +36,14 @@ int Osoba::setWiek(int age) {
 	return this->wiek;
 }
 
+void Osoba::setTelefon(string telefon) {
+	this->telefon = telefon;
+}
+
+void Osoba::setEmail(string email) {
+	this->email = email;
+}
+
 void Osoba::printOsoba() {
 	
 	cout << "Dane osobowe:" << endl;

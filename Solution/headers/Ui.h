@@ -59,7 +59,7 @@ public:
 	//do metody przekazywany jest tryb okreslajacy osobe ktora sie loguje.
 	//Zwraca wskaznik na obiekt typu Czytelnik lub Bibliotekarz w zaleznosci od trybu.
 
-	bool zaloguj(int tryb, sqlite3* bazaDanych);
+	Osoba* zaloguj(int tryb, sqlite3* bazaDanych);
 
 	bool addCzytelnik(Czytelnik new_user, sqlite3* database);
 	bool addBibliotekarz(Bibliotekarz new_user, sqlite3* database);
@@ -93,9 +93,9 @@ public:
 	//Metody wykorzystywane w menu po zalogowaniu czytelnika/bibliotekarza.
 
 	int menuPoZalogowaniuCzytelnika(Czytelnik* czytelnik);
-	int menuPoZalogowaniuBibliotekarza(Bibliotekarz*bibliotekarz);
+	int menuPoZalogowaniuBibliotekarza(Bibliotekarz*bibliotekarz, sqlite3*bazaDanych);
 	void wyborWMenuCzytelnika(int wybor);
-	void wyborWMenuBibliotekarza(int wybor, Bibliotekarz*bibliotekarz);
+	void wyborWMenuBibliotekarza(int wybor, Bibliotekarz*bibliotekarz, sqlite3*bazaDanych);
 
 private:
 
@@ -110,6 +110,10 @@ private:
 
 	//Tworzy Bibliotekarza na podstawie danych w rekordzie tabeli Bibliotekarz.
 	Bibliotekarz* wczytywanieBibliotekarza(sqlite3_stmt*);
+
+	//Metoda do modyfikacji danych bibliotekarza.
+
+	void zmienDaneBibliotekarza(Bibliotekarz* bibliotekarz, sqlite3* bazaDanych);
 
 };
 
