@@ -17,25 +17,32 @@ private:
 public:
 	//funkcja do tworzenia obiektu klasy Osoba przez uzytkownika
 	//zwraca ona obiekt, ktory tworzy
-	Osoba createOsoba();
+	Osoba createOsoba(sqlite3*bazaDanych);
 
 	//funkcja do tworzenia obiektu klasy Autor przez uzytkownika
 	//zwraca ona obiekt, ktory tworzy
-	Autor createAutor();
+	Autor createAutor(sqlite3* bazaDanych);
 
-	//funkcja do tworzenia obiektu klasy Czytelnik
-	//zwraca ona obiekt, ktory tworzy
+	//Metoda do tworzenia nowego uzytkownika (bibliotekarza/czytelnika w zaleznosci od trybu).
+	//Zwraca wskaznik na nowo utworzony obiekt.
+	Osoba* createUzytkownik(int tryb, sqlite3* bazaDanych);
 
-	Czytelnik createCzytelnik(sqlite3* database);
+	//Dodaje uzytkownika (bibliotekarza/czytelnika w zaleznosci od trybu) do bazy danych.
+	//Przyjmuje wskaznika na obiekt Osoba utworzony przez metode createUzytkownik.
+	bool addUzytkownik(int tryb, sqlite3* bazaDanych, Osoba* osoba);
 
-	//metoda do tworzenia obiektu klasy Bibliotekarz przez u¿ytkownika,
-	//zwraca utworzony obiekt.
+	//Wyswietla menu tworzenia hasla (wykorzystywane w metodzie createUzytkownik).
+	string oknoTworzeniaHasla();
 
-	Bibliotekarz createBibliotekarz(sqlite3* database);
+	//Sprawdza obecnosc maila przekazanego jako argument w bazach danych Czytelnik oraz Bibliotekarz.
+	//Jezeli znajduje sie w jednej z tych baz zwraca false. W przeciwnym razie zwraca true.
+	bool sprawdzDostepnoscEmail(sqlite3* bazaDanych, string email);
 
+	//Sprawdza email pod katem wystepowania w nim odpowiedniego zakonczenia (@ oraz nazwy domeny).
+	bool sprawdzPoprawnoscEmail(string email);
+	
 	//funkcja do tworzenia obiektu klasy Adres przez uzytkownika
 	//zwraca ona obiekt, ktory tworzy
-
 	Adres createAdres();
 	
 	//funkcja do wyboru pierwszej akcji uzytkownika. 
@@ -56,14 +63,16 @@ public:
 	int chooseUserTypeRegistration();
 	bool confirmVerification();
 
+	//Metoda pozwalajaca zarejestrowac sie uzytkownikowi (zarowno bibliotekarzowi jak i czytelnikowi)
+	//Tryb okresla typ tworzonego konta (bibliotekarz = 2/czytelnik = 1).
+	//Jezeli rejestracja sie powiedzie, zwraca true. W przeciwnym razie zwraca false.
+	bool zarejestruj(int tryb, sqlite3* bazaDanych);
+
 	//Metoda pozwalajaca zalogowac sie na konto uzytkownikowi (zarowno bibliotekarzowi jak i czytelnikowi)
 	//do metody przekazywany jest tryb okreslajacy osobe ktora sie loguje.
 	//Zwraca wskaznik na obiekt typu Czytelnik lub Bibliotekarz w zaleznosci od trybu.
-
 	Osoba* zaloguj(int tryb, sqlite3* bazaDanych);
 
-	bool addCzytelnik(Czytelnik new_user, sqlite3* database);
-	bool addBibliotekarz(Bibliotekarz new_user, sqlite3* database);
 	//funkcja dodajaca ksiazke do biblioteki.
 	//po callu wymagane jest wpisanie tytulu i kategorii, aby dodac ksiazke
 	bool addBook();
@@ -97,8 +106,8 @@ public:
 
 	//metoda do sprawdzania, czy jakies egzemplarze ksiazki da sie wypozyczyc. parametr - tytul ksiazki do sprawdzenia. zwraca nr isbn egzemplarza gotowego do wypozyczenia
 	string checkEgzemplarze(string tytul);
-	//Metody wykorzystywane w menu po zalogowaniu czytelnika/bibliotekarza.
 
+	//Metody wykorzystywane w menu po zalogowaniu czytelnika/bibliotekarza.
 	int menuPoZalogowaniuCzytelnika(Czytelnik* czytelnik);
 	int menuPoZalogowaniuBibliotekarza(Bibliotekarz*bibliotekarz, Biblioteka*biblioteka, sqlite3*bazaDanych);
 	void wyborWMenuCzytelnika(int wybor);
@@ -108,13 +117,11 @@ public:
 	Bibliotekarz* wczytywanieBibliotekarza(sqlite3_stmt*);
 
 	//Metoda do modyfikacji danych bibliotekarza.
-
 	void zmienDaneBibliotekarza(Bibliotekarz* bibliotekarz, sqlite3* bazaDanych);
 
 	//wczytywanie biblioteki do pamieci.
-
+	//zwraca wskaznik na utworzony obiekt.
 	Biblioteka* wczytywanieBiblioteki(sqlite3* bazaDanych);
-	
 };
 
 #endif

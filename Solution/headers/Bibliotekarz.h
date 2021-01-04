@@ -21,7 +21,7 @@ public:
 	void printInfOBibliotekarzu();
 	void getBiblioteka();
 	Bibliotekarz(string imie, string nazwisko, int ID);
-	Bibliotekarz(string imie, string nazwisko, string email, string telefon, int d, int m, int r, Adres adres, int ID);
+	Bibliotekarz(string imie, string nazwisko, string email, string telefon, int d, int m, int r, Adres adres, string haslo, int ID);
 
 };
 

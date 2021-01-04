@@ -13,8 +13,6 @@ using namespace std;
 
 int main() {
 
-	
-
 	Ui ui = Ui();
 	sqlite3* db;
 	sqlite3_stmt* stmt;
@@ -76,50 +74,10 @@ int main() {
 			else if (acc_type2 == 3)
 				continue;
 			else if (acc_type2 == 1) {
-				//REJESTRACJA CZYTELNIKA
-				Czytelnik new_user = ui.createCzytelnik(db);
-				new_user.printInfo();
-				//WERYFIKACJA POPRAWNOSCI WPROWADZONYCH DANYCH
-				if (ui.confirmVerification() == true) {
-					//DODANIE CZYTELNIKA DO BAZY DANYCH
-					if (ui.addCzytelnik(new_user, db) == true) {
-						system("cls");
-						cout << "Pomyslnie dodano uzytkownika!\nHaslo: " << new_user.getHaslo()
-						<< "\nLogin: " << new_user.getImie() << " " << new_user.getNazwisko() << endl;
-						system("pause");
-					}
-					else {
-						cout << "Blad przy dodawaniu uzytkownika do bazy danych.\n";
-						system("pause");
-					}
-				}
-				else {
-					continue;
-				}
+				ui.zarejestruj(1, db);
 			}
 			else if (acc_type2 == 2) {
-
-				//REJESTRACJA BIBLIOTEKARZA
-
-				Bibliotekarz new_user = ui.createBibliotekarz(db);
-				new_user.printInfOBibliotekarzu();
-
-				if (ui.confirmVerification() == true) {
-
-					if (ui.addBibliotekarz(new_user, db) == true) {
-						system("cls");
-						cout << "Pomyslnie dodano bibliotekarza!\nHaslo: " << new_user.getHaslo() << "\nLogin: " << new_user.getImie() << " " << new_user.getNazwisko() << endl;
-						system("pause");
-					}
-						else {
-						cout << "Blad przy dodawaniu uzytkownika do bazy danych.\n";
-						system("pause");
-					}
-				}
-				else {
-					continue;
-				}
-			
+				ui.zarejestruj(2, db);
 			}
 		}
 		else {
@@ -128,12 +86,12 @@ int main() {
 		}
 	}
 	
-	
 	//ui.addBook();
 	//Czytelnik c = Czytelnik("Gabriel", "Rojek", 5);
 	//ui.getUserBooks(c);
 
 	sqlite3_close(db);
+
 	system("pause");
 
 	return 0;
