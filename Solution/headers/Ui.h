@@ -82,6 +82,9 @@ public:
 	//funkcja do zliczania ilosci wypozyczonych ksiazek przez czytelnika
 	int getNumberOfLentBooks(Czytelnik c);
 
+	//metoda sprawdzajaca, czy czytelnik wypozyczyl ksiazke podana w argumencie i jesli tak, to zwraca, w ktorej kolumnie jest ona zapisana
+	int getSpecificUserBook(Czytelnik c, string isbn);
+
 	//metoda do wypozyczania ksiazek. jako argumenty przyjmuje obiekt zalogowanego czytelnika oraz tytul wypozyczanej ksiazki. zwraca wartosc odpowiadajaca kodowi bledu (1 - sukces), (-1 - blad)
 	int lendBook(Czytelnik c, string tytul);
 

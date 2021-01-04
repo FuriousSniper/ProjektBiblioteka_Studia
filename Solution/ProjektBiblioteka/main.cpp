@@ -25,8 +25,7 @@ int main() {
 		return 1;
 	}
 	
-	//const char* sql = "CREATE TABLE CZYTELNIK(ID INTEGER PRIMARY        KEY      ,listaZaleglosci       TEXT     ,dataPierwszegoWypozyczenia     DATE     ,iloscWypozyczonychOdDolaczenia  INT             ,preferowaneTematy     TEXT             ,dataDolaczenia        DATE             ,miasto				   TEXT             ,kodPocztowy           TEXT             ,ulica                 TEXT             ,imie                  TEXT             ,nazwisko              TEXT             ,wiek                  TEXT             ,dataUrodzenia         DATE             ,haslo				   TEXT				,numerMieszkania       TEXT             , ksiazka1 TEXT, ksiazka2 TEXT, ksiazka3 TEXT)";
-	//sqlite3_exec(db, sql, NULL, NULL, NULL);
+	
 	
 
 	Biblioteka* biblioteka = ui.wczytywanieBiblioteki(db);
@@ -35,7 +34,7 @@ int main() {
 		cout << "Nie udalo sie utworzyc obiektu biblioteka." << endl;
 		return -1;
 	}
-	
+	/*
 	for (;;) {
 
 		int tryb = ui.signInUpMenu();
@@ -85,10 +84,10 @@ int main() {
 			break;
 		}
 	}
-	
+	*/
+
 	//ui.addBook();
-	//Czytelnik c = Czytelnik("Gabriel", "Rojek", 5);
-	//ui.getUserBooks(c);
+
 
 	sqlite3_close(db);
 
