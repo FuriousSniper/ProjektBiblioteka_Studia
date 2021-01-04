@@ -4,7 +4,7 @@ using namespace std;
 
 #include <string>
 #include "Data.h"
-#include "AdresZamieszkania.h"
+#include "Adres.h"
 #include "Egzemplarz.h"
 #include "Osoba.h"
 #include "Statystyki.h"
@@ -42,7 +42,7 @@ public:
 	int zmienTerminOddania(Data termin);
 	int zarezerwujKsiazke(Egzemplarz* ksiazka);
 	Czytelnik(string imie, string nazwisko, int id);
-	Czytelnik(string imie, string nazwisko, string email, string telefon, int d, int m, int r, AdresZamieszkania, int ID);
+	Czytelnik(string imie, string nazwisko, string email, string telefon, int d, int m, int r, Adres, string haslo, int ID);
 	Czytelnik(string imie, string nazwisko, int d, int m, int r, string* preferowaneTematy, int ID);
 	Czytelnik();
 	void printInfo();

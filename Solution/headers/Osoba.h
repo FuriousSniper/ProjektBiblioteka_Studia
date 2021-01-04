@@ -2,7 +2,7 @@
 #define OSOBA_H
 #include <string>
 #include "Data.h"
-#include "AdresZamieszkania.h"
+#include "Adres.h"
 
 using namespace std;
 
@@ -16,7 +16,7 @@ private:
 	const Data dataUrodzenia;
 	string email;
 	string telefon;
-	AdresZamieszkania adres;
+	Adres adres;
 
 public:
 
@@ -24,8 +24,8 @@ public:
 	string getImie();
 	string getEmail();
 	string getTelefon();
-	AdresZamieszkania getAdresZamieszkania();
-	void setAdresZamieszkania(AdresZamieszkania adres);
+	Adres getAdresZamieszkania();
+	void setAdresZamieszkania(Adres adres);
 	Data getDataUrodzenia();
 	int getWiek();
 
@@ -35,7 +35,7 @@ public:
 	void setEmail(string email);
 
 	Osoba(string imie, string nazwisko, int d, int m, int r);
-	Osoba(string imie, string nazwisko, string email, string telefon, int d, int m, int r, AdresZamieszkania adres);
+	Osoba(string imie, string nazwisko, string email, string telefon, int d, int m, int r, Adres adres);
 	Osoba(string imie, string nazwisko);
 	Osoba();
 

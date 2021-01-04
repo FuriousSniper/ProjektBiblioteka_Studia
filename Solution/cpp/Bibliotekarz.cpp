@@ -23,7 +23,7 @@ void Bibliotekarz::printInfOBibliotekarzu() {
 
 Bibliotekarz::Bibliotekarz(string imie, string nazwisko, int ID) : Osoba(imie, nazwisko), ID(ID) {}
 
-Bibliotekarz::Bibliotekarz(string imie, string nazwisko, string email, string telefon, int d, int m, int r, AdresZamieszkania adres, int ID) : Osoba(imie, nazwisko, email, telefon, d,m,r,adres), ID(ID) {}
+Bibliotekarz::Bibliotekarz(string imie, string nazwisko, string email, string telefon, int d, int m, int r, Adres adres, string haslo, int ID) : Osoba(imie, nazwisko, email, telefon, d,m,r,adres), ID(ID), haslo(haslo) {}
 
 void Bibliotekarz::getBiblioteka() {
 	// TODO - implement Bibliotekarz::getBiblioteka
