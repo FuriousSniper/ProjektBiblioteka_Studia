@@ -86,9 +86,6 @@ int main() {
 	}
 	*/
 
-	//ui.addBook();
-
-
 	sqlite3_close(db);
 
 	system("pause");
