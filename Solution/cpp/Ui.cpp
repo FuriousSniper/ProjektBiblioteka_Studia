@@ -441,30 +441,33 @@ bool Ui::confirmVerification() {
 	}
 }
 bool Ui::addBook() {
+	//funkcja dodajaca ksiazke do biblioteki.
+	//po callu wymagane jest wpisanie tytulu i kategorii, aby dodac ksiazke
+
 	system("CLS");
 	cout << "Dodawanie ksiazki" << endl;
 
-	string tytul = "";
-	string autorzy = "";
-	string tagi = "";
-	string kategoria = "";
-	string egzemplarze = "";
+	string title = "";
+	string authors = "";
+	string tags = "";
+	string category = "";
+	string ex = "";
 	string dmr;
 
 	cout << "Podaj tytul\nTytul: ";
-	//uzywam getline, zeby pozwolic na spizywanie tytulow ze spacjami.
-	getline(cin, tytul);
+	//uzywam getline, zeby pozwolic na spizywanie titleow ze spacjami.
+	getline(cin, title);
 	cout << "Podaj autorow. Jesli wielu, wpisywac ze znakami specjalnymi \" || \" pomiedzy. Przyklad: \"Sasha Kostylev || Niko Kovac\" \nAutorzy: ";
-	getline(cin, autorzy);
+	getline(cin, authors);
 	cout << "Podaj tagi. Jesli kilka, wpisywac ze znakami specjalnymi \" || \" pomiedzy.\nTagi: ";
-	getline(cin, tagi);
+	getline(cin, tags);
 	cout << "Podaj kategorie\nKategoria: ";
-	getline(cin, kategoria);
+	getline(cin, category);
 	cout << "Podaj numery ISBN egzemplarzy. Jesli kilka, wpisywac ze znakami specjalnymi \" || \" pomiedzy. Przyklad: 978-83-246-3342-5||978-83-61040-85-9\nNumery: ";
-	getline(cin, egzemplarze);
+	getline(cin, ex);
 	cout << "Podaj date wydania (dd-mm-rrrr): ";
 	getline(cin, dmr);
-	if (tytul != "" && kategoria != "") {
+	if (title != "" && category != "") {
 		//dodawanie nowej ksiazki do tabeli
 		sqlite3* db;
 		sqlite3_stmt* stmt;
@@ -476,24 +479,24 @@ bool Ui::addBook() {
 			return 1;
 		}
 		//podzielenie autorow i wywolanie funkcji dodajacej/sprawdzajacej czy autor istnieje dla kazdego autora
-		if (autorzy.find("||") != string::npos) {
+		if (authors.find("||") != string::npos) {
 			string delimit = "||";
-			vector<string> autors_splitted = ElementyPomocnicze::split_string(autorzy, delimit);
+			vector<string> autors_splitted = ElementyPomocnicze::split_string(authors, delimit);
 			for (int i = 0; i < autors_splitted.size(); i++) {
 				//metoda sprawdzajaca czy autor istnieje i dodaje go/updatuje jego ksiazki
-				addAutor3(autors_splitted[i], tytul);
+				addAutor3(autors_splitted[i], title);
 			}
 		}
 		else
-			addAutor3(autorzy, tytul);
+			addAutor3(authors, title);
 		string sql2;
 		sql2 = "INSERT INTO KSIAZKA (tytul,autorzy,tagi,kategoria,egzemplarze,dataPremiery) "
 			"VALUES ('" +
-			tytul + "','" +
-			autorzy + "','" +
-			tagi + "','" +
-			kategoria + "','" +
-			egzemplarze + "','" +
+			title + "','" +
+			authors + "','" +
+			tags + "','" +
+			category + "','" +
+			ex + "','" +
 			dmr +
 			"'	);";
 		if (db == NULL)
@@ -508,24 +511,27 @@ bool Ui::addBook() {
 		}
 		cout << "Dodano ksiazke do bazy danych" << endl;
 		//splitowanie egzemplarzy na czesci
-		if (egzemplarze != "") {
+		if (ex != "") {
 			vector<string> splittedString;
 			string delimeter = "||";
 
-			splittedString = ElementyPomocnicze::split_string(egzemplarze, delimeter);
+			splittedString = ElementyPomocnicze::split_string(ex, delimeter);
 			//dla kazdego egzemplarza wywolywana jest funkcja dodajaca go do bazy danych
 			for (int i = 0; i < splittedString.size(); i++) {
 				cout << "Dodawanie egzemplarza ksiazki o isbn " << splittedString[i];
-				addEgzemplarz2(splittedString[i], tytul);
+				addEgzemplarz2(splittedString[i], title);
 				system("CLS");
 			}
 		}
 	}
 	else {
 		cout << "Pola \'tytul\' i \'kategoria\' nie moga byc puste!" << endl;
+		return -1;
 	}
 }
 int Ui::getBooks() {
+	//metoda pozwalajaca na wypisanie wszystkich ksiazek znajdujacych sie w bazie
+
 	system("CLS");
 	cout << "Przegladanie ksiazek\n" << endl;
 	//wyswietlanie ksiazek w zwyklym formacie
@@ -633,6 +639,8 @@ int Ui::getBooks() {
 	sqlite3_finalize(stmt);
 }
 int Ui::getNumberOfLentBooks(Czytelnik c) {
+	//funkcja do zliczania ilosci wypozyczonych ksiazek przez czytelnika
+
 	sqlite3* db;
 	sqlite3_stmt* stmt;
 	//Czytelnik c jest zalogowanym czytelnikiem, wiec pola, ktorych uzywamy w getterach sa w pamieci.
@@ -656,6 +664,8 @@ int Ui::getNumberOfLentBooks(Czytelnik c) {
 	return counter;
 }
 int Ui::getSpecificUserBook(Czytelnik c, string isbn) {
+	//metoda sprawdzajaca, czy czytelnik wypozyczyl ksiazke podana w argumencie i jesli tak, to zwraca, w ktorej kolumnie jest ona zapisana
+
 	sqlite3* db;
 	sqlite3_stmt* stmt;
 	//Czytelnik c jest zalogowanym czytelnikiem, wiec pola, ktorych uzywamy w getterach sa w pamieci.
@@ -688,6 +698,8 @@ int Ui::getSpecificUserBook(Czytelnik c, string isbn) {
 	return -1;
 }
 int Ui::lendBook(Czytelnik c, string tytul) {
+	//metoda do wypozyczania ksiazek. jako argumenty przyjmuje obiekt zalogowanego czytelnika oraz tytul wypozyczanej ksiazki. zwraca wartosc odpowiadajaca kodowi bledu (1 - sukces), (-1 - blad)
+
 	int l = getNumberOfLentBooks(c);
 	if (l < 3) {
 		sqlite3* db;
@@ -756,8 +768,10 @@ int Ui::lendBook(Czytelnik c, string tytul) {
 	return -1;
 }
 int Ui::returnBook(Czytelnik c, string isbn) {
-	string imie = c.getImie();
-	string nazwisko = c.getNazwisko();
+	//metoda pozwalajaca na wyswietlenie ksiazek wypozyczonych przez czytelnika c
+
+	string name = c.getImie();
+	string surname = c.getNazwisko();
 	sqlite3* db;
 	sqlite3_stmt* stmt;
 	string query;
@@ -789,7 +803,7 @@ int Ui::returnBook(Czytelnik c, string isbn) {
 			return -1;
 		}
 		//updatowanie czytelnika
-		query = "UPDATE CZYTELNIK SET ksiazka" + to_string(user_book_column) + "='' WHERE imie='" + imie + "' AND nazwisko='" + nazwisko + "' ;";
+		query = "UPDATE CZYTELNIK SET ksiazka" + to_string(user_book_column) + "='' WHERE imie='" + name + "' AND nazwisko='" + surname + "' ;";
 		sqlite3_exec(db, query.c_str(), NULL, NULL, &error);
 		if (error != SQLITE_OK) {
 			cout << "blad: " << error << endl;
@@ -804,8 +818,11 @@ int Ui::returnBook(Czytelnik c, string isbn) {
 	return 0;
 }
 int Ui::getUserBooks(Czytelnik c) {
-	string imie = c.getImie();
-	string nazwisko = c.getNazwisko();
+	//metoda do zwracania ksiazek. Czytelnik c - zalogowany czytelnik. pobieramy z niego imie i nazwisko potrzebne do zwracania.
+	//isbn - nr ksiazki do zwrocenia
+
+	string name = c.getImie();
+	string surname = c.getNazwisko();
 	sqlite3* db;
 	sqlite3_stmt* stmt;
 	char* error;
@@ -816,12 +833,12 @@ int Ui::getUserBooks(Czytelnik c) {
 		printf("Blad przy otwieraniu bazy danych\n");
 		return -1;
 	}
-	//numery isbn ksiazek, ktore czytelnik wypozyczyl
+	//numery isbn ksiazek, ktore czytelnik wypozyczyl. pobierane z tabeli CZYTELNIK w bazie danych z kolumn ksiazka1, ksiazka2, ksiazka3
 	string k1 = "";
 	string k2 = "";
 	string k3 = "";
 	string query;
-	query = "SELECT ksiazka1, ksiazka2, ksiazka3 from CZYTELNIK WHERE imie='" + imie + "' AND nazwisko='" + nazwisko + "';";
+	query = "SELECT ksiazka1, ksiazka2, ksiazka3 from CZYTELNIK WHERE imie='" + name + "' AND nazwisko='" + surname + "';";
 	sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, NULL);
 	bool done = false;
 	int row = 0;
@@ -891,7 +908,7 @@ int Ui::getUserBooks(Czytelnik c) {
 	done = false;
 	row = 0;
 	//wypisywanie na ekran ksiazek i numerow isbn ksiazek
-	cout << "Ksiazki Czytelnika " << imie << " " << nazwisko << ": " << endl;
+	cout << "Ksiazki Czytelnika " << name << " " << surname << ": " << endl;
 	sqlite3_prepare_v2(db, query.c_str(), -1, &stmt2, NULL);
 	while (!done) {
 		switch (sqlite3_step(stmt2)) {
@@ -916,6 +933,8 @@ int Ui::getUserBooks(Czytelnik c) {
 	return 1;
 }
 int Ui::addEgzemplarz() {
+	//metoda dodajaca egzemplarz danej ksiazki do bazy danych
+
 	system("CLS");
 	cout << "Dodawanie egzemplarza ksiazki" << endl;
 	sqlite3* db;
@@ -927,32 +946,32 @@ int Ui::addEgzemplarz() {
 		printf("Blad przy otwieraniu bazy danych\n");
 		return -1;
 	}
-	string ilosc;
+	string amount;
 	string isbn;
-	string wydawnictwo;
-	string tytul;
+	string ph;
+	string title;
 	string query;
 
 	cout << "Podaj ilosc stron\nIlosc stron: ";
-	getline(cin, ilosc);
+	getline(cin, amount);
 	cout << "Podaj numer ISBN \nNumer ISBN: ";
 	getline(cin, isbn);
 	cout << "Podaj wydawnictwo \nWydawnictwo: ";
-	getline(cin, wydawnictwo);
+	getline(cin, ph);
 	cout << "Podaj tytul \nTytul: ";
-	getline(cin, tytul);
+	getline(cin, title);
 
 	query = "INSERT INTO EGZEMPLARZE(iloscStron,numerISBN,wydawnictwo,osobaWyp,dataWyp,dataOdd,przedluzony,przetrzymany,ksiazka) "
 		"VALUES(" +
-		ilosc + "," +// ilosc stron
+		amount + "," +// ilosc stron
 		"'" + isbn + "'," + //isbn
-		"'" + wydawnictwo + "'," + //wydawnictwo
+		"'" + ph + "'," + //wydawnictwo
 		"''," + //osoba wypozyczajaca
 		"''," + //data wypozyczenia
 		"''," + //data oddania
 		"0," + //przedluzony
 		"0," + //przetrzymany
-		"'" + tytul + "' " + //tytul
+		"'" + title + "' " + //tytul
 		");";
 	sqlite3_exec(db, query.c_str(), NULL, NULL, &error);
 	if (error != SQLITE_OK) {
@@ -965,6 +984,8 @@ int Ui::addEgzemplarz() {
 
 }
 int Ui::addEgzemplarz2(string isbn, string tytul) {
+	//metoda dodajaca egzemplarz danej ksiazki do bazy danych. jako parametr przyjmuje nr isbn dodawanej ksiazki, co pozwala na uproszczenie funkcji dodawania ksiazek.
+
 	sqlite3* db;
 	char* error;
 	sqlite3_open("main_db.db", &db);
@@ -973,19 +994,19 @@ int Ui::addEgzemplarz2(string isbn, string tytul) {
 		printf("Blad przy otwieraniu bazy danych\n");
 		return -1;
 	}
-	string ilosc;
-	string wydawnictwo;
+	string amount;
+	string ph;
 	string query;
 
 	cout << "\nPodaj ilosc stron\nIlosc stron: ";
-	getline(cin, ilosc);
+	getline(cin, amount);
 	cout << "Podaj wydawnictwo \nWydawnictwo: ";
-	getline(cin, wydawnictwo);
+	getline(cin, ph);
 	query = "INSERT INTO EGZEMPLARZE(iloscStron,numerISBN,wydawnictwo,osobaWyp,dataWyp,dataOdd,przedluzony,przetrzymany,ksiazka) "
 		"VALUES(" +
-		ilosc + "," +// ilosc stron
+		amount + "," +// ilosc stron
 		"'" + isbn + "'," + //isbn
-		"'" + wydawnictwo + "'," + //wydawnictwo
+		"'" + ph + "'," + //wydawnictwo
 		"''," + //osoba wypozyczajaca
 		"''," + //data wypozyczenia
 		"''," + //data oddania
@@ -1001,10 +1022,12 @@ int Ui::addEgzemplarz2(string isbn, string tytul) {
 		sqlite3_close(db);
 		return -1;
 	}
-
+	cout << "Dodano egzemplarz do bazy" << endl;
 	return 1;
 }
 int Ui::addAutor() {
+	//metoda pozwalajaca na dodawanie nowego autora (od zera)
+
 	system("CLS");
 	cout << "Dodawanie autora" << endl;
 	sqlite3* db;
@@ -1016,25 +1039,23 @@ int Ui::addAutor() {
 		printf("Blad przy otwieraniu bazy danych\n");
 		return -1;
 	}
-	string imie;
-	string nazwisko;
-	string dataUrodzenia;
+	string name;
+	string surname;
+	string dmr = "1-1-1";
 	string query;
 
 
 	cout << "Podaj imie autora\nImie: ";
-	getline(cin, imie);
+	getline(cin, name);
 	cout << "Podaj nazwisko autora\nNazwisko: ";
-	getline(cin, nazwisko);
-	cout << "Podaj date urodzenia autora (dd-mm-rrrr)\nData urodzenia: ";
-	getline(cin, dataUrodzenia);
+	getline(cin, surname);
 
 
 	query = "INSERT INTO AUTOR(imie,nazwisko,dataUrodzenia,ksiazki) "
 		"VALUES('" +
-		imie + "','" + //isbn
-		nazwisko + "','" + //wydawnictwo
-		dataUrodzenia + "','" + //przedluzony
+		name + "','" + //imie
+		surname + "','" + //nazwisko
+		dmr + "','" + //data urodzenia (niepotrzebna, wiec ustawiona na 1-1-1
 		"'" +
 		");";
 	sqlite3_exec(db, query.c_str(), NULL, NULL, &error);
@@ -1044,9 +1065,12 @@ int Ui::addAutor() {
 		sqlite3_close(db);
 		return -1;
 	}
+	cout << "Dodano nowego autora do bazy danych" << endl;
 	return 1;
 }
-int Ui::addAutor2(string imie, string ksiazka) {
+int Ui::addAutor2(string name, string title) {
+	//dodawanie nowego autora od zera. parametry - imie oraz tytul ksiazki, ktora autor napisal
+
 	system("CLS");
 	cout << "Dodawanie autora" << endl;
 	sqlite3* db;
@@ -1058,24 +1082,20 @@ int Ui::addAutor2(string imie, string ksiazka) {
 		printf("Blad przy otwieraniu bazy danych\n");
 		return -1;
 	}
+	//delimiter, do podzialu na imie i nazwisko autora
 	string d = " ";
-	vector<string> sp = ElementyPomocnicze::split_string(imie, d);
-	string imie2 = sp[0];
-	string nazwisko = sp[1];
-	string dataUrodzenia;
+	vector<string> sp = ElementyPomocnicze::split_string(name, d);
+	string name2 = sp[0];
+	string surname = sp[1];
+	string dmr = "1-1-1";
 	string query;
-
-
-	cout << "Podaj date urodzenia autora " << imie << " (dd-mm-rrrr)\nData urodzenia: ";
-	getline(cin, dataUrodzenia);
-
 
 	query = "INSERT INTO AUTOR(imie,nazwisko,dataUrodzenia,ksiazki) "
 		"VALUES('" +
-		imie2 + "','" + //imie
-		nazwisko + "','" + //nazwisko
-		dataUrodzenia + "','" + //data urodzenia
-		ksiazka + "'" +	//ksiazka
+		name2 + "','" + //imie
+		surname + "','" + //nazwisko
+		dmr + "','" + //data urodzenia
+		title + "'" +	//ksiazka
 		");";
 	sqlite3_exec(db, query.c_str(), NULL, NULL, &error);
 	if (error != SQLITE_OK) {
@@ -1087,7 +1107,8 @@ int Ui::addAutor2(string imie, string ksiazka) {
 	system("PAUSE");
 	return 1;
 }
-int Ui::addAutor3(string imie, string ksiazka) {
+int Ui::addAutor3(string name, string title) {
+	//aktualizacja, dodawanie nowego autora, sprawdzanie czy taki istnieje, dopisywanie ksiazek
 	sqlite3* db;
 	sqlite3_stmt* stmt;
 	char* error;
@@ -1099,13 +1120,14 @@ int Ui::addAutor3(string imie, string ksiazka) {
 	}
 	//rozdzielanie imienia i nazwiska autora
 	string d = " ";
-	vector<string> sp = ElementyPomocnicze::split_string(imie, d);
-	string imie2 = sp[0];
-	string nazwisko = sp[1];
+	vector<string> sp = ElementyPomocnicze::split_string(name, d);
+	string name2 = sp[0];
+	string surname = sp[1];
 	string query;
+	//zmienna, za pomoa ktorej sprawdzamy istnienie autora i wykonanie odpowiednych przypadkow
 	bool exists = false;
 
-	query = "SELECT EXISTS(SELECT 1 from AUTOR WHERE imie='" + imie2 + "' AND nazwisko='" + nazwisko + "' LIMIT 1);";
+	query = "SELECT EXISTS(SELECT 1 from AUTOR WHERE imie='" + name2 + "' AND nazwisko='" + surname + "' LIMIT 1);";
 	sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, NULL);
 	bool done = false;
 	int row = 0;
@@ -1135,10 +1157,10 @@ int Ui::addAutor3(string imie, string ksiazka) {
 
 	if (exists) {
 		//autor istnieje, wiec sprawdzamy, czy ksiazka, ktora przypisujemy jest juz przypisana. jesli nie, to ja przypisujemy. jesli tak, konczymy i wypisujemy, ze to juz jest
-		query = "SELECT ksiazki from AUTOR WHERE imie='" + imie2 + "' AND nazwisko='" + nazwisko + "';";
+		query = "SELECT ksiazki from AUTOR WHERE imie='" + name2 + "' AND nazwisko='" + surname + "';";
 
 		//zmienna do ktorej tymczasowo wpisujemy wynik powyzszej kwerendy
-		string ksiazki_autora = "";
+		string books = "";
 		sqlite3_stmt* stmt2;
 
 		sqlite3_prepare_v2(db, query.c_str(), -1, &stmt2, NULL);
@@ -1151,7 +1173,7 @@ int Ui::addAutor3(string imie, string ksiazka) {
 			case SQLITE_ROW:
 				for (int i = 0; i < sqlite3_column_count(stmt2); i++) {
 					//przypisujemy pobrane z bazy ksiazki autora (string typu "aaa aaa||bbbbbbb||cccc cc||gggg gg")
-					ksiazki_autora = string(reinterpret_cast<const char*>((sqlite3_column_text(stmt2, i))));
+					books = string(reinterpret_cast<const char*>((sqlite3_column_text(stmt2, i))));
 				}
 				row++;
 				break;
@@ -1168,25 +1190,25 @@ int Ui::addAutor3(string imie, string ksiazka) {
 		sqlite3_finalize(stmt2);
 		//jesli nie istnieja, to bedzie to pierwsza ksiazka autora i przypisujemy mu ja
 		//cout << "Ksiazki autora: " << ksiazki_autora << endl;
-		if (ksiazki_autora == "") {
-			to_update = ksiazka;
+		if (books == "") {
+			to_update = title;
 		}
 		else {
 			//splitujemy ksiazki autora pobrane z bazy
 			string d2 = "||";
-			vector<string> ksiazki_split = ElementyPomocnicze::split_string(ksiazki_autora, d2);
+			vector<string> books_split = ElementyPomocnicze::split_string(books, d2);
 
 			//forem sprawdzamy, czy taka ksiazka nie jest juz do autora przypisana
-			for (int i = 0; i < ksiazki_split.size(); i++) {
-				if (ksiazki_split[i] == ksiazka) {
+			for (int i = 0; i < books_split.size(); i++) {
+				if (books_split[i] == title) {
 					cout << "Ksiazka jest juz dopisana do autora" << endl;
 					return -1;
 				}
 			}
-			to_update = ksiazki_autora + "||" + ksiazka;
+			to_update = books + "||" + title;
 		}
 		//updatujemy rekord wstawiajac zmienna to_update do kolumny "ksiazka"
-		query = "UPDATE AUTOR SET ksiazki='" + to_update + "' WHERE imie='" + imie2 + "' AND nazwisko='" + nazwisko + "';";
+		query = "UPDATE AUTOR SET ksiazki='" + to_update + "' WHERE imie='" + name2 + "' AND nazwisko='" + surname + "';";
 		sqlite3_exec(db, query.c_str(), NULL, NULL, &error);
 		if (error != SQLITE_OK) {
 			cout << "blad: " << error << endl;
@@ -1200,12 +1222,14 @@ int Ui::addAutor3(string imie, string ksiazka) {
 
 	else {
 		//autor nie istnieje, wiec go dodajemy i przypisujemy mu ksiazke
-		addAutor2(imie, ksiazka);
-		cout << "dodano i powracamy" << endl;
+		addAutor2(name, title);
+		//cout << "dodano i powracamy" << endl;
 		return 1;
 	}
 }
 string Ui::checkEgzemplarze(string tytul) {
+	//metoda do sprawdzania, czy jakies egzemplarze ksiazki da sie wypozyczyc. parametr - tytul ksiazki do sprawdzenia. zwraca nr isbn egzemplarza gotowego do wypozyczenia
+
 	sqlite3* db;
 	sqlite3_stmt* stmt;
 	char* error;
@@ -1217,7 +1241,7 @@ string Ui::checkEgzemplarze(string tytul) {
 	}
 	string query;
 	//resultat z bazy danych - egzemplarze ksiazek
-	string egzemplarze;
+	string ex;
 	//zmienna, ktora zwracamy. defaultowo ustawiamy "kod" bledu jako NOT_AVAILABLE
 	string to_return = "NOT_AVAILABLE";
 	query = "SELECT egzemplarze from KSIAZKA WHERE tytul='" + tytul + "' LIMIT 1;";
@@ -1230,7 +1254,7 @@ string Ui::checkEgzemplarze(string tytul) {
 		switch (sqlite3_step(stmt)) {
 		case SQLITE_ROW:
 			for (int i = 0; i < sqlite3_column_count(stmt); i++) {
-				egzemplarze = string(reinterpret_cast<const char*>((sqlite3_column_text(stmt, i))));
+				ex = string(reinterpret_cast<const char*>((sqlite3_column_text(stmt, i))));
 			}
 			row++;
 			break;
@@ -1249,12 +1273,12 @@ string Ui::checkEgzemplarze(string tytul) {
 
 	//dzielenie egzemplarzy
 	string delimit_1 = "||";
-	vector<string> split_egz = ElementyPomocnicze::split_string(egzemplarze, delimit_1);
+	vector<string> split_ex = ElementyPomocnicze::split_string(ex, delimit_1);
 
 	//dla kazdego spradzamy dostepnosc
-	for (int i = 0; i < split_egz.size(); i++) {
+	for (int i = 0; i < split_ex.size(); i++) {
 		sqlite3_stmt* stmt2;
-		query = "SELECT dataWyp from EGZEMPLARZE WHERE numerISBN='" + split_egz[i] + "' LIMIT 1;";
+		query = "SELECT dataWyp from EGZEMPLARZE WHERE numerISBN='" + split_ex[i] + "' LIMIT 1;";
 
 		sqlite3_prepare_v2(db, query.c_str(), -1, &stmt2, NULL);
 		done = false;
@@ -1269,7 +1293,7 @@ string Ui::checkEgzemplarze(string tytul) {
 					string row = string(reinterpret_cast<const char*>((sqlite3_column_text(stmt2, k))));
 					if (row == "") {
 						sqlite3_finalize(stmt2);
-						to_return = split_egz[i];
+						to_return = split_ex[i];
 						return to_return;
 					}
 				}

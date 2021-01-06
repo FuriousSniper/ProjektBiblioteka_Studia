@@ -77,6 +77,7 @@ public:
 	//po callu wymagane jest wpisanie tytulu i kategorii, aby dodac ksiazke
 	bool addBook();
 
+	//metoda pozwalajaca na wypisanie wszystkich ksiazek znajdujacych sie w bazie
 	int getBooks();
 
 	//funkcja do zliczania ilosci wypozyczonych ksiazek przez czytelnika
@@ -86,7 +87,7 @@ public:
 	int getSpecificUserBook(Czytelnik c, string isbn);
 
 	//metoda do wypozyczania ksiazek. jako argumenty przyjmuje obiekt zalogowanego czytelnika oraz tytul wypozyczanej ksiazki. zwraca wartosc odpowiadajaca kodowi bledu (1 - sukces), (-1 - blad)
-	int lendBook(Czytelnik c, string tytul);
+	int lendBook(Czytelnik c, string title);
 
 	//metoda pozwalajaca na wyswietlenie ksiazek wypozyczonych przez czytelnika c
 	int getUserBooks(Czytelnik c);
@@ -98,17 +99,17 @@ public:
 	//metoda dodajaca egzemplarz danej ksiazki do bazy danych
 	int addEgzemplarz();
 	//metoda dodajaca egzemplarz danej ksiazki do bazy danych. jako parametr przyjmuje nr isbn dodawanej ksiazki, co pozwala na uproszczenie funkcji dodawania ksiazek.
-	int addEgzemplarz2(string isbn, string tytul);
+	int addEgzemplarz2(string isbn, string title);
 
 	//metoda pozwalajaca na dodawanie nowego autora (od zera)
 	int addAutor();
-	//dodawanie nowego autora od zera
-	int addAutor2(string imie, string ksiazka);
-	//aktualizacja, dodawanie nowego autora
-	int addAutor3(string imie, string ksiazka);
+	//dodawanie nowego autora od zera. parametry - imie oraz tytul ksiazki, ktora autor napisal
+	int addAutor2(string name, string title);
+	//aktualizacja, dodawanie nowego autora, sprawdzanie czy taki istnieje, dopisywanie ksiazek
+	int addAutor3(string name, string title);
 
 	//metoda do sprawdzania, czy jakies egzemplarze ksiazki da sie wypozyczyc. parametr - tytul ksiazki do sprawdzenia. zwraca nr isbn egzemplarza gotowego do wypozyczenia
-	string checkEgzemplarze(string tytul);
+	string checkEgzemplarze(string title);
 
 	//Metody wykorzystywane w menu po zalogowaniu czytelnika/bibliotekarza.
 	int menuPoZalogowaniuCzytelnika(Czytelnik* czytelnik);
