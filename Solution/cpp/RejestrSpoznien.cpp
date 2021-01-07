@@ -1,10 +1,10 @@
 #include "..\headers\RejestrSpoznien.h"
 #include "..\headers\Czytelnik.h"
 
-void RejestrSpoznien::addRejestrSpoznien(Czytelnik spoz_osoba) {
+void RejestrSpoznien::addRejestrSpoznien(Reader spoz_osoba) {
  //TODO
 }
-void RejestrSpoznien::removeRejestrSpoznien(Czytelnik spoz_osoba) {
+void RejestrSpoznien::removeRejestrSpoznien(Reader spoz_osoba) {
 	//TODO
 }
 void RejestrSpoznien::printRejestrSpoznien() {

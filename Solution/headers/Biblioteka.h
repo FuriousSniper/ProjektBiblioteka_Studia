@@ -8,33 +8,27 @@
 
 using namespace std;
 
-class Biblioteka{
+class Library{
 
 	//Obiekt tej klasy przechowuje informacje nt. biblioteki. Z zalozenia jest on tworzony zawsze
 	//przy uruchomieniu programu. Dane pobierane sa z bazy danych.
 
-	string emailKontaktowy;
-	string telefonKontaktowy;
-	Adres adres;
-	map<string, string> godzinyOtwarcia;  //Tablica CzasPracy, 7 elementowa, kazdy element odpowiada danemu dniu tygodnia.
-	int iloscEgzemplarzy;
+	string contactEmailAdress;
+	string contactPhoneNumber;
+	Adress adress;
+	map<string, string> openingHours;  //Tablica CzasPracy, 7 elementowa, kazdy element odpowiada danemu dniu tygodnia.
+	int numberOfCopies;
 
 public:
 
-	Biblioteka(string emailKontaktowy, string telefonKontaktowy, Adres adres, map<string, string> godzinyOtwarcia, int iloscEgzemplarzy);
-	void printInfo();
-
-	//Metody wykorzystywane przy wyczywaniu danych biblioteki do pamieci.
-
-	static map<string, string> wczytywanieGodzin(sqlite3* bazaDanych);
+	Library(string contactEmailAdress, string contactPhoneNumber, Adress adress, map<string, string> openingHours, int numberOfCopies);
+	void printLibraryInfo();
+	static map<string, string> loadOpeningHours(sqlite3* dataBase);
 
 private:
 
-	//Metody wykorzystywane tylko i wylacznie w innych metodach tej klasy.
-
-	void printGodzinyOtwarcia();
-	static map<string, string> wczytywanieGodzinBlad();
-
+	void printOpeningHours();
+	static map<string, string> loadOpeningHoursError();
 };
 
 #endif

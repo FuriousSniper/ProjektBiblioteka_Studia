@@ -3,47 +3,47 @@
 #include "..\headers\Autor.h"
 using namespace std;
 
-string Ksiazka::getTytul() {
+string Book::getTytul() {
 	return tytul;
 }
-Autor* Ksiazka::getAutorzy() {
+Author* Book::getAutorzy() {
 	return autorzy;
 }
-string* Ksiazka::getTagi() {
+string* Book::getTagi() {
 	return tagi;
 }
-void Ksiazka::setTagi(string* tagi) {
+void Book::setTagi(string* tagi) {
 	//TODO
 }
-Data Ksiazka::getDataPremiery() {
+Date Book::getDataPremiery() {
 	return dataPremiery;
 }
-void Ksiazka::dodajEgzemplarz(Egzemplarz* egzemplarz) {
+void Book::dodajEgzemplarz(BookCopy* egzemplarz) {
 	//TODO
 
 }
-Egzemplarz** Ksiazka::getEgzemplarze() {
+BookCopy** Book::getEgzemplarze() {
 	return egzemplarze;
 }
-int Ksiazka::usunEgzemplarz(Egzemplarz* e) {
+int Book::usunEgzemplarz(BookCopy* e) {
 	//TODO
 	return 1;
 }
-int Ksiazka::getId() {
+int Book::getId() {
 	return id;
 }
-string Ksiazka::getKategoria() {
+string Book::getKategoria() {
 	return kategoria;
 }
-int Ksiazka::getIloscEgzemplarzy() {
+int Book::getIloscEgzemplarzy() {
 	return iloscEgzemplarzy;
 }
-Ksiazka::Ksiazka(string tytul, Autor* autorzy, int id, Data dataPremiery) {
+Book::Book(string tytul, Author* autorzy, int id, Date dataPremiery) {
 	//TODO
 }
-Ksiazka::Ksiazka(string tytul, Autor* autorzy, int id, Data dataPremiery, Egzemplarz* egzemplarz) {
+Book::Book(string tytul, Author* autorzy, int id, Date dataPremiery, BookCopy* egzemplarz) {
 	//TODO
 }
-Ksiazka::Ksiazka(string tytul, Autor* autorzy, int id, Data dataPremiery, Egzemplarz** egzemplarze) {
+Book::Book(string tytul, Author* autorzy, int id, Date dataPremiery, BookCopy** egzemplarze) {
 	//TODO
 }

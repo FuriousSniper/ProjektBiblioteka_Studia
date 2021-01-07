@@ -6,7 +6,7 @@
 #include "..\headers\Adres.h"
 #include "..\headers\Biblioteka.h"
 #include "..\headers\ElementyPomocnicze.h"
-#include "../ProjektBiblioteka/Libraries/sqlite3/sqlite3.h"
+#include "..\ProjektBiblioteka\Libraries\sqlite3\sqlite3.h"
 #include <string>
 #include <exception>
 #include <iostream>
@@ -15,104 +15,102 @@
 
 using namespace std;
 
-Adres Ui::createAdres() {
+Adress Ui::createAdress() {
 
-	string miasto;
+	string city;
 	cin.clear();
 	cout << "Podaj miasto: ";
-	getline(cin, miasto);
+	getline(cin, city);
+	cin.clear();
 
-	string kod;
+	string zipCode;
 	cout << "Podaj kod pocztowy: ";
-	cin >> kod;
+	cin >> zipCode;
 	cin.clear();
 	cin.ignore(200, '\n');
 
-	string ulica;
+	string street;
 	cout << "Podaj ulice i nr domu Twojego adresu zamieszkania: ";
-	getline(cin, ulica);
+	getline(cin, street);
 	cin.clear();
 
 	cout << "Podaj numer Twojego mieszkania (opcjonalne): ";
-	int numerMieszkania;
-	cin >> numerMieszkania;
+	int flatNumber;
+	cin >> flatNumber;
 	cin.clear();
 	cin.ignore(200, '\n');
-	Adres adres = Adres(miasto, kod, ulica, numerMieszkania);
-	return adres;
+	Adress adress = Adress(city, zipCode, street, flatNumber);
+	return adress;
 }
 
-Osoba Ui::createOsoba(sqlite3* bazaDanych) {
+Person Ui::createPerson(sqlite3* bazaDanych) {
 
 	//Ta metoda z zalozenia wykorzystywana jest w metodzie createUzytkownik oraz createAutor.
 	//Tworzy obiekt typu Osoba i go zwraca.
-
 	//Nie sprawdza czy baza jest otwarta bo jest to robione w metodzie sprawdzDostepnoscEmail, ktora
 	//wykorzystuje ta baze jako jedyna.
 
-	string imie;
-	string nazwisko;
-	int dzien;
-	int miesiac;
-	int rok;
-	string email;
-	string telefon;
-	Adres adres;
+	string firstName;
+	string LastName;
+	int day;
+	int month;
+	int year;
+	string emailAdress;
+	string phoneNumber;
+	Adress adress;
 
-	//czyszczenie ekranu
 	system("CLS");
-	//podawanie danych do obiektu Osoba
 	cout << "Podaj imie: ";
-	cin >> imie;
+	cin >> firstName;
 	cin.clear();
 	cin.ignore(200, '\n');
 	cout << "Podaj nazwisko: ";
-	cin >> nazwisko;
+	cin >> LastName;
 
 	do {
-		//dzien, miesiac, rok sa typu int a moze wprowadzic jakies znaki.
 		system("CLS");
 		cin.clear();
 		cin.ignore(200, '\n');
 		cout << "Podaj date urodzenia (dd mm rrrr): ";
-		cin >> dzien >> miesiac >> rok;
+		cin >> day >> month >> year;
 	} while (!cin.good());
 
 	while (true) {
 
 		system("CLS");
 		cout << "Podaj swoj email: ";
-		cin >> email;
+		cin >> emailAdress;
 		cin.clear();
 		cin.ignore(200, '\n');
 
 		//Sprawdzenie czy e-mail zawiera @ oraz . w nazwie domeny. (np. @gmail.com).
 
-		if (!sprawdzPoprawnoscEmail(email)) {
+		if (!validateEmail(emailAdress)) {
 			cout << "Niepoprawny format adresu e-mail. Sprobuj ponownie." << endl;
 			system("pause");
 		}
 		else {
 			cout << "Powtorz swoj email: ";
-			string email2;
-			cin >> email2;
+			string emailAdress2;
+			cin >> emailAdress2;
 			cin.clear();
 			cin.ignore(200, '\n');
 
 			//Sprawdzanie dostepnosci e-maila, bo moze byc taka sytuacja, ze jest juz zajety.
 			//Sprawdza tylko wtedy, gdy wprowadzono 2 identyczne e-maile.
 
-			if (email == email2 && sprawdzDostepnoscEmail(bazaDanych, email)) {
+			if (emailAdress == emailAdress2 && checkEmailAvailability(bazaDanych, emailAdress)) {
 				cout << "Podaj swoj nr telefonu: ";
 				//Wczytuje linie bo moze podac oddzielony spacjami (np. 678 567 456).
-				getline(cin, telefon);
+				getline(cin, phoneNumber);
+				cin.clear();
 				break;
 			}
 
 			//Gdy wprowadzono 2 identyczne e-maile drukuje odpowiedni komunikat i nastepuje przejscie do kolejnej
 			//iteracji w celu wprowadzenia maila ponownie.
 
-			else if (email == email2 && !sprawdzDostepnoscEmail(bazaDanych, email)) {
+			else if (emailAdress == emailAdress2 && !checkEmailAvailability(bazaDanych, emailAdress)) {
 				cout << "Email jest juz zajety. Sprobuj ponownie." << endl;
 				system("pause");
 			}
@@ -122,29 +120,28 @@ Osoba Ui::createOsoba(sqlite3* bazaDanych) {
 			}
 		}
 	}
-	adres = createAdres();
-	Osoba osoba = Osoba(imie, nazwisko, email, telefon, dzien, miesiac, rok, adres);
-	return osoba;
+	adress = createAdress();
+	Person person = Person(firstName, LastName, emailAdress, phoneNumber, day, month, year, adress);
+	return person;
 }
 
-bool Ui::sprawdzPoprawnoscEmail(string email) {
+bool Ui::validateEmail(string emailAdress) {
 
 	//Sprawdza poprawnosc email pod katem wystapienia znaku @ oraz . w nazwie domeny.
 	const regex format("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+");
-	return regex_match(email, format);
+	return regex_match(emailAdress, format);
 }
 
-bool Ui::sprawdzDostepnoscEmail(sqlite3* bazaDanych, string email) {
+bool Ui::checkEmailAvailability(sqlite3* dataBase, string emailAdress) {
 
 	//Metoda sluzaca do sprawdzania dostepnosci e-maila
-
 	//Na wypadek gdyby przekazano zamknieta baze.
 
-	if (bazaDanych == NULL) {
+	if (dataBase == NULL) {
 		//Proba otworzenia bazy.
-		sqlite3_open("..\\ProjektBiblioteka\\main_db.db", &bazaDanych);
+		sqlite3_open("..\\ProjektBiblioteka\\main_db.db", &dataBase);
 		//Jezeli proba sie nie powiodla to nie powodzi sie tez sprawdzanie dostepnosci.
-		if (bazaDanych == NULL) {
+		if (dataBase == NULL) {
 			return false;
 		}
 	}
@@ -153,17 +150,17 @@ bool Ui::sprawdzDostepnoscEmail(sqlite3* bazaDanych, string email) {
 	//SQL.
 
 	sqlite3_stmt* stmt = NULL;
-	string zapytanie = "SELECT * FROM Czytelnik WHERE email == '" + email + "';";
-	int ret1, ret2;
+	string query = "SELECT * FROM Czytelnik WHERE email == '" + emailAdress + "';";
+	int retValue1, retValue2;
 
-	sqlite3_prepare_v2(bazaDanych, zapytanie.c_str(), -1, &stmt, NULL);
+	sqlite3_prepare_v2(dataBase, query.c_str(), -1, &stmt, NULL);
 	//Zapisuje wartosc zwracana przez funkcje do dalszego sprawdzania w warunku.
-	ret1 = sqlite3_step(stmt);
+	retValue1 = sqlite3_step(stmt);
 	sqlite3_finalize(stmt);
 
-	zapytanie = "SELECT * FROM Bibliotekarz WHERE email == '" + email + "';";
-	sqlite3_prepare_v2(bazaDanych, zapytanie.c_str(), -1, &stmt, NULL);
-	ret2 = sqlite3_step(stmt);
+	query = "SELECT * FROM Bibliotekarz WHERE email == '" + emailAdress + "';";
+	sqlite3_prepare_v2(dataBase, query.c_str(), -1, &stmt, NULL);
+	retValue2 = sqlite3_step(stmt);
 	sqlite3_finalize(stmt);
 
 	//SQLITE_DONE jest zwracane jezeli nie wystapil zaden blad oraz nie ma zadnego wiersza do oczytu.
@@ -171,7 +168,7 @@ bool Ui::sprawdzDostepnoscEmail(sqlite3* bazaDanych, string email) {
 	//Mozna ewentualnie dodac rozpatrywanie przypadkow - co sie dzieje w przypadku bledu a co w przypadku
 	//SQLITE_ROW. Na razie jest to ujednolicone i zwraca false.
 
-	if (ret1 == SQLITE_DONE && ret2 == SQLITE_DONE) {
+	if (retValue1 == SQLITE_DONE && retValue2 == SQLITE_DONE) {
 		return true;
 	}
 	else {
@@ -179,31 +176,31 @@ bool Ui::sprawdzDostepnoscEmail(sqlite3* bazaDanych, string email) {
 	}
 }
 
-Autor Ui::createAutor(sqlite3* bazaDanych) {
+Author Ui::createAuthor(sqlite3* dataBase) {
 	cout << "Tworzenie nowego Autora" << endl;
-	Osoba o = createOsoba(bazaDanych);
+	Person person = createPerson(dataBase);
 	//Autor dziedziczy po Osobie, wiec tworzymy obiekt osoba i przepisujemy wartosci. da sie to zrobic prosciej przypisujac obiekt zamiast poszczegolnych skladowych, ale na razie to nie jest istotne
-	Autor a = Autor(o.getImie(), o.getNazwisko(), o.getDataUrodzenia().getDzien(), o.getDataUrodzenia().getMiesiac(), o.getDataUrodzenia().getRok());
+	Author author = Author(person.getFirstName(), person.getLastName(), person.getBirthDate().getDay(), person.getBirthDate().getMonth(), person.getBirthDate().getYear());
 	cout << "Pomyslnie utworzono: Autor" << endl;
-	return a;
+	return author;
 }
 
-string Ui::oknoTworzeniaHasla() {
+string Ui::createPasswordWindow() {
 
-	string pass1;
-	string pass2;
+	string password1;
+	string password2;
 
 	while (true) {
 		cout << "Podaj haslo do swojego konta: ";
-		cin >> pass1;
+		cin >> password1;
 		cin.clear();
 		cin.ignore(200, '\n');
 		cout << "Potwierdz haslo do swojego konta: ";
-		cin >> pass2;
+		cin >> password2;
 		cin.clear();
 		cin.ignore(200, '\n');
-		if (pass1 == pass2) {
-			return pass1;
+		if (password1 == password2) {
+			return password1;
 		}
 		else {
 			cout << "Hasla nie sa zgodne! Sprobuj ponownie.\n";
@@ -211,17 +208,17 @@ string Ui::oknoTworzeniaHasla() {
 	}
 }
 
-Osoba* Ui::createUzytkownik(int tryb, sqlite3* bazaDanych) {
+Person* Ui::createUser(int mode, sqlite3* dataBase) {
 
 	//Tworzenie czytelnika/bibliotekarza w zaleznosci od wybranego trybu.
 
-	if (bazaDanych == NULL) {
-		sqlite3_open("..\\ProjektBiblioteka\\main_db.db", &bazaDanych);
-		if (bazaDanych == NULL) {
+	if (dataBase == NULL) {
+		sqlite3_open("..\\ProjektBiblioteka\\main_db.db", &dataBase);
+		if (dataBase == NULL) {
 			return NULL;
 		}
 	}
-	if (tryb != 1 && tryb != 2) {
+	if (mode != 1 && mode != 2) {
 		return NULL;
 	}
 
@@ -230,13 +227,13 @@ Osoba* Ui::createUzytkownik(int tryb, sqlite3* bazaDanych) {
 
 	//W zaleznosci od trybu przygotowuje odpowienie zapytanie.
 
-	if (tryb == 1) {
+	if (mode == 1) {
 		cout << "Tworzenie czytelnika." << endl;
-		sqlite3_prepare_v2(bazaDanych, "select MAX(ID) from CZYTELNIK", -1, &stmt, NULL);
+		sqlite3_prepare_v2(dataBase, "select MAX(ID) from CZYTELNIK", -1, &stmt, NULL);
 	}
-	else if (tryb == 2) {
+	else if (mode == 2) {
 		cout << "Tworzenie bibliotekarza." << endl;
-		sqlite3_prepare_v2(bazaDanych, "select MAX(ID) from BIBLIOTEKARZ", -1, &stmt, NULL);
+		sqlite3_prepare_v2(dataBase, "select MAX(ID) from BIBLIOTEKARZ", -1, &stmt, NULL);
 	}
 
 	//Jezeli tabela zawiera jakies rekordy to pobierz Id.
@@ -247,47 +244,47 @@ Osoba* Ui::createUzytkownik(int tryb, sqlite3* bazaDanych) {
 	temp++;
 
 	//Tworzenie obiektu pomocniczego osoba.
-	Osoba osoba = createOsoba(bazaDanych);
+	Person person = createPerson(dataBase);
 	//Okno tworzenia hasla dla osoby.
-	string haslo = oknoTworzeniaHasla();
+	string password = createPasswordWindow();
 
 	//W zaleznosci od wybranego trybu tworzenie czytelnika lub bibliotekarza.
-	if (tryb == 1) {
-		Czytelnik* czytelnik = new Czytelnik(osoba.getImie(), osoba.getNazwisko(), osoba.getEmail(), osoba.getTelefon(), osoba.getDataUrodzenia().getDzien(), osoba.getDataUrodzenia().getMiesiac(), osoba.getDataUrodzenia().getRok(), osoba.getAdresZamieszkania(), haslo, temp);
-		return czytelnik;
+	if (mode == 1) {
+		Reader* reader = new Reader(person.getFirstName(), person.getLastName(), person.getEmailAdress(), person.getPhoneNumber(), person.getBirthDate().getDay(), person.getBirthDate().getMonth(), person.getBirthDate().getYear(), person.getAdress(), password, temp);
+		return reader;
 	}
-	else if (tryb == 2) {
-		Bibliotekarz* bibliotekarz = new Bibliotekarz(osoba.getImie(), osoba.getNazwisko(), osoba.getEmail(), osoba.getTelefon(), osoba.getDataUrodzenia().getDzien(), osoba.getDataUrodzenia().getMiesiac(), osoba.getDataUrodzenia().getRok(), osoba.getAdresZamieszkania(), haslo, temp);
-		return bibliotekarz;
+	else if (mode == 2) {
+		Librarian* librarian = new Librarian(person.getFirstName(), person.getLastName(), person.getEmailAdress(), person.getPhoneNumber(), person.getBirthDate().getDay(), person.getBirthDate().getMonth(), person.getBirthDate().getYear(), person.getAdress(), password, temp);
+		return librarian;
 	}
 }
 
-bool Ui::addUzytkownik(int tryb, sqlite3* bazaDanych, Osoba* osoba) {
+bool Ui::addUserToDataBase(int mode, sqlite3* dataBase, Person* person) {
 
 	//Metoda dodajaca uzytkownika (czytelnika/biblitotekarza) do bazy danych w zaleznosci od wybranego trybu.
 
-	if (tryb != 1 && tryb != 2 || osoba == NULL) {
+	if (mode != 1 && mode != 2 || person == NULL) {
 		return false;
 	}
 
-	if (bazaDanych == NULL) {
-		sqlite3_open("main_db.db", &bazaDanych);
-		if (bazaDanych == NULL) {
+	if (dataBase == NULL) {
+		sqlite3_open("main_db.db", &dataBase);
+		if (dataBase == NULL) {
 			return false;
 		}
 	}
 
-	string zapytanie;
-	char* blad;
+	string query;
+	char* error;
 
 	//Dodawanie czytelnika lub biblitekarza w zaleznosci od trybu.
 
-	if (tryb == 1) {
+	if (mode == 1) {
 
 		//Wartaloby sprawdzic przypadek, gdy przekaze do funkcji wskaznik na bibliotekarza (Bibliotekarz*).
-		Czytelnik* czytelnik = reinterpret_cast<Czytelnik*>(osoba);
+		Reader* reader = reinterpret_cast<Reader*>(person);
 
-		zapytanie = "INSERT INTO CZYTELNIK"
+		query = "INSERT INTO CZYTELNIK"
 			"(listaZaleglosci,dataPierwszegoWypozyczenia,iloscWypozyczonychOdDolaczenia,preferowaneTematy,"	"dataDolaczenia,miasto,kodPocztowy,ulica,imie,nazwisko,wiek,dataUrodzenia,haslo,numerMieszkania,"
 			"email,telefon)"
 			" VALUES ("
@@ -296,58 +293,58 @@ bool Ui::addUzytkownik(int tryb, sqlite3* bazaDanych, Osoba* osoba) {
 			"	0,"
 			"	'',"
 			"	DATE(),'" +
-			czytelnik->getAdresZamieszkania().getMiasto() + "','" +
-			czytelnik->getAdresZamieszkania().getKodPocztowy() + "','" +
-			czytelnik->getAdresZamieszkania().getUlica() + "','" +
-			czytelnik->getImie() + "','" +
-			czytelnik->getNazwisko() + "','" +
-			to_string(czytelnik->getWiek()) + "','" +
-			to_string(czytelnik->getDataUrodzenia().getDzien()) + "-" +
-			to_string(czytelnik->getDataUrodzenia().getMiesiac()) + "-" +
-			to_string(czytelnik->getDataUrodzenia().getRok()) + "','" +
-			czytelnik->getHaslo() + "','" +
-			to_string(czytelnik->getAdresZamieszkania().getNumerMieszkania()) + "','" +
-			czytelnik->getEmail() + "','" +
-			czytelnik->getTelefon() + "'"
+			reader->getAdress().getCity() + "','" +
+			reader->getAdress().getZipCode() + "','" +
+			reader->getAdress().getStreet() + "','" +
+			reader->getFirstName() + "','" +
+			reader->getLastName() + "','" +
+			to_string(reader->getAge()) + "','" +
+			to_string(reader->getBirthDate().getDay()) + "-" +
+			to_string(reader->getBirthDate().getMonth()) + "-" +
+			to_string(reader->getBirthDate().getYear()) + "','" +
+			reader->getPassword() + "','" +
+			to_string(reader->getAdress().getFlatNumber()) + "','" +
+			reader->getEmailAdress() + "','" +
+			reader->getPhoneNumber() + "'"
 			"	);";
 	}
-	else if (tryb == 2) {
+	else if (mode == 2) {
 
 		//Wartaloby sprawdzic przypadek, gdy przekaze do funkcji wskaznik na czytelnika (Czytelnik*).
-		Bibliotekarz* bibliotekarz = reinterpret_cast<Bibliotekarz*>(osoba);
+		Librarian* librarian = reinterpret_cast<Librarian*>(person);
 
-		zapytanie = "INSERT INTO BIBLIOTEKARZ"
+		query = "INSERT INTO BIBLIOTEKARZ"
 			"(imie, nazwisko, wiek,"
 			"dataUrodzenia, haslo, email, telefon, miasto, kodPocztowy, ulica, numerMieszkania)"
 			" VALUES ('" +
-			bibliotekarz->getImie() + "','" +
-			bibliotekarz->getNazwisko() + "'," +
-			to_string(bibliotekarz->getWiek()) + ",'" +
-			to_string(bibliotekarz->getDataUrodzenia().getDzien()) + "-" +
-			to_string(bibliotekarz->getDataUrodzenia().getMiesiac()) + "-" +
-			to_string(bibliotekarz->getDataUrodzenia().getRok()) + "','" +
-			bibliotekarz->getHaslo() + "','" +
-			bibliotekarz->getEmail() + "','" +
-			bibliotekarz->getTelefon() + "','" +
-			bibliotekarz->getAdresZamieszkania().getMiasto() + "','" +
-			bibliotekarz->getAdresZamieszkania().getKodPocztowy() + "','" +
-			bibliotekarz->getAdresZamieszkania().getUlica() + "','" +
-			to_string(bibliotekarz->getAdresZamieszkania().getNumerMieszkania()) + "');";
+			librarian->getFirstName() + "','" +
+			librarian->getLastName() + "'," +
+			to_string(librarian->getAge()) + ",'" +
+			to_string(librarian->getBirthDate().getDay()) + "-" +
+			to_string(librarian->getBirthDate().getMonth()) + "-" +
+			to_string(librarian->getBirthDate().getYear()) + "','" +
+			librarian->getPassword() + "','" +
+			librarian->getEmailAdress() + "','" +
+			librarian->getPhoneNumber() + "','" +
+			librarian->getAdress().getCity() + "','" +
+			librarian->getAdress().getZipCode() + "','" +
+			librarian->getAdress().getStreet() + "','" +
+			to_string(librarian->getAdress().getFlatNumber()) + "');";
 	}
 
 	//Wykonaj zapytanie.
-	sqlite3_exec(bazaDanych, zapytanie.c_str(), NULL, NULL, &blad);
+	sqlite3_exec(dataBase, query.c_str(), NULL, NULL, &error);
 
 	//Ewentualnie wyswietla blad.
-	if (blad != SQLITE_OK) {
-		cout << "Wystapil blad: " << blad << endl;
+	if (error != SQLITE_OK) {
+		cout << "Wystapil blad: " << error << endl;
 		return false;
 	}
 	return true;
 }
 
 int Ui::signInUpMenu() {
-	int n = 0;
+	int choice = 0;
 	while (true) {
 		system("CLS");
 		cout << "System obslugi Biblioteki (v. alfa 0.1)\n";
@@ -355,12 +352,12 @@ int Ui::signInUpMenu() {
 		cout << "Wybierz '2', aby sie zarejestrowac." << endl;
 		cout << "Wybierz '9', aby wyjsc z programu." << endl;
 		cout << "Wybor: ";
-		cin >> n;
-		if (n == 9) {
+		cin >> choice;
+		if (choice == 9) {
 			cout << "Zakonczono prace programu" << endl;
 			return 0;
 		}
-		else if (n == 1 || n == 2) {
+		else if (choice == 1 || choice == 2) {
 			break;
 		}
 		else {
@@ -368,10 +365,10 @@ int Ui::signInUpMenu() {
 			cin.ignore(1024, '\n');
 		}
 	}
-	return n;
+	return choice;
 }
 int Ui::chooseUserType() {
-	int n = 0;
+	int choice = 0;
 	while (true) {
 		system("CLS");
 		cout << "System obslugi Biblioteki (v. alfa 0.1)\n";
@@ -380,12 +377,12 @@ int Ui::chooseUserType() {
 		cout << "Wybierz '3', aby powrocic do menu glownego." << endl;
 		cout << "Wybierz '9', aby wyjsc z programu." << endl;
 		cout << "Wybor: ";
-		cin >> n;
-		if (n == 9) {
+		cin >> choice;
+		if (choice == 9) {
 			cout << "Zakonczono prace programu" << endl;
 			return 0;
 		}
-		else if (n == 1 || n == 2 || n == 3) {
+		else if (choice == 1 || choice == 2 || choice == 3) {
 			break;
 		}
 		else {
@@ -393,7 +390,7 @@ int Ui::chooseUserType() {
 			cin.ignore(1024, '\n');
 		}
 	}
-	return n;
+	return choice;
 }
 Ui::Ui() {}
 
@@ -481,14 +478,14 @@ bool Ui::addBook() {
 		//podzielenie autorow i wywolanie funkcji dodajacej/sprawdzajacej czy autor istnieje dla kazdego autora
 		if (authors.find("||") != string::npos) {
 			string delimit = "||";
-			vector<string> autors_splitted = ElementyPomocnicze::split_string(authors, delimit);
+			vector<string> autors_splitted = Utilities::split_string(authors, delimit);
 			for (int i = 0; i < autors_splitted.size(); i++) {
 				//metoda sprawdzajaca czy autor istnieje i dodaje go/updatuje jego ksiazki
-				addAutor3(autors_splitted[i], title);
+				addAuthor3(autors_splitted[i], title);
 			}
 		}
 		else
-			addAutor3(authors, title);
+			addAuthor3(authors, title);
 		string sql2;
 		sql2 = "INSERT INTO KSIAZKA (tytul,autorzy,tagi,kategoria,egzemplarze,dataPremiery) "
 			"VALUES ('" +
@@ -515,11 +512,11 @@ bool Ui::addBook() {
 			vector<string> splittedString;
 			string delimeter = "||";
 
-			splittedString = ElementyPomocnicze::split_string(ex, delimeter);
+			splittedString = Utilities::split_string(ex, delimeter);
 			//dla kazdego egzemplarza wywolywana jest funkcja dodajaca go do bazy danych
 			for (int i = 0; i < splittedString.size(); i++) {
 				cout << "Dodawanie egzemplarza ksiazki o isbn " << splittedString[i];
-				addEgzemplarz2(splittedString[i], title);
+				addCopy2(splittedString[i], title);
 				system("CLS");
 			}
 		}
@@ -638,13 +635,13 @@ int Ui::getBooks() {
 	}
 	sqlite3_finalize(stmt);
 }
-int Ui::getNumberOfLentBooks(Czytelnik c) {
+int Ui::getNumberOfLentBooks(Reader reader) {
 	//funkcja do zliczania ilosci wypozyczonych ksiazek przez czytelnika
 
 	sqlite3* db;
 	sqlite3_stmt* stmt;
 	//Czytelnik c jest zalogowanym czytelnikiem, wiec pola, ktorych uzywamy w getterach sa w pamieci.
-	string query = "SELECT ksiazka1, ksiazka2, ksiazka3 from CZYTELNIK WHERE imie='" + c.getImie() + "' AND nazwisko='" + c.getNazwisko() + "';";
+	string query = "SELECT ksiazka1, ksiazka2, ksiazka3 from CZYTELNIK WHERE imie='" + reader.getFirstName() + "' AND nazwisko='" + reader.getLastName() + "';";
 	int counter = 0;
 	sqlite3_open("main_db.db", &db);
 	if (db == NULL)
@@ -663,13 +660,13 @@ int Ui::getNumberOfLentBooks(Czytelnik c) {
 	sqlite3_finalize(stmt);
 	return counter;
 }
-int Ui::getSpecificUserBook(Czytelnik c, string isbn) {
+int Ui::getSpecificUserBook(Reader reader, string isbn) {
 	//metoda sprawdzajaca, czy czytelnik wypozyczyl ksiazke podana w argumencie i jesli tak, to zwraca, w ktorej kolumnie jest ona zapisana
 
 	sqlite3* db;
 	sqlite3_stmt* stmt;
 	//Czytelnik c jest zalogowanym czytelnikiem, wiec pola, ktorych uzywamy w getterach sa w pamieci.
-	string query = "SELECT ksiazka1, ksiazka2, ksiazka3 from CZYTELNIK WHERE imie='" + c.getImie() + "' AND nazwisko='" + c.getNazwisko() + "';";
+	string query = "SELECT ksiazka1, ksiazka2, ksiazka3 from CZYTELNIK WHERE imie='" + reader.getFirstName() + "' AND nazwisko='" + reader.getLastName() + "';";
 	int counter = 0;
 	sqlite3_open("main_db.db", &db);
 	if (db == NULL)
@@ -694,19 +691,19 @@ int Ui::getSpecificUserBook(Czytelnik c, string isbn) {
 		}
 	}
 	sqlite3_finalize(stmt);
-	cout << "Czytelnik " << c.getImie() << " " << c.getNazwisko() << " nie wypozyczyl takiej ksiazki!" << endl;
+	cout << "Czytelnik " << reader.getFirstName() << " " << reader.getLastName() << " nie wypozyczyl takiej ksiazki!" << endl;
 	return -1;
 }
-int Ui::lendBook(Czytelnik c, string tytul) {
+int Ui::lendBook(Reader reader, string title) {
 	//metoda do wypozyczania ksiazek. jako argumenty przyjmuje obiekt zalogowanego czytelnika oraz tytul wypozyczanej ksiazki. zwraca wartosc odpowiadajaca kodowi bledu (1 - sukces), (-1 - blad)
 
-	int l = getNumberOfLentBooks(c);
+	int l = getNumberOfLentBooks(reader);
 	if (l < 3) {
 		sqlite3* db;
 		sqlite3_stmt* stmt;
 		char* error;
 		//Czytelnik c jest zalogowanym czytelnikiem, wiec pola, ktorych uzywamy w getterach sa w pamieci.
-		string query = "SELECT ksiazka1, ksiazka2, ksiazka3 from CZYTELNIK WHERE imie='" + c.getImie() + "' AND nazwisko='" + c.getNazwisko() + "';";
+		string query = "SELECT ksiazka1, ksiazka2, ksiazka3 from CZYTELNIK WHERE imie='" + reader.getFirstName() + "' AND nazwisko='" + reader.getLastName() + "';";
 		//zmienna, w ktorej zapisujemy wolna kolumne
 		int counter = 1;
 		sqlite3_open("main_db.db", &db);
@@ -729,7 +726,7 @@ int Ui::lendBook(Czytelnik c, string tytul) {
 		sqlite3_finalize(stmt);
 
 		//sprawdzamy, czy jakies egzemplarze ksiazki sa dostepne
-		string isbn = checkEgzemplarze(tytul);
+		string isbn = checkCopiesList(title);
 		//jesli nie, to zwracamy bledy
 		if (isbn == "false") {
 			cout << "Ksiazka o tym tytule nie znajduje sie w bazie" << endl;
@@ -741,7 +738,7 @@ int Ui::lendBook(Czytelnik c, string tytul) {
 		}
 
 		//updatujemy row, czyli konkretniej - kolumne gdzie zapisujemy nowo wypozyczona ksiazke danego czytelnika
-		query = "UPDATE CZYTELNIK SET ksiazka" + to_string(counter) + "='" + isbn + "' WHERE imie='" + c.getImie() + "' AND nazwisko='" + c.getNazwisko() + "';";
+		query = "UPDATE CZYTELNIK SET ksiazka" + to_string(counter) + "='" + isbn + "' WHERE imie='" + reader.getFirstName() + "' AND nazwisko='" + reader.getLastName() + "';";
 		int rc = sqlite3_exec(db, query.c_str(), NULL, NULL, &error);
 		if (rc != SQLITE_OK) {
 			cout << error << endl;
@@ -750,7 +747,7 @@ int Ui::lendBook(Czytelnik c, string tytul) {
 		}
 
 		//koniecznie - updatujemy wypozyczany egzemplarz. zmieniamy date wypozyczenia oraz osobe
-		query = "UPDATE EGZEMPLARZE SET osobaWyp='" + c.getImie() + " " + c.getNazwisko() + "', dataWyp=(DATETIME('now')), dataOdd=(DATETIME('now','+1 month')) WHERE numerISBN='" + isbn + "';";
+		query = "UPDATE EGZEMPLARZE SET osobaWyp='" + reader.getFirstName() + " " + reader.getLastName() + "', dataWyp=(DATETIME('now')), dataOdd=(DATETIME('now','+1 month')) WHERE numerISBN='" + isbn + "';";
 		rc = sqlite3_exec(db, query.c_str(), NULL, NULL, &error);
 		if (rc != SQLITE_OK) {
 			cout << error << endl;
@@ -767,11 +764,11 @@ int Ui::lendBook(Czytelnik c, string tytul) {
 		cout << "Czytelnik wypozyczyl maksymalna ilosc ksiazek" << endl;
 	return -1;
 }
-int Ui::returnBook(Czytelnik c, string isbn) {
+int Ui::returnBook(Reader reader, string isbnNumber) {
 	//metoda pozwalajaca na wyswietlenie ksiazek wypozyczonych przez czytelnika c
 
-	string name = c.getImie();
-	string surname = c.getNazwisko();
+	string name = reader.getFirstName();
+	string surname = reader.getLastName();
 	sqlite3* db;
 	sqlite3_stmt* stmt;
 	string query;
@@ -780,7 +777,7 @@ int Ui::returnBook(Czytelnik c, string isbn) {
 	bool exists = false;
 
 	//sprawdzanie, czy ksiazka jest wypozyczona przez usera i jesli tak, to zwraca kolumne w tabeli, w ktorej ksiazka jest umieszczona
-	int user_book_column = getSpecificUserBook(c, isbn);
+	int user_book_column = getSpecificUserBook(reader, isbnNumber);
 
 	//ustawianie zmiennej w zaleznosci od istnienia ksiazki
 	if (user_book_column != -1)
@@ -794,7 +791,7 @@ int Ui::returnBook(Czytelnik c, string isbn) {
 			return -1;
 		}
 		//updatowanie egzemplarza. clearowanie pol ustawianych przy wypozyczeniu
-		query = "UPDATE EGZEMPLARZE SET dataWyp='', dataOdd='', osobaWyp='' WHERE numerISBN='" + isbn + "';";
+		query = "UPDATE EGZEMPLARZE SET dataWyp='', dataOdd='', osobaWyp='' WHERE numerISBN='" + isbnNumber + "';";
 		sqlite3_exec(db, query.c_str(), NULL, NULL, &error);
 		if (error != SQLITE_OK) {
 			cout << "blad: " << error << endl;
@@ -817,12 +814,12 @@ int Ui::returnBook(Czytelnik c, string isbn) {
 	}
 	return 0;
 }
-int Ui::getUserBooks(Czytelnik c) {
+int Ui::getUserBooks(Reader reader) {
 	//metoda do zwracania ksiazek. Czytelnik c - zalogowany czytelnik. pobieramy z niego imie i nazwisko potrzebne do zwracania.
 	//isbn - nr ksiazki do zwrocenia
 
-	string name = c.getImie();
-	string surname = c.getNazwisko();
+	string name = reader.getFirstName();
+	string surname = reader.getLastName();
 	sqlite3* db;
 	sqlite3_stmt* stmt;
 	char* error;
@@ -932,7 +929,7 @@ int Ui::getUserBooks(Czytelnik c) {
 	sqlite3_finalize(stmt2);
 	return 1;
 }
-int Ui::addEgzemplarz() {
+int Ui::addCopy1() {
 	//metoda dodajaca egzemplarz danej ksiazki do bazy danych
 
 	system("CLS");
@@ -983,7 +980,7 @@ int Ui::addEgzemplarz() {
 	return 1;
 
 }
-int Ui::addEgzemplarz2(string isbn, string tytul) {
+int Ui::addCopy2(string isbnNumber, string title) {
 	//metoda dodajaca egzemplarz danej ksiazki do bazy danych. jako parametr przyjmuje nr isbn dodawanej ksiazki, co pozwala na uproszczenie funkcji dodawania ksiazek.
 
 	sqlite3* db;
@@ -1005,14 +1002,14 @@ int Ui::addEgzemplarz2(string isbn, string tytul) {
 	query = "INSERT INTO EGZEMPLARZE(iloscStron,numerISBN,wydawnictwo,osobaWyp,dataWyp,dataOdd,przedluzony,przetrzymany,ksiazka) "
 		"VALUES(" +
 		amount + "," +// ilosc stron
-		"'" + isbn + "'," + //isbn
+		"'" + isbnNumber + "'," + //isbn
 		"'" + ph + "'," + //wydawnictwo
 		"''," + //osoba wypozyczajaca
 		"''," + //data wypozyczenia
 		"''," + //data oddania
 		"0," + //przedluzony
 		"0," + //przetrzymany
-		"'" + tytul + "' " + //tytul
+		"'" + title + "' " + //tytul
 		");";
 
 	sqlite3_exec(db, query.c_str(), NULL, NULL, &error);
@@ -1025,7 +1022,7 @@ int Ui::addEgzemplarz2(string isbn, string tytul) {
 	cout << "Dodano egzemplarz do bazy" << endl;
 	return 1;
 }
-int Ui::addAutor() {
+int Ui::getAuthor() {
 	//metoda pozwalajaca na dodawanie nowego autora (od zera)
 
 	system("CLS");
@@ -1068,7 +1065,7 @@ int Ui::addAutor() {
 	cout << "Dodano nowego autora do bazy danych" << endl;
 	return 1;
 }
-int Ui::addAutor2(string name, string title) {
+int Ui::getAuthor2(string firstName, string title) {
 	//dodawanie nowego autora od zera. parametry - imie oraz tytul ksiazki, ktora autor napisal
 
 	system("CLS");
@@ -1084,7 +1081,7 @@ int Ui::addAutor2(string name, string title) {
 	}
 	//delimiter, do podzialu na imie i nazwisko autora
 	string d = " ";
-	vector<string> sp = ElementyPomocnicze::split_string(name, d);
+	vector<string> sp = Utilities::split_string(firstName, d);
 	string name2 = sp[0];
 	string surname = sp[1];
 	string dmr = "1-1-1";
@@ -1107,7 +1104,7 @@ int Ui::addAutor2(string name, string title) {
 	system("PAUSE");
 	return 1;
 }
-int Ui::addAutor3(string name, string title) {
+int Ui::addAuthor3(string firstName, string title) {
 	//aktualizacja, dodawanie nowego autora, sprawdzanie czy taki istnieje, dopisywanie ksiazek
 	sqlite3* db;
 	sqlite3_stmt* stmt;
@@ -1120,7 +1117,7 @@ int Ui::addAutor3(string name, string title) {
 	}
 	//rozdzielanie imienia i nazwiska autora
 	string d = " ";
-	vector<string> sp = ElementyPomocnicze::split_string(name, d);
+	vector<string> sp = Utilities::split_string(firstName, d);
 	string name2 = sp[0];
 	string surname = sp[1];
 	string query;
@@ -1196,7 +1193,7 @@ int Ui::addAutor3(string name, string title) {
 		else {
 			//splitujemy ksiazki autora pobrane z bazy
 			string d2 = "||";
-			vector<string> books_split = ElementyPomocnicze::split_string(books, d2);
+			vector<string> books_split = Utilities::split_string(books, d2);
 
 			//forem sprawdzamy, czy taka ksiazka nie jest juz do autora przypisana
 			for (int i = 0; i < books_split.size(); i++) {
@@ -1222,12 +1219,12 @@ int Ui::addAutor3(string name, string title) {
 
 	else {
 		//autor nie istnieje, wiec go dodajemy i przypisujemy mu ksiazke
-		addAutor2(name, title);
+		getAuthor2(firstName, title);
 		//cout << "dodano i powracamy" << endl;
 		return 1;
 	}
 }
-string Ui::checkEgzemplarze(string tytul) {
+string Ui::checkCopiesList(string title) {
 	//metoda do sprawdzania, czy jakies egzemplarze ksiazki da sie wypozyczyc. parametr - tytul ksiazki do sprawdzenia. zwraca nr isbn egzemplarza gotowego do wypozyczenia
 
 	sqlite3* db;
@@ -1244,7 +1241,7 @@ string Ui::checkEgzemplarze(string tytul) {
 	string ex;
 	//zmienna, ktora zwracamy. defaultowo ustawiamy "kod" bledu jako NOT_AVAILABLE
 	string to_return = "NOT_AVAILABLE";
-	query = "SELECT egzemplarze from KSIAZKA WHERE tytul='" + tytul + "' LIMIT 1;";
+	query = "SELECT egzemplarze from KSIAZKA WHERE tytul='" + title + "' LIMIT 1;";
 	sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, NULL);
 	bool done = false;
 	int row = 0;
@@ -1273,7 +1270,7 @@ string Ui::checkEgzemplarze(string tytul) {
 
 	//dzielenie egzemplarzy
 	string delimit_1 = "||";
-	vector<string> split_ex = ElementyPomocnicze::split_string(ex, delimit_1);
+	vector<string> split_ex = Utilities::split_string(ex, delimit_1);
 
 	//dla kazdego spradzamy dostepnosc
 	for (int i = 0; i < split_ex.size(); i++) {
@@ -1315,14 +1312,14 @@ string Ui::checkEgzemplarze(string tytul) {
 	return to_return;
 }
 
-Osoba* Ui::zaloguj(int tryb, sqlite3* bazaDanych) {
+Person* Ui::logIn(int mode, sqlite3* dataBase) {
 
-	//tryb == 1 - logowanie czytelnika
-	//tryb == 2 - logowanie bibliotekarza
+	//mode == 1 - logowanie czytelnika
+	//mode == 2 - logowanie bibliotekarza
 
-	if (bazaDanych == NULL) {
-		sqlite3_open("..\\ProjektBiblioteka\\main_db.db", &bazaDanych);
-		if (bazaDanych == NULL) {
+	if (dataBase == NULL) {
+		sqlite3_open("..\\ProjektBiblioteka\\main_db.db", &dataBase);
+		if (dataBase == NULL) {
 			return NULL;
 		}
 	}
@@ -1331,42 +1328,43 @@ Osoba* Ui::zaloguj(int tryb, sqlite3* bazaDanych) {
 
 		system("CLS");
 
-		string email;
-		string haslo;
-		int ret;      //Do przypisania wartosci zwracanej przez funkcje sqlite3_step(...).
+		string emailAdress;
+		string password;
+		int retValue;      //Do przypisania wartosci zwracanej przez funkcje sqlite3_step(...).
 
 		cout << "Logowanie do systemu biblioteki." << endl;
 		cout << "Podaj adres e-mail konta: ";
-		cin >> email;
+		cin >> emailAdress;
+		cin.clear();
+		cin.ignore(200, '\n');
 		cout << "Podaj haslo: ";
-		cin >> haslo;
+		cin >> password;
+		cin.clear();
+		cin.ignore(200, '\n');
 
-		string zapytanie;     //zapytanie sql
+		string query;     //zapytanie sql
 
 		//Jedyna roznica w logowaniu bibliotekarza i czytelnika jest zapytanie.
 
-		//Nie bawilem sie w sprawdzanie istnienia za pomoca SQL (WHERE EXISTS) bo nie wiem jak zinterpretowac zwracana wartosc funkcja
-		//w bibliotece sqlite3
-
-		if (tryb == 1) {
-			zapytanie = "SELECT imie, nazwisko, haslo "
+		if (mode == 1) {
+			query = "SELECT imie, nazwisko, haslo "
 				"FROM Czytelnik "
 				"WHERE email == '" +
-				email + "' AND haslo == '" +
-				haslo + "';";
+				emailAdress + "' AND haslo == '" +
+				password + "';";
 		}
-		else if (tryb == 2) {
-			zapytanie = "SELECT imie, nazwisko, haslo "
+		else if (mode == 2) {
+			query = "SELECT imie, nazwisko, haslo "
 				"FROM Bibliotekarz "
 				"WHERE email == '" +
-				email + "' AND haslo == '" +
-				haslo + "';";
+				emailAdress + "' AND haslo == '" +
+				password + "';";
 		}
 
 		sqlite3_stmt* stmt = NULL;
 
-		sqlite3_prepare_v2(bazaDanych, zapytanie.c_str(), -1, &stmt, NULL);
-		ret = sqlite3_step(stmt);
+		sqlite3_prepare_v2(dataBase, query.c_str(), -1, &stmt, NULL);
+		retValue = sqlite3_step(stmt);
 		sqlite3_finalize(stmt);
 
 		//SQLITE_ROW jest zwracane przez sqlite3_step(...) jezeli jest dostepny wiersz do odczytu.
@@ -1376,57 +1374,54 @@ Osoba* Ui::zaloguj(int tryb, sqlite3* bazaDanych) {
 		//Rekord 1: email = roj@gmail.com haslo = admin
 		//Rekord 2: email = roj@gmail.com haslo = admin
 
-		if (ret == SQLITE_ROW) {
+		if (retValue == SQLITE_ROW) {
 
 			//Jest dostepny wiersz do oczytu czyli czytelnik znajduje sie w bazie.
 
 			cout << "Pomyslnie zalogowano!" << endl;
 
-			if (tryb == 1) {
+			if (mode == 1) {
 				//TODO ladowanie otrzymanego rekordu do pamieci (tworzenie obiektu typu Czytelnik).
 				//(Brak metody wczytywanieCzytelnika).
 
 				//Tym razem pobieramy wszystkie kolumny (do wczytania).
 
-				zapytanie = zapytanie = "SELECT * "
+				query = query = "SELECT * "
 					"FROM Czytelnik "
 					"WHERE email == '" +
-					email + "' AND haslo == '" +
-					haslo + "';";
+					emailAdress + "' AND haslo == '" +
+					password + "';";
 
-				sqlite3_prepare_v2(bazaDanych, zapytanie.c_str(), -1, &stmt, NULL);
+				sqlite3_prepare_v2(dataBase, query.c_str(), -1, &stmt, NULL);
 				sqlite3_step(stmt);
 
 				//To bedzie wykorzystywac metode wczytywanieCzytelnika a nie konsturktor domyslny.
 
-				Czytelnik* czytelnik = new Czytelnik();
+				Reader* reader = new Reader();
 				sqlite3_finalize(stmt);
 				system("pause");
-				return czytelnik;
+				return reader;
 			}
-			else if (tryb == 2) {
+			else if (mode == 2) {
 
 				//Metoda wczytywanieBibliotekarza zwraca wskaznik na obiekt dynamiczny typu Bibliotekarz utworzony na
 				//podstawie zawartosci rekordu.
 
-				zapytanie = "SELECT * "
+				query = "SELECT * "
 					"FROM Bibliotekarz "
 					"WHERE email == '" +
-					email + "' AND haslo == '" +
-					haslo + "';";
+					emailAdress + "' AND haslo == '" +
+					password + "';";
 
-				sqlite3_prepare_v2(bazaDanych, zapytanie.c_str(), -1, &stmt, NULL);
-				sqlite3_step(stmt);
-
-				Bibliotekarz* bibliotekarz = wczytywanieBibliotekarza(stmt);
+				Librarian* librarian = loadLibrarian(dataBase, query);
 				sqlite3_finalize(stmt);
 				system("pause");
-				return bibliotekarz;
+				return librarian;
 			}
 		}
 		else {
 
-			int wybor = -1;
+			int choice = -1;
 
 			//Jezeli logowanie sie nie powiodlo tj. SQLITE_ROW nie zostalo zwrocone przez funkcje (z roznego powodu),
 			//sygnalizujemy wystapienie problemu i oferujemy mozliwosc ponownego logowania.
@@ -1437,23 +1432,24 @@ Osoba* Ui::zaloguj(int tryb, sqlite3* bazaDanych) {
 			cout << "Logowanie sie nie powiodlo. Mozliwe ze uzytkownik o podanych danych nie istnieje." << endl;
 			cout << "Jezeli chcesz wrocic do menu glownego wybierz 0." << endl;
 			cout << "Jezeli chcesz sprobowac zalogowac sie ponownie, wybierz liczbe inna niz 0: ";
-			cin >> wybor;
-
-			if (wybor == 0) {
+			cin >> choice;
+			cin.clear();
+			cin.ignore(200, '\n');
+			if (choice == 0) {
 				return NULL;
 			}
 		}
 	}
 }
 
-int Ui::menuPoZalogowaniuCzytelnika(Czytelnik* czytelnik) {
+int Ui::readerMenuChoice(Reader* reader) {
 
 	//Proste menu wyswietlane po zalogowaniu.
 	//Po wyborze umozliwia dalsze operacje np. wypozyczenie ksiazki, aktualizacja danych itd.
 
 	while (true) {
 		system("CLS");
-		int wybor = 0;
+		int choice = 0;
 		cout << "Wprowadz odpowiednia liczbe aby kontynuowac." << endl;
 		cout << "1: Wyswietl dane o bibliotece" << endl;
 		cout << "2: Wyswietl dane o koncie" << endl;
@@ -1462,23 +1458,24 @@ int Ui::menuPoZalogowaniuCzytelnika(Czytelnik* czytelnik) {
 		cout << "5: Wyswietl liste zaleglosci." << endl;
 		cout << "0: Wyloguj i wroc do menu glownego." << endl;
 		cout << "Wybor: ";
-		cin >> wybor;
+		cin >> choice;
+		cin.clear();
+		cin.ignore(200, '\n');
 
-		if (wybor == 0) {
+		if (choice == 0) {
 			return 0;
 		}
-
-		wyborWMenuCzytelnika(wybor);
+		readerMenu(choice);
 	}
 }
 
-void Ui::wyborWMenuCzytelnika(int wybor) {
+void Ui::readerMenu(int choice) {
 
 	//Wyswietla odpowiednie informacje w zaleznosci od wyboru w menu czytelnika po zalogowaniu.
 	//Wybor pozwala na wykonywanie odpowiednich czynnosci np. zmiana danych konta, wypozyczenie/oddanie ksiazki.
 
 	system("CLS");
-	switch (wybor) {
+	switch (choice) {
 	case 1:
 		//TODO: dodac wyswietlanie danych o bibliotece.
 		cout << "Dane o bibliotece." << endl;
@@ -1511,7 +1508,7 @@ void Ui::wyborWMenuCzytelnika(int wybor) {
 	system("pause");
 }
 
-int Ui::menuPoZalogowaniuBibliotekarza(Bibliotekarz* bibliotekarz, Biblioteka* biblioteka, sqlite3* bazaDanych) {
+int Ui::librarianMenu(Librarian* librarian, Library* library, sqlite3* dataBase) {
 
 	//Proste menu wyswietlane po zalogowaniu bibliotekarza.
 	//Po wyborze umozliwia dalsze operacje np. sprawdzenie rejestru spoznien.
@@ -1519,34 +1516,38 @@ int Ui::menuPoZalogowaniuBibliotekarza(Bibliotekarz* bibliotekarz, Biblioteka* b
 	while (true) {
 
 		system("CLS");
-		int wybor = 0;
+		int choice = 0;
 		cout << "Wprowadz odpowiednia liczbe aby kontynuowac." << endl;
 		cout << "1: Wyswietl dane o bibliotece" << endl;
 		cout << "2: Wyswietl dane o koncie" << endl;
 		cout << "3: Wyswietl liste dostepnych ksiazek." << endl;
 		cout << "4: Wyswietl liste osob zalegajacych z oddaniem ksiazki." << endl;
+		cout << "5: Dodaj ksiazke do biblioteki." << endl;
+		cout << "6: Usun ksiazke z biblioteki." << endl;
 		cout << "0: Wyloguj i wroc do menu glownego." << endl;
 		cout << "Wybor: ";
-		cin >> wybor;
+		cin >> choice;
+		cin.clear();
+		cin.ignore(200, '\n');
 
-		if (wybor == 0) {
+		if (choice == 0) {
 			return 0;
 		}
-		wyborWMenuBibliotekarza(wybor, bibliotekarz, biblioteka, bazaDanych);
+		librarianMenuChoice(choice, librarian, library, dataBase);
 	}
 }
 
-void Ui::wyborWMenuBibliotekarza(int wybor, Bibliotekarz* bibliotekarz, Biblioteka* biblioteka, sqlite3* bazaDanych) {
+void Ui::librarianMenuChoice(int choice, Librarian* librarian, Library* library, sqlite3* dataBase) {
 
 	//Wyswietla odpowienie informacje w zaleznosci od wyboru w menu.
 	//Wybor odpowiedniej opcji w menu pozwala rowniez dokonac roznych akcji np. wyslanie powiadomienia
 	//o zaleganiu z oddanie ksiazek.
 
 	system("CLS");
-	switch (wybor) {
+	switch (choice) {
 	case 1:
 	{
-		biblioteka->printInfo();
+		library->printLibraryInfo();
 		cout << endl;
 		cout << "Nie posiadasz uprawnien do zmiany tych danych." << endl;
 		break;
@@ -1554,23 +1555,25 @@ void Ui::wyborWMenuBibliotekarza(int wybor, Bibliotekarz* bibliotekarz, Bibliote
 	case 2:
 	{
 		cout << "Dane o koncie." << endl;
-		bibliotekarz->printInfOBibliotekarzu();
+		librarian->printLibrarianInfo();
 		cout << endl;
-		int wybor1;
+		int choice1;
+		cin.clear();
+		cin.ignore(200, '\n');
 		cout << "Aby zmienic dane wprowadz 1. Inaczej wprowadz dowolna liczbe poza 1." << endl;
 		cout << "Wybor: ";
-		cin >> wybor1;
+		cin >> choice1;
+		cin.clear();
+		cin.ignore(200, '\n');
 		cout << endl;
-		if (wybor1 == 1) {
-			zmienDaneBibliotekarza(bibliotekarz, bazaDanych);
+		if (choice1 == 1) {
+			changeLibrarianData(librarian, dataBase);
 		}
 		break;
 	}
 	case 3:
 	{
-		//TODO: dodac wyswietlanie listy dostepnych do wypozyczenia ksiazek.
-		cout << "Lista dostepnych ksiazek." << endl;
-		//Po wyswietleniu ma miec mozliwosc wypozyczenia ksiazki.
+		getBooks();	
 		break;
 	}
 	case 4:
@@ -1590,7 +1593,7 @@ void Ui::wyborWMenuBibliotekarza(int wybor, Bibliotekarz* bibliotekarz, Bibliote
 	system("pause");
 }
 
-Bibliotekarz* Ui::wczytywanieBibliotekarza(sqlite3_stmt* stmt) {
+Librarian* Ui::loadLibrarian(sqlite3* dataBase, string query) {
 
 	//Baza danych musi byc otwarta.
 	//Do metody przekazuje siê obiekt typu stmt (ju¿ przygotowany, utworzony).
@@ -1598,32 +1601,47 @@ Bibliotekarz* Ui::wczytywanieBibliotekarza(sqlite3_stmt* stmt) {
 	//dlatego tez, wiersze w tabeli Czytelnik sa juz gotowe do odczytu (przygotowanie jest robione w 
 	//metodzie logujacej).
 
+	if (dataBase == NULL) {
+		sqlite3_open("..\\ProjektBiblioteka\\main_db.db", &dataBase);
+		if (dataBase == NULL) {
+			return NULL;
+		}
+	}
+
+	sqlite3_stmt* stmt = NULL;
+	sqlite3_prepare_v2(dataBase, query.c_str(), -1, &stmt, NULL);
+	int retValue = sqlite3_step(stmt);
+
+	if (retValue != SQLITE_ROW) {
+		return NULL;
+	}
+	
 	int id = sqlite3_column_int(stmt, 0);
-	string imie = ElementyPomocnicze::konwersjaNaString(sqlite3_column_text(stmt, 1));
-	string nazwisko = ElementyPomocnicze::konwersjaNaString(sqlite3_column_text(stmt, 2));
-	int wiek = sqlite3_column_int(stmt, 3);
-	Data dataUrodzenia = ElementyPomocnicze::konwersjaNaData(ElementyPomocnicze::konwersjaNaString(sqlite3_column_text(stmt, 4)));
-	string haslo = ElementyPomocnicze::konwersjaNaString(sqlite3_column_text(stmt, 5));
-	string email = ElementyPomocnicze::konwersjaNaString(sqlite3_column_text(stmt, 6));
-	string telefon = ElementyPomocnicze::konwersjaNaString(sqlite3_column_text(stmt, 7));
-	string miasto = ElementyPomocnicze::konwersjaNaString(sqlite3_column_text(stmt, 8));
-	string kodPocztowy = ElementyPomocnicze::konwersjaNaString(sqlite3_column_text(stmt, 9));
-	string ulica = ElementyPomocnicze::konwersjaNaString(sqlite3_column_text(stmt, 10));
-	int numerMieszkania = sqlite3_column_int(stmt, 11);
+	string firstName = Utilities::convertToString(sqlite3_column_text(stmt, 1));
+	string lastName = Utilities::convertToString(sqlite3_column_text(stmt, 2));
+	int age = sqlite3_column_int(stmt, 3);
+	Date birthDate = Utilities::convertToData(Utilities::convertToString(sqlite3_column_text(stmt, 4)));
+	string password = Utilities::convertToString(sqlite3_column_text(stmt, 5));
+	string emailAdress = Utilities::convertToString(sqlite3_column_text(stmt, 6));
+	string phoneNumber = Utilities::convertToString(sqlite3_column_text(stmt, 7));
+	string city = Utilities::convertToString(sqlite3_column_text(stmt, 8));
+	string zipCode = Utilities::convertToString(sqlite3_column_text(stmt, 9));
+	string street = Utilities::convertToString(sqlite3_column_text(stmt, 10));
+	int flatNumber = sqlite3_column_int(stmt, 11);
+	Adress adress = Adress(city, zipCode, street, flatNumber);
 
-	Adres adres = Adres(miasto, kodPocztowy, ulica, numerMieszkania);
+	Librarian* librarian = new Librarian(firstName, lastName, emailAdress, phoneNumber, birthDate.getDay(), birthDate.getMonth(), birthDate.getYear(), adress, password, id);
 
-	Bibliotekarz* bibliotekarz = new Bibliotekarz(imie, nazwisko, email, telefon, dataUrodzenia.getDzien(), dataUrodzenia.getMiesiac(), dataUrodzenia.getRok(), adres, haslo, id);
-
-	return bibliotekarz;
+	sqlite3_finalize(stmt);
+	return librarian;
 }
 
 
-void Ui::zmienDaneBibliotekarza(Bibliotekarz* bibliotekarz, sqlite3* bazaDanych) {
+void Ui::changeLibrarianData(Librarian* librarian, sqlite3* dataBase) {
 
 	while (true) {
 
-		int wybor;
+		int choice;
 		system("CLS");
 		cout << "Wybierz co chcesz zmienic." << endl;
 		cout << "Pamietaj, ze nie mozna zmienic niektorych danych za pomoca systemu. ";
@@ -1632,38 +1650,47 @@ void Ui::zmienDaneBibliotekarza(Bibliotekarz* bibliotekarz, sqlite3* bazaDanych)
 		cout << "2: Zmiana adresu e-mail" << endl;
 		cout << "3: Zmiana numeru telefonu" << endl;
 		cout << "0: Przerwanie dokonywania zmian" << endl;
-		cin >> wybor;
+		cin >> choice;
+		cin.clear();
+		cin.ignore(200, '\n');
 
-		string zapytanie;
+		string query;
 		sqlite3_stmt* stmt = NULL;
 
-		switch (wybor) {
+		switch (choice) {
 		case 0:
 			return;
 		case 1:
 		{
 			while (true) {
-				string haslo1;
-				string haslo2;
+				string password1;
+				string password2;
 				cout << "Podaj nowe haslo: ";
-				cin >> haslo1;
+				cin >> password1;
+				cin.clear();
+				cin.ignore(200, '\n');
 				cout << "Powtorz haslo: ";
-				cin >> haslo2;
+				cin >> password2;
+				cin.clear();
+				cin.ignore(200, '\n');
 
-				if (haslo1 != haslo2) {
-					int wybor1 = -1;
+				if (password1 != password2) {
+					int choice1 = -1;
 					cout << "Hasla nie sa zgodne. Sprobuj ponownie albo zakoncz (0).";
-					cin >> wybor1;
-					if (wybor1 == 0) {
+					cin >> choice1;
+					cin.clear();
+					cin.ignore(200, '\n');
+
+					if (choice1 == 0) {
 						break;
 					}
 				}
 				else {
-					zapytanie = "UPDATE Bibliotekarz "
+					query = "UPDATE Bibliotekarz "
 						"SET haslo = '" +
-						haslo1 + "' WHERE ID == " + to_string(bibliotekarz->getID()) + ";";
-					sqlite3_exec(bazaDanych, zapytanie.c_str(), NULL, NULL, NULL);
-					bibliotekarz->setHaslo(haslo1);
+						password1 + "' WHERE ID == " + to_string(librarian->getID()) + ";";
+					sqlite3_exec(dataBase, query.c_str(), NULL, NULL, NULL);
+					librarian->setPassword(password1);
 					cout << "Pomyslnie zmieniono haslo" << endl;
 					system("pause");
 					break;
@@ -1676,27 +1703,36 @@ void Ui::zmienDaneBibliotekarza(Bibliotekarz* bibliotekarz, sqlite3* bazaDanych)
 			string email;
 			cout << "Podaj nowy adres email: ";
 			cin >> email;
+			cin.clear();
+			cin.ignore(200, '\n');
 
-			zapytanie = "UPDATE Bibliotekarz "
-				"SET email = '" +
-				email + "' WHERE ID == " + to_string(bibliotekarz->getID()) + ";";
-			sqlite3_exec(bazaDanych, zapytanie.c_str(), NULL, NULL, NULL);
-			bibliotekarz->setEmail(email);
-			cout << "Pomyslnie zmieniono adres e-mail" << endl;
-			system("pause");
+			if (validateEmail(email)) {
+				query = "UPDATE Bibliotekarz "
+					"SET email = '" +
+					email + "' WHERE ID == " + to_string(librarian->getID()) + ";";
+				sqlite3_exec(dataBase, query.c_str(), NULL, NULL, NULL);
+				librarian->setEmailAdress(email);
+				cout << "Pomyslnie zmieniono adres e-mail" << endl;
+				system("pause");
+			}
+			else {
+				cout << "Nieprawidlowy format adresu e-mail. Sprobuj ponownie." << endl;
+			}
 			break;
 		}
 		case 3:
 		{
-			string telefon;
+			string phoneNumber;
 			cout << "Podaj nowy nr. telefonu: ";
-			cin >> telefon;
+			cin >> phoneNumber;
+			getline(cin, phoneNumber);
+			cin.clear();
 
-			zapytanie = "UPDATE Bibliotekarz "
+			query = "UPDATE Bibliotekarz "
 				"SET telefon = '" +
-				telefon + "' WHERE ID == " + to_string(bibliotekarz->getID()) + ";";
-			sqlite3_exec(bazaDanych, zapytanie.c_str(), NULL, NULL, NULL);
-			bibliotekarz->setTelefon(telefon);
+				phoneNumber + "' WHERE ID == " + to_string(librarian->getID()) + ";";
+			sqlite3_exec(dataBase, query.c_str(), NULL, NULL, NULL);
+			librarian->setPhoneNumber(phoneNumber);
 			cout << "Pomyslnie zmieniono nr. telefonu" << endl;
 			system("pause");
 			break;
@@ -1711,106 +1747,99 @@ void Ui::zmienDaneBibliotekarza(Bibliotekarz* bibliotekarz, sqlite3* bazaDanych)
 	}
 }
 
-Biblioteka* Ui::wczytywanieBiblioteki(sqlite3* bazaDanych) {
+Library* Ui::loadLibrary(sqlite3* dataBase) {
 
 	//Wczytuje biblioteke do bazy danych. 
 
-	if (bazaDanych == NULL) {
-
+	if (dataBase == NULL) {
 		//Na wypadek gdyby przekazano NULL'a.
-
-		sqlite3_open("..\\ProjektBiblioteka\\main_db.db", &bazaDanych);
-
-		if (bazaDanych == NULL) {
-
+		sqlite3_open("..\\ProjektBiblioteka\\main_db.db", &dataBase);
+		if (dataBase == NULL) {
 			//Nie udalo sie otworzyc bazy danych.
-
 			return NULL;
 		}
 	}
 
-	string zapytanie = "SELECT * FROM BIBLIOTEKA;";
+	string query = "SELECT * FROM BIBLIOTEKA;";
 	sqlite3_stmt* stmt = NULL;
-	sqlite3_prepare_v2(bazaDanych, zapytanie.c_str(), -1, &stmt, NULL);
-	sqlite3_step(stmt);
+	sqlite3_prepare_v2(dataBase, query.c_str(), -1, &stmt, NULL);
+	int ret = sqlite3_step(stmt);
 
-	string emailKontaktowy = ElementyPomocnicze::konwersjaNaString(sqlite3_column_text(stmt, 0));
-	string telefonKontaktowy = ElementyPomocnicze::konwersjaNaString(sqlite3_column_text(stmt, 1));
-	string miasto = ElementyPomocnicze::konwersjaNaString(sqlite3_column_text(stmt, 2));
-	string kodPocztowy = ElementyPomocnicze::konwersjaNaString(sqlite3_column_text(stmt, 3));
-	string ulica = ElementyPomocnicze::konwersjaNaString(sqlite3_column_text(stmt, 4));
-	int numer = sqlite3_column_int(stmt, 5);
-	int iloscEgzemplarzy = sqlite3_column_int(stmt, 6);
-	map<string, string> godzinyOtwarcia = Biblioteka::wczytywanieGodzin(bazaDanych);
+	if (ret != SQLITE_ROW) {
+		return NULL;
+	}
 
-	Adres adres = Adres(miasto, kodPocztowy, ulica, numer);
+	string emailAdress = Utilities::convertToString(sqlite3_column_text(stmt, 0));
+	string phoneNumber = Utilities::convertToString(sqlite3_column_text(stmt, 1));
+	string city = Utilities::convertToString(sqlite3_column_text(stmt, 2));
+	string zipCode = Utilities::convertToString(sqlite3_column_text(stmt, 3));
+	string street = Utilities::convertToString(sqlite3_column_text(stmt, 4));
+	int flatNumber = sqlite3_column_int(stmt, 5);
+	int amountOfCopies = sqlite3_column_int(stmt, 6);
+	map<string, string> openingHours = Library::loadOpeningHours(dataBase);
+	Adress adress = Adress(city, zipCode, street, flatNumber);
 
 	sqlite3_finalize(stmt);
 
-	Biblioteka* biblioteka = new Biblioteka(emailKontaktowy, telefonKontaktowy, adres, godzinyOtwarcia, iloscEgzemplarzy);
-
-	return biblioteka;
+	Library* library = new Library(emailAdress, phoneNumber, adress, openingHours, amountOfCopies);
+	return library;
 }
 
-bool Ui::zarejestruj(int tryb, sqlite3* bazaDanych) {
+bool Ui::registerUser(int mode, sqlite3* dataBase) {
 
 	//Rejestracja bibliotekarza lub czytelnika w zaleznosci od wybranego trybu.
 
-	if (tryb != 1 && tryb != 2) {
+	if (mode != 1 && mode != 2) {
 		return false;
 	}
-	if (bazaDanych == NULL) {
-		sqlite3_open("..\\ProjektBiblioteka\\main_db.db", &bazaDanych);
-		if (bazaDanych == NULL) {
+	if (dataBase == NULL) {
+		sqlite3_open("..\\ProjektBiblioteka\\main_db.db", &dataBase);
+		if (dataBase == NULL) {
 			return false;
 		}
 	}
-	if (tryb == 1) {
-		Osoba* osoba = createUzytkownik(1, bazaDanych);
-		if (osoba == NULL) {
+	if (mode == 1) {
+		Person* person = createUser(1, dataBase);
+		if (person == NULL) {
 			return false;
 		}
-		Czytelnik* czytelnik = reinterpret_cast<Czytelnik*>(osoba);
-		czytelnik->printInfo();
+		Reader* reader = reinterpret_cast<Reader*>(person);
+		reader->printReaderInfo();
 
 		if (confirmVerification()) {
-
-			if (addUzytkownik(1, bazaDanych, czytelnik)) {
-				cout << "Pomyslnie dodano czytelnika." << endl;
+			if (addUserToDataBase(1, dataBase, reader)) {
+				cout << "Pomyslnie dodano czytelnika do bazy danych." << endl;
 				system("pause");
 				//Po rejestracji kasuje czytelnika (musi sie nastepnie zalogowac).
-				delete czytelnik;
+				delete reader;
 				return true;
 			}
 			else {
 				cout << "Blad przy dodawaniu czytelnika do bazy danych." << endl;
 				system("pause");
-				delete czytelnik;
+				delete reader;
 				return false;
 			}
 		}
 	}
-
-	else if (tryb == 2) {
-		Osoba* osoba = createUzytkownik(2, bazaDanych);
-		if (osoba == NULL) {
+	else if (mode == 2) {
+		Person* person = createUser(2, dataBase);
+		if (person == NULL) {
 			return false;
 		}
-		Bibliotekarz* bibliotekarz = reinterpret_cast<Bibliotekarz*>(osoba);
-		bibliotekarz->printInfOBibliotekarzu();
-
+		Librarian* librarian = reinterpret_cast<Librarian*>(person);
+		librarian->printLibrarianInfo();
 		if (confirmVerification()) {
-
-			if (addUzytkownik(2, bazaDanych, bibliotekarz)) {
-				cout << "Pomyslnie dodano bibliotekarza." << endl;
+			if (addUserToDataBase(2, dataBase, librarian)) {
+				cout << "Pomyslnie dodano bibliotekarza do bazy danych." << endl;
 				system("pause");
-				delete bibliotekarz;
+				delete librarian;
 				return true;
 			}
 			else {
-				cout << "Blad przy dodawaniu bibliotekarza do bazy danych." << endl;
+				cout << "Blad przy dodawaniu bibliotekarz do bazy danych." << endl;
 				system("pause");
-				delete bibliotekarz;
+				delete librarian;
 				return false;
 			}
 		}

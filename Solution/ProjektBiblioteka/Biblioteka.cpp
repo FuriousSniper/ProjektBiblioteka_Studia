@@ -1,39 +1,35 @@
 #include "..\headers\Biblioteka.h"
 #include "..\headers\ElementyPomocnicze.h"
 
-Biblioteka::Biblioteka(string emailKontaktowy, string telefonKontaktowy, Adres adres, map<string, string> godzinyOtwarcia, int iloscEgzemplarzy) : emailKontaktowy(emailKontaktowy), telefonKontaktowy(telefonKontaktowy), adres(adres), godzinyOtwarcia(godzinyOtwarcia), iloscEgzemplarzy(iloscEgzemplarzy) {}
+Library::Library(string contactEmailAdress, string contactPhoneNumber, Adress adress, map<string, string> openingHours, int numberOfCopies) : contactEmailAdress(contactEmailAdress), contactPhoneNumber(contactPhoneNumber), adress(adress), openingHours(openingHours), numberOfCopies(numberOfCopies) {}
 
-void Biblioteka::printGodzinyOtwarcia() {
-	map<string, string> ::iterator iterator = godzinyOtwarcia.begin();
+void Library::printOpeningHours() {
+	map<string, string> ::iterator iterator = openingHours.begin();
 
-	while (iterator != godzinyOtwarcia.end()) {
+	while (iterator != openingHours.end()) {
 		cout<<"\t\t"<<iterator->first << ": " << iterator->second << endl;
 		iterator++;
 	}
 }
 
-void Biblioteka::printInfo() {
+void Library::printLibraryInfo() {
 	cout << "Informacje o bibliotece:" << endl<<endl;
-	cout << "\tTelefon kontaktowy: " << telefonKontaktowy << endl;
-	cout << "\tE-mail kontaktowy: " << emailKontaktowy << endl;
+	cout << "\tTelefon kontaktowy: " << contactPhoneNumber << endl;
+	cout << "\tE-mail kontaktowy: " << contactEmailAdress << endl;
 	cout << "\tAdres: ";
-	adres.printAdres();
-	cout << "\tRozmiar ksiegozbiorow biblioteki: " << iloscEgzemplarzy << endl << endl;
+	adress.printAdress();
+	cout << "\tRozmiar ksiegozbiorow biblioteki: " << numberOfCopies << endl << endl;
 	cout << "\tGodziny otwarcia:" << endl << endl;
-	printGodzinyOtwarcia();	
+	printOpeningHours();	
 }
 
-map<string, string> Biblioteka :: wczytywanieGodzin(sqlite3* bazaDanych) {
+map<string, string> Library :: loadOpeningHours(sqlite3* dataBase) {
 
-	if (bazaDanych == NULL) {
-
-		sqlite3_open("..\\ProjektBiblioteka\\main_db.db", &bazaDanych);
-
-		if (bazaDanych == NULL) {
-
+	if (dataBase == NULL) {
+		sqlite3_open("..\\ProjektBiblioteka\\main_db.db", &dataBase);
+		if (dataBase == NULL) {
 			//Nie udalo sie otworzyc bazy.
-
-			return wczytywanieGodzinBlad();
+			return loadOpeningHoursError();
 		}
 	}
 
@@ -41,10 +37,10 @@ map<string, string> Biblioteka :: wczytywanieGodzin(sqlite3* bazaDanych) {
 	//Zwraca mape, gdzie kluczem jest dzien tygodnia, a wartoscia godziny otwarcia dla danego dnia.
 
 	sqlite3_stmt* stmt = NULL;
-	string zapytanie = "SELECT godzinyOtwarcia FROM Biblioteka;";
-	sqlite3_prepare_v2(bazaDanych, zapytanie.c_str(), -1, &stmt, NULL);
+	string query = "SELECT godzinyOtwarcia FROM Biblioteka;";
+	sqlite3_prepare_v2(dataBase, query.c_str(), -1, &stmt, NULL);
 
-	map<string, string> godzinyOtwarcia;
+	map<string, string> openingHours;
 
 	if (sqlite3_step(stmt) == SQLITE_ROW) {
 
@@ -52,9 +48,9 @@ map<string, string> Biblioteka :: wczytywanieGodzin(sqlite3* bazaDanych) {
 		//Ten program nie bedzie przewidywal ich modyfikacji.
 		//Jezeli bylaby mozliwa modyfikacja to tutaj trzeba byloby duzo wiecej dopisac...
 
-		vector<string> podzielone = ElementyPomocnicze :: split_string(ElementyPomocnicze :: konwersjaNaString(sqlite3_column_text(stmt, 0)), "||");
+		vector<string> splitString = Utilities :: split_string(Utilities :: convertToString(sqlite3_column_text(stmt, 0)), "||");
 
-		if (podzielone.size() != 7) {
+		if (splitString.size() != 7) {
 
 			//Gdyby wystapila sytuacja (te dane nie beda modyfikowane przez czytelnika/bibliotekarza, ale
 			//dodaje, na wszelki wypadek, obsluge tego przypadku) gdzie nie ma godzin otwarcia
@@ -62,18 +58,18 @@ map<string, string> Biblioteka :: wczytywanieGodzin(sqlite3* bazaDanych) {
 
 			//Przypisuje reszcie dni "Brak danych do wyswietlenia".
 
-			while (podzielone.size() != 7) {
-				podzielone.push_back("Brak danych do wyswietlenia.");
+			while (splitString.size() != 7) {
+				splitString.push_back("Brak danych do wyswietlenia.");
 			}
 		}
 
-		godzinyOtwarcia["Poniedzialek"] = podzielone[0];
-		godzinyOtwarcia["Wtorek"] = podzielone[1];
-		godzinyOtwarcia["Sroda"] = podzielone[2];
-		godzinyOtwarcia["Czwartek"] = podzielone[3];
-		godzinyOtwarcia["Piatek"] = podzielone[4];
-		godzinyOtwarcia["Sobota"] = podzielone[5];
-		godzinyOtwarcia["Niedziela"] = podzielone[6];
+		openingHours["Poniedzialek"] = splitString[0];
+		openingHours["Wtorek"] = splitString[1];
+		openingHours["Sroda"] = splitString[2];
+		openingHours["Czwartek"] = splitString[3];
+		openingHours["Piatek"] = splitString[4];
+		openingHours["Sobota"] = splitString[5];
+		openingHours["Niedziela"] = splitString[6];
 
 	}
 	else {
@@ -82,30 +78,29 @@ map<string, string> Biblioteka :: wczytywanieGodzin(sqlite3* bazaDanych) {
 
 		//Wtedy tworzy mape, gdzie dla kazdego klucza przypisuje wartosc "Blad odczytu".
 
-		godzinyOtwarcia = wczytywanieGodzinBlad();
+		openingHours = loadOpeningHoursError();
 
 	}
-
 	sqlite3_finalize(stmt);
-	return godzinyOtwarcia;
+	return openingHours;
 }
 
-map<string, string> Biblioteka :: wczytywanieGodzinBlad() {
+map<string, string> Library :: loadOpeningHoursError() {
 
-	map<string, string> godzinyOtwarcia;
+	map<string, string> openingHours;
 
 	//Wykorzystywane do przypisywania godzin, gdy nie udalo sie otworzyc bazy lub otworzono baze
 	//ale nie zawiera ona zadnych rekordow (patrz metoda wczytywanieGodzin).
 
-	godzinyOtwarcia["Poniedzialek"] = "Blad odczytu";
-	godzinyOtwarcia["Wtorek"] = "Blad odczytu";
-	godzinyOtwarcia["Sroda"] = "Blad odczytu";
-	godzinyOtwarcia["Czwartek"] = "Blad odczytu";
-	godzinyOtwarcia["Piatek"] = "Blad odczytu";
-	godzinyOtwarcia["Sobota"] = "Blad odczytu";
-	godzinyOtwarcia["Niedziela"] = "Blad odczytu";
+	openingHours["Poniedzialek"] = "Blad odczytu";
+	openingHours["Wtorek"] = "Blad odczytu";
+	openingHours["Sroda"] = "Blad odczytu";
+	openingHours["Czwartek"] = "Blad odczytu";
+	openingHours["Piatek"] = "Blad odczytu";
+	openingHours["Sobota"] = "Blad odczytu";
+	openingHours["Niedziela"] = "Blad odczytu";
 
-	return godzinyOtwarcia;
+	return openingHours;
 }
 
 

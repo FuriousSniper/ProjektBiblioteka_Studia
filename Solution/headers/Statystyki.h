@@ -4,19 +4,19 @@
 #include "..\headers\Data.h"
 
 
-class Statystyki {
+class Statistics {
 
 	//Statystyki odnosnie konta czytelnika.
 
-	Data dataPierszegoWypozyczenia;
+	Date dataPierszegoWypozyczenia;
 	int iloscWypozyczonychOdDolaczenia;
 	string* preferowaneTematy;
-	Data dataDolaczenia;
+	Date dataDolaczenia;
 
 public:
 
-	Statystyki(Data, int, string*, Data);
-	Statystyki();
+	Statistics(Date, int, string*, Date);
+	Statistics();
 };
 
 #endif

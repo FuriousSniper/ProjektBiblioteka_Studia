@@ -3,48 +3,48 @@
 #include <iostream>
 #include <ctime>
 
-string Osoba::getNazwisko() {
+string Person::getLastName() {
 	return this->nazwisko;
 }
 
-string Osoba::getImie() {
+string Person::getFirstName() {
 	return this->imie;
 }
 
-int Osoba::getWiek() {
+int Person::getAge() {
 	return this->wiek;
 }
 
-Adres Osoba::getAdresZamieszkania() {
+Adress Person::getAdress() {
 	return this->adres;
 }
 
-string Osoba :: getEmail() {
+string Person :: getEmailAdress() {
 	return this->email;
 }
 
-string Osoba :: getTelefon() {
+string Person :: getPhoneNumber() {
 	return this->telefon;
 }
 
-Data Osoba::getDataUrodzenia() {
+Date Person::getBirthDate() {
 	return this->dataUrodzenia;
 }
 
-int Osoba::setWiek(int age) {
+int Person::setWiek(int age) {
 	this->wiek = age;
 	return this->wiek;
 }
 
-void Osoba::setTelefon(string telefon) {
+void Person::setPhoneNumber(string telefon) {
 	this->telefon = telefon;
 }
 
-void Osoba::setEmail(string email) {
+void Person::setEmailAdress(string email) {
 	this->email = email;
 }
 
-void Osoba::printOsoba() {
+void Person::printPerson() {
 	
 	cout << "Dane osobowe:" << endl;
 	cout << "\timie: " << this->imie << endl << "\tnazwisko: " << this->nazwisko << endl << "\tdata urodzenia: ";
@@ -61,19 +61,19 @@ void Osoba::printOsoba() {
 	cout << "\te-mail: " << this->email << endl;
 	cout << "\ttelefon: " << this->telefon << endl;
 	cout << "\tadres zamieszkania: ";
-	adres.printAdres();
+	adres.printAdress();
 }
 
-void Osoba::setDaneKontaktowe(string email, string telefon) {
+void Person::setDaneKontaktowe(string email, string telefon) {
 	this->email = email;
 	this->telefon = telefon;
 }
 
-void Osoba :: setAdresZamieszkania(Adres adres) {
+void Person :: setAdresZamieszkania(Adress adres) {
 	this->adres = adres;
 }
 
-Osoba::Osoba(string imie, string nazwisko, int d, int m, int r):imie(imie),nazwisko(nazwisko), dataUrodzenia(Data(d,m,r)), 
+Person::Person(string imie, string nazwisko, int d, int m, int r):imie(imie),nazwisko(nazwisko), dataUrodzenia(Data(d,m,r)), 
 adres(Adres()), email("nie podano"), telefon("nie podano"){
 	time_t t = time(NULL);
 	tm* buf = new tm;
@@ -81,14 +81,14 @@ adres(Adres()), email("nie podano"), telefon("nie podano"){
 	this->wiek = buf->tm_year + 1900 - r;
 }
 
-Osoba::Osoba(string imie, string nazwisko) : imie(imie), nazwisko(nazwisko),dataUrodzenia(Data()), wiek(0), email("nie podano"),telefon("nie podano"),
+Person::Person(string imie, string nazwisko) : imie(imie), nazwisko(nazwisko),dataUrodzenia(Data()), wiek(0), email("nie podano"),telefon("nie podano"),
 adres(Adres()){
 }
 
-Osoba::Osoba() : imie("nie podano"), nazwisko("nie podano"), email("nie podano"), telefon("nie podano"), dataUrodzenia(Data()), wiek(0),
+Person::Person() : imie("nie podano"), nazwisko("nie podano"), email("nie podano"), telefon("nie podano"), dataUrodzenia(Data()), wiek(0),
 adres(Adres()){}
 
-Osoba::Osoba(string imie, string nazwisko, string email, string telefon, int d, int m, int r, Adres adres) : imie(imie), nazwisko(nazwisko), email(email), telefon(telefon), dataUrodzenia(Data(d,m,r)), adres(adres) {
+Person::Person(string imie, string nazwisko, string email, string telefon, int d, int m, int r, Adress adres) : imie(imie), nazwisko(nazwisko), email(email), telefon(telefon), dataUrodzenia(Data(d,m,r)), adres(adres) {
 	time_t t = time(NULL);
 	tm* buf = new tm;
 	localtime_s(buf,&t);

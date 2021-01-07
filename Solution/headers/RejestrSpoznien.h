@@ -5,11 +5,11 @@ using namespace std;
 class RejestrSpoznien {
 
 private:
-	Czytelnik spoz_osoba;
+	Reader spoz_osoba;
 
 public:
-	void addRejestrSpoznien(Czytelnik spoz_osoba);
-	void removeRejestrSpoznien(Czytelnik spoz_osoba);
+	void addRejestrSpoznien(Reader spoz_osoba);
+	void removeRejestrSpoznien(Reader spoz_osoba);
 	void printRejestrSpoznien();
 };
 

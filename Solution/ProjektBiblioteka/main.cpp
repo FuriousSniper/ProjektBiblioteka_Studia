@@ -26,15 +26,13 @@ int main() {
 	}
 	
 	
-	
-
-	Biblioteka* biblioteka = ui.wczytywanieBiblioteki(db);
+	Library* biblioteka = ui.loadLibrary(db);
 
 	if (biblioteka == NULL) {
 		cout << "Nie udalo sie utworzyc obiektu biblioteka." << endl;
 		return -1;
 	}
-	/*
+	
 	for (;;) {
 
 		int tryb = ui.signInUpMenu();
@@ -49,19 +47,19 @@ int main() {
 				//Logowanie czytelnika.
 				//do zmodyfikowania po zaimplementowaniu ladowania czytelnika do pamieci 
 				//(podobnie jak w bibliotekarzu).
-				Czytelnik* osZalogowana = reinterpret_cast<Czytelnik*>(ui.zaloguj(1, db));
+				Reader* osZalogowana = reinterpret_cast<Reader*>(ui.logIn(1, db));
 				if (osZalogowana == NULL) continue;
 				else {
-					ui.menuPoZalogowaniuCzytelnika(osZalogowana);
+					ui.readerMenuChoice(osZalogowana);
 				}
 			}
 			else {
 				//Logowanie bibliotekarza.
 				//metoda zaloguj zwraca wskaznik na Osob? wiec konwertujemy.
-				Bibliotekarz* osZalogowana = reinterpret_cast<Bibliotekarz*>(ui.zaloguj(2, db));
+				Librarian* osZalogowana = reinterpret_cast<Librarian*>(ui.logIn(2, db));
 				if (osZalogowana == NULL) continue;
 				else {
-					ui.menuPoZalogowaniuBibliotekarza(osZalogowana, biblioteka, db);		
+					ui.librarianMenu(osZalogowana, biblioteka, db);		
 				}
 			}
 		}
@@ -73,10 +71,10 @@ int main() {
 			else if (acc_type2 == 3)
 				continue;
 			else if (acc_type2 == 1) {
-				ui.zarejestruj(1, db);
+				ui.registerUser(1, db);
 			}
 			else if (acc_type2 == 2) {
-				ui.zarejestruj(2, db);
+				ui.registerUser(2, db);
 			}
 		}
 		else {
@@ -84,8 +82,8 @@ int main() {
 			break;
 		}
 	}
-	*/
-	ui.addBook();
+	
+	//ui.addBook();
 	sqlite3_close(db);
 
 	system("pause");

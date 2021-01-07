@@ -6,40 +6,40 @@
 
 using namespace std;
 
-class Osoba {
+class Person {
 
 private:
 
 	const string imie;
 	const string nazwisko;
 	int wiek;
-	const Data dataUrodzenia;
+	const Date dataUrodzenia;
 	string email;
 	string telefon;
-	Adres adres;
+	Adress adres;
 
 public:
 
-	string getNazwisko();
-	string getImie();
-	string getEmail();
-	string getTelefon();
-	Adres getAdresZamieszkania();
-	void setAdresZamieszkania(Adres adres);
-	Data getDataUrodzenia();
-	int getWiek();
+	string getLastName();
+	string getFirstName();
+	string getEmailAdress();
+	string getPhoneNumber();
+	Adress getAdress();
+	void setAdresZamieszkania(Adress adres);
+	Date getBirthDate();
+	int getAge();
 
 	void setDaneKontaktowe(string email, string telefon);
 	int setWiek(int wiek);
-	void setTelefon(string telefon);
-	void setEmail(string email);
+	void setPhoneNumber(string telefon);
+	void setEmailAdress(string email);
 
-	Osoba(string imie, string nazwisko, int d, int m, int r);
-	Osoba(string imie, string nazwisko, string email, string telefon, int d, int m, int r, Adres adres);
-	Osoba(string imie, string nazwisko);
-	Osoba();
+	Person(string imie, string nazwisko, int d, int m, int r);
+	Person(string imie, string nazwisko, string email, string telefon, int d, int m, int r, Adress adres);
+	Person(string imie, string nazwisko);
+	Person();
 
-	void printOsoba();
+	void printPerson();
 };
 
 #endif

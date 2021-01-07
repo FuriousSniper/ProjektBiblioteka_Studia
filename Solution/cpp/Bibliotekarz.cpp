@@ -4,28 +4,24 @@
 #include <iostream>
 using namespace std;
 
-void Bibliotekarz :: setHaslo(string haslo) {
-	this->haslo = haslo;
+void Librarian :: setPassword(string password) {
+	this->password = password;
 }
-string Bibliotekarz::getHaslo() {
-	return this->haslo;
+string Librarian::getPassword() {
+	return this->password;
 }
 
-int Bibliotekarz::getID() {
+int Librarian::getID() {
 	return this->ID;
 }
 
-void Bibliotekarz::printInfOBibliotekarzu() {
-	printOsoba();
+void Librarian::printLibrarianInfo() {
+	printPerson();
 	cout << "\nDane charakterystyczne dla bibliotekarza: " << endl;
 	cout << "\tID: " << this->ID << endl;
 }
 
-Bibliotekarz::Bibliotekarz(string imie, string nazwisko, int ID) : Osoba(imie, nazwisko), ID(ID) {}
+Librarian::Librarian(string firstName, string lastName, int ID) : Person(firstName, lastName), ID(ID) {}
 
-Bibliotekarz::Bibliotekarz(string imie, string nazwisko, string email, string telefon, int d, int m, int r, Adres adres, string haslo, int ID) : Osoba(imie, nazwisko, email, telefon, d,m,r,adres), ID(ID), haslo(haslo) {}
+Librarian::Librarian(string firstName, string lastName, string emailAdress, string phoneNumber, int day, int month, int year, Adress adress, string password, int ID) : Person(firstName, lastName, emailAdress, phoneNumber, day,month,year,adress), ID(ID), password(password) {}
 
-void Bibliotekarz::getBiblioteka() {
-	// TODO - implement Bibliotekarz::getBiblioteka
-	throw "Not yet implemented";
-}

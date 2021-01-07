@@ -1,23 +1,23 @@
 #include "..\headers\Adres.h"
 #include <iostream>
 
-void Adres::printAdres() const {
-	cout << "ul. " << ulica << " " << numerMieszkania << " " << miasto << " " << kodPocztowy << endl;
+void Adress::printAdress() const {
+	cout << "ul. " << street << " " << flatNumber << " " << city << " " << zipCode << endl;
 }
 
-Adres::Adres(string miasto, string kodPocztowy, string ulica, int numerMieszkania) : miasto(miasto), kodPocztowy(kodPocztowy), ulica(ulica), numerMieszkania(numerMieszkania) {};
+Adress::Adress(string city, string zipCode, string street, int flatNumber) : city(city), zipCode(zipCode), street(street), flatNumber(flatNumber) {};
 
-Adres::Adres() : miasto("nie podano"), kodPocztowy("nie podano"), ulica("nie podano"), numerMieszkania(0) {}
+Adress::Adress() : city("nie podano"), zipCode("nie podano"), street("nie podano"), flatNumber(0) {}
 
-string Adres::getKodPocztowy() {
-	return this->kodPocztowy;
+string Adress::getZipCode() {
+	return this->zipCode;
 }
-string Adres::getMiasto() {
-	return this->miasto;
+string Adress::getCity() {
+	return this->city;
 }
-string Adres::getUlica() {
-	return this->ulica;
+string Adress::getStreet() {
+	return this->street;
 }
-int Adres::getNumerMieszkania() {
-	return this->numerMieszkania;
+int Adress::getFlatNumber() {
+	return this->flatNumber;
 }

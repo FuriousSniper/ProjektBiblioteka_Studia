@@ -5,36 +5,37 @@
 #include "Data.h"
 #include "Czytelnik.h"
 using namespace std;
-class Egzemplarz;
-class Autor;
-class Ksiazka {
+
+class BookCopy;
+class Author;
+class Book {
 
 private:
 	string tytul;
-	Autor* autorzy;
+	Author* autorzy;
 	string* tagi;
 	string kategoria;
-	Egzemplarz** egzemplarze;
+	BookCopy** egzemplarze;
 	int id;
 	int iloscEgzemplarzy;
-	Data dataPremiery;
+	Date dataPremiery;
 	int iloscEgzemplarzyKsiazki;
 
 public:
 	string getTytul();
-	Autor* getAutorzy();
+	Author* getAutorzy();
 	string* getTagi();
 	void setTagi(string* tagi);
-	Data getDataPremiery();
-	void dodajEgzemplarz(Egzemplarz* egzemplarz);
-	Egzemplarz** getEgzemplarze();
-	int usunEgzemplarz(Egzemplarz* e);
+	Date getDataPremiery();
+	void dodajEgzemplarz(BookCopy* egzemplarz);
+	BookCopy** getEgzemplarze();
+	int usunEgzemplarz(BookCopy* e);
 	int getId();
 	string getKategoria();
 	int getIloscEgzemplarzy();
-	Ksiazka(string tytul, Autor* autorzy, int id, Data dataPremiery);
-	Ksiazka(string tytul, Autor* autorzy, int id, Data dataPremiery, Egzemplarz* egzemplarz);
-	Ksiazka(string tytul, Autor* autorzy, int id, Data dataPremiery, Egzemplarz** egzemplarze);
+	Book(string tytul, Author* autorzy, int id, Date dataPremiery);
+	Book(string tytul, Author* autorzy, int id, Date dataPremiery, BookCopy* egzemplarz);
+	Book(string tytul, Author* autorzy, int id, Date dataPremiery, BookCopy** egzemplarze);
 };
 
 #endif

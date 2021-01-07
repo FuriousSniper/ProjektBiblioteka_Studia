@@ -3,22 +3,23 @@
 #include <string>
 using namespace std;
 
-class Adres {
+class Adress {
 
 public:
 
-	string miasto;
-	string kodPocztowy;
-	string ulica;
-	int numerMieszkania;
+	string city;
+	string zipCode;
+	string street;
+	int flatNumber;
 
-	void printAdres() const;
-	Adres(string, string, string, int);
-	Adres();
-	string getMiasto();
-	string getKodPocztowy();
-	string getUlica();
-	int getNumerMieszkania();
+	Adress(string city, string zipCode, string street, int flatNumber);
+	Adress();
+
+	string getCity();
+	string getZipCode();
+	string getStreet();
+	int getFlatNumber();
+	void printAdress() const;
 };
 
 #endif

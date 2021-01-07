@@ -1,37 +1,31 @@
 #include "..\headers\Data.h"
 #include <iostream>
 
-void Data::printData() const {
-	cout << this->godzina << ":";
+void Date::printData() const {
+	cout << this->day << "." << this->month << "." << this->year <<"r."<< endl;
+}
+int Date::setDay(int dzien) {
+	this->day = dzien;
+	return this->day;
+}
+int Date::getDay() {
+	return this->day;
+}
+int Date::setMonth(int m) {
+	this->month = m;
+	return this->month;
+}
+int Date::getMonth() {
+	return this->month;
+}
+int Date::setYear(int r) {
+	this->year = r;
+	return this->year;
+}
+int Date::getYear() {
+	return this->year;
+}
+Date::Date():day(0),month(0),year(0){}
+Date::Date(int dzien, int miesiac, int rok) : day(dzien), month(miesiac), year(rok){}
 
-	if (minuta < 10) {
-		cout << "0";
-	}
-
-	cout << this->minuta << " " << this->dzien << "." << this->miesiac << "." << this->rok <<"r."<< endl;
-}
-int Data::setDzien(int dzien) {
-	this->dzien = dzien;
-	return this->dzien;
-}
-int Data::getDzien() {
-	return this->dzien;
-}
-int Data::setMiesiac(int m) {
-	this->miesiac = m;
-	return this->miesiac;
-}
-int Data::getMiesiac() {
-	return this->miesiac;
-}
-int Data::setRok(int r) {
-	this->rok = r;
-	return this->rok;
-}
-int Data::getRok() {
-	return this->rok;
-}
-Data::Data():dzien(0),miesiac(0),rok(0),godzina(0),minuta(0) {}
-Data::Data(int dzien, int miesiac, int rok) : dzien(dzien), miesiac(miesiac), rok(rok), godzina(0), minuta(0) {}
-Data::Data(int dzien, int miesiac, int rok, int godzina, int minuta) : dzien(dzien), miesiac(miesiac), rok(rok), godzina(godzina), minuta(minuta) {}
 

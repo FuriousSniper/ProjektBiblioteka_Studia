@@ -5,24 +5,23 @@
 #include "Adres.h"
 
 using namespace std;
-class Bibliotekarz : public Osoba {
+class Librarian : public Person {
 
 private:
 
 	const int ID;
-	string haslo;
+	string password;
 
 public:
 
-	void setHaslo(string haslo);
-	string getHaslo();
+	Librarian(string firstName, string lastName, int ID);
+	Librarian(string firstName, string lastName, string emailAdress, string phoneNumber, int day, int month, int year, Adress adress, string password, int ID);
+
+	void setPassword(string password);
+	string getPassword();
 	int getID();
-
-	void printInfOBibliotekarzu();
+	void printLibrarianInfo();
 	void getBiblioteka();
-	Bibliotekarz(string imie, string nazwisko, int ID);
-	Bibliotekarz(string imie, string nazwisko, string email, string telefon, int d, int m, int r, Adres adres, string haslo, int ID);
-
 };
 
 #endif

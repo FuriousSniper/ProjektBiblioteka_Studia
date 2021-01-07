@@ -1,23 +1,23 @@
 #include "..\headers\Autor.h"
 
-int Autor::dodajKsiazke(Ksiazka* ksiazka) {
+int Author::addBook(Book* ksiazka) {
 	// TODO - implement Autor::dodajKsiazke
 	throw "Not yet implemented";
 }
 
-int Autor::dodajKsiazki(Ksiazka** ksiazki) {
+int Author::addBooks(Book** ksiazki) {
 	// TODO - implement Autor::dodajKsiazki
 	throw "Not yet implemented";
 }
 
-Autor::Autor(string imie, string nazwisko, int d, int m, int r):Osoba(imie,nazwisko,d,m,r){
+Author::Author(string firstName, string lastName, int day, int month, int year):Person(firstName,lastName,day,month,year){
 }
 
-Autor::Autor(string imie, string nazwisko, int d, int m, int r, Ksiazka* ksiazka): Osoba(imie, nazwisko, d, m, r){
-	dodajKsiazke(ksiazka);
+Author::Author(string firstName, string LastName, int day, int month, int year, Book* book): Person(firstName, LastName, day, month, year){
+	addBook(book);
 }
 
-Autor::Autor(string imie, string nazwisko, int d, int m, int r, Ksiazka** ksiazki) : Osoba(imie, nazwisko, d, m, r),dziela(ksiazki) {
+Author::Author(string firstName, string lastName, int day, int month, int year, Book** books) : Person(firstName, lastName, day, month, year),books(books) {
 	// TODO - implement Autor::Autor
 	throw "Not yet implemented";
 }

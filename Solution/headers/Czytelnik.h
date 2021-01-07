@@ -9,46 +9,30 @@ using namespace std;
 #include "Osoba.h"
 #include "Statystyki.h"
 
-class Egzemplarz;
-class Osoba;
+class BookCopy;
+class Person;
 
-class Czytelnik: public Osoba {
+class Reader: public Person {
 
 private:
 
-	//TUTAJ JEST BARDZO DZIWNY BLAD, NALEZY JESZCZE W DRUGIM PLIKU DOPISAC DO KONSTRUKTORA I WTEDY SIE ON POJAWIA
-	//DaneKontaktowe kontakt;
-
-	//Kazdy Czytelnik, ktory zalega z oddanie posiada swoje ID w rejestrze spoznien. Jezeli nie zalega to jest
-	//to ustawione na -1.
-
-	int idRejestrSpoznien;
 	const int ID;
-	string* preferowaneTematy;
-	string haslo;
-	Statystyki statystyki;
+	string* preferredCategories;
+	string password;
+	Statistics statistics;
 
 public:
 
+	Reader(string firstName, string lastName, int id);
+	Reader(string firstName, string lastName, string emailAdress, string phoneNumber, int day, int month, int year, Adress, string password, int ID);
+	Reader(string firstName, string lastName, int day, int month, int year, string* preferredCategories, int ID);
+	Reader();
+	void printReaderInfo();
+	void setPassword(string newPassword);
+	string getPassword();
 	const int getID();
-	string getOfertySpecjalne();
-	string* getPreferowaneTematy();
-	int setPreferowaneTematy(string* tematy);
-	int wypozyczKsiazke(Egzemplarz* ksiazka);
-	int oddajKsiazke(Egzemplarz* ksiazka);
-	bool sprawdzDostepnoscKsiazki(Egzemplarz* ksiazka);
-	Egzemplarz** getWypozyczoneObecnie();
-	Data sprawdzTerminOddania(Egzemplarz* ksiazka);
-	int zmienTerminOddania(Data termin);
-	int zarezerwujKsiazke(Egzemplarz* ksiazka);
-	Czytelnik(string imie, string nazwisko, int id);
-	Czytelnik(string imie, string nazwisko, string email, string telefon, int d, int m, int r, Adres, string haslo, int ID);
-	Czytelnik(string imie, string nazwisko, int d, int m, int r, string* preferowaneTematy, int ID);
-	Czytelnik();
-	void printInfo();
-	void setHaslo(string newHaslo);
-	string getHaslo();
-
+	string* getPrefferedCategories();
+	int setPrefferedCategories(string* tematy);
 };
 
 #endif

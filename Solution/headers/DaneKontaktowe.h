@@ -2,7 +2,7 @@
 #define DANEKONTAKTOWE_H
 #include <string>
 #include "Czytelnik.h"
-class Czytelnik;
+class Reader;
 using namespace std;
 
 class DaneKontaktowe {

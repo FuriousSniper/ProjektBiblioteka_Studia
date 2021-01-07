@@ -5,69 +5,31 @@
 #include "..\headers\Adres.h"
 
 using namespace std;
-const int Czytelnik::getID() {
+const int Reader::getID() {
 	return ID;
 }
-string Czytelnik::getOfertySpecjalne() {
-	//TODO
-	throw "not implemented";
-}
 
-string* Czytelnik::getPreferowaneTematy() {
-	return preferowaneTematy;
+string* Reader::getPrefferedCategories() {
+	return preferredCategories;
 }
-int Czytelnik::setPreferowaneTematy(string* tematy) {
-	//TODO
-	throw "not implemented";
+int Reader::setPrefferedCategories(string* categories) {
+	this->preferredCategories = categories;
 }
-int Czytelnik::wypozyczKsiazke(Egzemplarz* ksiazka) {
-	//TODO
-	throw "not implemented";
-}
-int Czytelnik::oddajKsiazke(Egzemplarz* ksiazka) {
-	//TODO
-	throw "not implemented";
-}
-bool Czytelnik::sprawdzDostepnoscKsiazki(Egzemplarz* ksiazka) {
-	//TODO
-	throw "not implemented";
-}
-Egzemplarz** Czytelnik::getWypozyczoneObecnie() {
-	//TODO
-	throw "not implemented";
-}
-Data Czytelnik::sprawdzTerminOddania(Egzemplarz* ksiazka) {
-	//TODO
-	throw "not implemented";
-}
-int Czytelnik::zmienTerminOddania(Data termin) {
-	//TODO
-	throw "not implemented";
-}
-int Czytelnik::zarezerwujKsiazke(Egzemplarz* ksiazka) {
-	//TODO
-	throw "not implemented";
-}
-
-void Czytelnik::printInfo() {
-
-	//TODO: dopisaæ inne informacje (np. preferowane tematy itd..)
-
-	printOsoba();
+void Reader::printReaderInfo() {
+	printPerson();
 	cout << "Dane charakterystyczne dla czytelnika: " << endl;
 	cout << "\tID: " << this->ID << endl;
 }
-void Czytelnik::setHaslo(string newHaslo) {
-	this->haslo = newHaslo;
+void Reader::setPassword(string newPassword) {
+	this->password = newPassword;
+}
+string Reader::getPassword() {
+	return this->password;
 }
 
-string Czytelnik::getHaslo() {
-	return this->haslo;
-}
+Reader::Reader(string firstName, string lastName, int id) : Person(firstName, lastName),ID(id) {}
+Reader::Reader(string firstName, string lastName, int day, int month, int year, string* preferredCategories, int ID): Person(firstName,lastName, day, month,year),
+preferredCategories(preferredCategories), ID(ID) {}  
 
-Czytelnik::Czytelnik(string imie, string nazwisko, int id) : Osoba(imie, nazwisko),ID(id) {}
-Czytelnik::Czytelnik(string imie, string nazwisko, int d, int m, int r, string* preferowaneTematy, int ID): Osoba(imie,nazwisko, d, m,r),
-preferowaneTematy(preferowaneTematy), ID(ID) {}  
-
-Czytelnik::Czytelnik(string imie, string nazwisko, string email, string telefon, int d, int m, int r, Adres adres, string haslo, int ID): ID(ID), Osoba(imie,nazwisko, email, telefon, d,m,r, adres), haslo(haslo) {}
-Czytelnik::Czytelnik() : Osoba(), ID(0), preferowaneTematy(NULL) {}
+Reader::Reader(string firstName, string lastName, string emailAdress, string phoneNumber, int day, int month, int year, Adress adress, string password, int ID): ID(ID), Person(firstName,lastName, emailAdress, phoneNumber, day,month,year, adress), password(password) {}
+Reader::Reader() : Person(), ID(0), preferredCategories(NULL) {}

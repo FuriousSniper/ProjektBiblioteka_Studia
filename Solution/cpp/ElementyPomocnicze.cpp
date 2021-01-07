@@ -1,6 +1,6 @@
 #include "..\headers\ElementyPomocnicze.h"
 
-string ElementyPomocnicze :: konwersjaNaString(const unsigned char* var) {
+string Utilities :: convertToString(const unsigned char* var) {
 
 	//Konwersja const unsigned char* na const char* (string).
 	//Jezeli wskaznik jest NULL'em, zwraca pustego stringa.
@@ -13,7 +13,7 @@ string ElementyPomocnicze :: konwersjaNaString(const unsigned char* var) {
 	}
 }
 
-Data ElementyPomocnicze :: konwersjaNaData(string napis) {
+Date Utilities :: convertToData(string stringToBeConverted) {
 
 	//Jezeli w danym rekordzie kolumna o typie danych DATA jest pusta to sqlite3_column_text(...) zwraca NULLA.
 	//W innej metodzie (konwersjaNaString) zwracana wartosc konwertowana jest na string (zwracana wartosc jest typu
@@ -21,8 +21,8 @@ Data ElementyPomocnicze :: konwersjaNaData(string napis) {
 	//Jezeli zwracana wartosc == NULL to jest konwertowana na "".
 	//W takim przypadku zwracany jest obiekt utworzony konstruktorem domyslnym.
 
-	if (napis == "") {
-		return Data();
+	if (stringToBeConverted == "") {
+		return Date();
 	}
 
 	//W przeciwnym razie stringa dzieli sie na 3 czesci (d,m,r) oddzielone delimiterem "-" (taki jest format zapisu
@@ -33,11 +33,11 @@ Data ElementyPomocnicze :: konwersjaNaData(string napis) {
 
 	//Jezeli moze zajsc sytuacja w ktorej rozmiar vectora moze byc rozny od 3, nalezy dodac tu wiecej warunkow.
 
-	vector<string> podzielony = split_string(napis, "-");
-	return Data(stoi(podzielony[0]), stoi(podzielony[1]), stoi(podzielony[2]));
+	vector<string> splitString = split_string(stringToBeConverted, "-");
+	return Date(stoi(splitString[0]), stoi(splitString[1]), stoi(splitString[2]));
 }
 
-vector<string> ElementyPomocnicze :: split_string(string stringToBeSplitted, string delimeter) {
+vector<string> Utilities :: split_string(string stringToBeSplitted, string delimeter) {
 	vector<string> splittedString;
 	int startIndex = 0;
 	int  endIndex = 0;

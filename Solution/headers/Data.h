@@ -2,25 +2,23 @@
 #define DATA_H
 #include <string>
 using namespace std;
-class Data {
+
+class Date {
 
 public:
-	int rok;
-	int miesiac;
-	int dzien;
-	int godzina;
-	int minuta;
+	int year;
+	int month;
+	int day;
 
 	void printData() const;
-	int setDzien(int dzien);
-	int getDzien();
-	int setMiesiac(int m);
-	int getMiesiac();
-	int setRok(int r);
-	int getRok();
-	Data();
-	Data(int dzien, int miesiac, int rok);
-	Data(int dzien, int miesiac, int rok, int godzina, int minuta);
+	int setDay(int dzien);
+	int getDay();
+	int setMonth(int m);
+	int getMonth();
+	int setYear(int r);
+	int getYear();
+	Date();
+	Date(int day, int month, int year);
 };
 
 #endif

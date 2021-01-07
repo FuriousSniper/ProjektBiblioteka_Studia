@@ -4,22 +4,23 @@
 #include "..\headers\Data.h"
 #include "Ksiazka.h"
 #include <string>
-class Ksiazka;
+
+class Book;
 using namespace std;
-class Autor : public Osoba {
+
+class Author : public Person {
+
 private:
-	Ksiazka** dziela;
+	Book** books;
 
 public:
-	int dodajKsiazke(Ksiazka* ksiazka);
 
-	int dodajKsiazki(Ksiazka** ksiazki);
+	Author(string firstName, string lastName, int day, int month, int year);
+	Author(string firstName, string lastName, int day, int month, int year, Book* book);
+	Author(string firstName, string lastName, int day, int month, int year, Book** books);
 
-	Autor(string imie, string nazwisko, int d, int m, int r);
-
-	Autor(string imie, string nazwisko, int d, int m, int r, Ksiazka* ksiazka);
-
-	Autor(string imie, string nazwisko, int d, int m, int r, Ksiazka** ksiazki);
+	int addBook(Book* book);
+	int addBooks(Book** books);
 };
 
 #endif
