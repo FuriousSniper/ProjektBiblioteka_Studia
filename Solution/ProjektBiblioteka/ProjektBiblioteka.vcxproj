@@ -139,39 +139,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\headers\Adres.h" />
-    <ClInclude Include="..\headers\Autor.h" />
-    <ClInclude Include="..\headers\Biblioteka.h" />
-    <ClInclude Include="..\headers\Bibliotekarz.h" />
-    <ClInclude Include="..\headers\Czytelnik.h" />
-    <ClInclude Include="..\headers\Data.h" />
-    <ClInclude Include="..\headers\Egzemplarz.h" />
-    <ClInclude Include="..\headers\ElementyPomocnicze.h" />
-    <ClInclude Include="..\headers\Ksiazka.h" />
-    <ClInclude Include="..\headers\Osoba.h" />
-    <ClInclude Include="..\headers\RejestrSpoznien.h" />
-    <ClInclude Include="..\headers\Statystyki.h" />
+    <ClInclude Include="..\headers\Adress.h" />
+    <ClInclude Include="..\headers\Author.h" />
+    <ClInclude Include="..\headers\Book.h" />
+    <ClInclude Include="..\headers\BookCopy.h" />
+    <ClInclude Include="..\headers\Date.h" />
+    <ClInclude Include="..\headers\Librarian.h" />
+    <ClInclude Include="..\headers\Library.h" />
+    <ClInclude Include="..\headers\Person.h" />
+    <ClInclude Include="..\headers\Reader.h" />
     <ClInclude Include="..\headers\Ui.h" />
+    <ClInclude Include="..\headers\Utilities.h" />
     <ClInclude Include="Libraries\sqlite3\sqlite3.h" />
     <ClInclude Include="Libraries\sqlite3\sqlite3ext.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\cpp\Adres.cpp" />
-    <ClCompile Include="..\cpp\Autor.cpp" />
-    <ClCompile Include="..\cpp\Bibliotekarz.cpp" />
-    <ClCompile Include="..\cpp\Czytelnik.cpp" />
-    <ClCompile Include="..\cpp\Data.cpp" />
-    <ClCompile Include="..\cpp\Egzemplarz.cpp" />
-    <ClCompile Include="..\cpp\ElementyPomocnicze.cpp" />
-    <ClCompile Include="..\cpp\Ksiazka.cpp" />
-    <ClCompile Include="..\cpp\Osoba.cpp" />
-    <ClCompile Include="..\cpp\RejestrSpoznien.cpp" />
+    <ClCompile Include="..\cpp\Adress.cpp" />
+    <ClCompile Include="..\cpp\Author.cpp" />
+    <ClCompile Include="..\cpp\Book.cpp" />
+    <ClCompile Include="..\cpp\BookCopy.cpp" />
+    <ClCompile Include="..\cpp\Date.cpp" />
+    <ClCompile Include="..\cpp\Librarian.cpp" />
+    <ClCompile Include="..\cpp\Library.cpp" />
+    <ClCompile Include="..\cpp\Person.cpp" />
+    <ClCompile Include="..\cpp\Reader.cpp" />
     <ClCompile Include="..\cpp\Ui.cpp" />
-    <ClCompile Include="Biblioteka.cpp" />
+    <ClCompile Include="..\cpp\Utilities.cpp" />
     <ClCompile Include="Libraries\sqlite3\shell.c" />
     <ClCompile Include="Libraries\sqlite3\sqlite3.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Statystyki.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Testy\Testy.vcxproj">

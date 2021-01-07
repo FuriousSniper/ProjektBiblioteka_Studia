@@ -1,11 +1,11 @@
 #include "..\headers\Ui.h"
-#include "..\headers\Osoba.h"
-#include "..\headers\Data.h"
-#include "..\headers\Autor.h"
-#include "..\headers\Czytelnik.h"
-#include "..\headers\Adres.h"
-#include "..\headers\Biblioteka.h"
-#include "..\headers\ElementyPomocnicze.h"
+#include "..\headers\Person.h"
+#include "..\headers\Date.h"
+#include "..\headers\Author.h"
+#include "..\headers\Reader.h"
+#include "..\headers\Adress.h"
+#include "..\headers\Library.h"
+#include "..\headers\Utilities.h"
 #include "..\ProjektBiblioteka\Libraries\sqlite3\sqlite3.h"
 #include <string>
 #include <exception>
@@ -1362,7 +1362,6 @@ Person* Ui::logIn(int mode, sqlite3* dataBase) {
 		}
 
 		sqlite3_stmt* stmt = NULL;
-
 		sqlite3_prepare_v2(dataBase, query.c_str(), -1, &stmt, NULL);
 		retValue = sqlite3_step(stmt);
 		sqlite3_finalize(stmt);
@@ -1386,7 +1385,7 @@ Person* Ui::logIn(int mode, sqlite3* dataBase) {
 
 				//Tym razem pobieramy wszystkie kolumny (do wczytania).
 
-				query = query = "SELECT * "
+				query = "SELECT * "
 					"FROM Czytelnik "
 					"WHERE email == '" +
 					emailAdress + "' AND haslo == '" +
@@ -1414,7 +1413,6 @@ Person* Ui::logIn(int mode, sqlite3* dataBase) {
 					password + "';";
 
 				Librarian* librarian = loadLibrarian(dataBase, query);
-				sqlite3_finalize(stmt);
 				system("pause");
 				return librarian;
 			}
@@ -1559,12 +1557,10 @@ void Ui::librarianMenuChoice(int choice, Librarian* librarian, Library* library,
 		cout << endl;
 		int choice1;
 		cin.clear();
-		cin.ignore(200, '\n');
 		cout << "Aby zmienic dane wprowadz 1. Inaczej wprowadz dowolna liczbe poza 1." << endl;
 		cout << "Wybor: ";
 		cin >> choice1;
 		cin.clear();
-		cin.ignore(200, '\n');
 		cout << endl;
 		if (choice1 == 1) {
 			changeLibrarianData(librarian, dataBase);
@@ -1652,7 +1648,6 @@ void Ui::changeLibrarianData(Librarian* librarian, sqlite3* dataBase) {
 		cout << "0: Przerwanie dokonywania zmian" << endl;
 		cin >> choice;
 		cin.clear();
-		cin.ignore(200, '\n');
 
 		string query;
 		sqlite3_stmt* stmt = NULL;
@@ -1662,40 +1657,28 @@ void Ui::changeLibrarianData(Librarian* librarian, sqlite3* dataBase) {
 			return;
 		case 1:
 		{
-			while (true) {
-				string password1;
-				string password2;
-				cout << "Podaj nowe haslo: ";
-				cin >> password1;
-				cin.clear();
-				cin.ignore(200, '\n');
-				cout << "Powtorz haslo: ";
-				cin >> password2;
-				cin.clear();
-				cin.ignore(200, '\n');
+			string password1;
+			string password2;
+			cout << "Podaj nowe haslo: ";
+			cin >> password1;
+			cin.clear();
+			cout << "Powtorz haslo: ";
+			cin >> password2;
+			cin.clear();
 
-				if (password1 != password2) {
-					int choice1 = -1;
-					cout << "Hasla nie sa zgodne. Sprobuj ponownie albo zakoncz (0).";
-					cin >> choice1;
-					cin.clear();
-					cin.ignore(200, '\n');
-
-					if (choice1 == 0) {
-						break;
-					}
-				}
-				else {
-					query = "UPDATE Bibliotekarz "
-						"SET haslo = '" +
-						password1 + "' WHERE ID == " + to_string(librarian->getID()) + ";";
-					sqlite3_exec(dataBase, query.c_str(), NULL, NULL, NULL);
-					librarian->setPassword(password1);
-					cout << "Pomyslnie zmieniono haslo" << endl;
-					system("pause");
-					break;
-				}
+			if (password1 != password2) {
+				int choice1 = -1;
+				cout << "Hasla nie sa zgodne. Sprobuj ponownie." << endl;
 			}
+			else {
+				query = "UPDATE Bibliotekarz "
+					"SET haslo = '" +
+					password1 + "' WHERE ID == " + to_string(librarian->getID()) + ";";
+				sqlite3_exec(dataBase, query.c_str(), NULL, NULL, NULL);
+				librarian->setPassword(password1);
+				cout << "Pomyslnie zmieniono haslo" << endl;
+			}	
+			system("pause");
 			break;
 		}
 		case 2:
@@ -1704,9 +1687,8 @@ void Ui::changeLibrarianData(Librarian* librarian, sqlite3* dataBase) {
 			cout << "Podaj nowy adres email: ";
 			cin >> email;
 			cin.clear();
-			cin.ignore(200, '\n');
 
-			if (validateEmail(email)) {
+			if (validateEmail(email) && checkEmailAvailability(dataBase, email)){
 				query = "UPDATE Bibliotekarz "
 					"SET email = '" +
 					email + "' WHERE ID == " + to_string(librarian->getID()) + ";";
@@ -1716,7 +1698,8 @@ void Ui::changeLibrarianData(Librarian* librarian, sqlite3* dataBase) {
 				system("pause");
 			}
 			else {
-				cout << "Nieprawidlowy format adresu e-mail. Sprobuj ponownie." << endl;
+				cout << "Wystapil blad przy probie zmiany adresu e-mail. Sprobuj ponownie." << endl;
+				system("pause");
 			}
 			break;
 		}

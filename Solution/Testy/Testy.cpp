@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "CppUnitTest.h"
-#include "..\headers\Osoba.h"
+#include "..\headers\Person.h"
 #include "..\headers\Ui.h"
 #include <string>
 
