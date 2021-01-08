@@ -17,26 +17,26 @@ private:
 public:
 	//funkcja do tworzenia obiektu klasy Osoba przez uzytkownika
 	//zwraca ona obiekt, ktory tworzy
-	Person createPerson(sqlite3*bazaDanych);
+	Person createPerson(sqlite3*db);
 
 	//funkcja do tworzenia obiektu klasy Autor przez uzytkownika
 	//zwraca ona obiekt, ktory tworzy
-	Author createAuthor(sqlite3* bazaDanych);
+	Author createAuthor(sqlite3* db);
 
 	//Metoda do tworzenia nowego uzytkownika (bibliotekarza/czytelnika w zaleznosci od trybu).
 	//Zwraca wskaznik na nowo utworzony obiekt.
-	Person* createUser(int tryb, sqlite3* bazaDanych);
+	Person* createUser(int mode, sqlite3* db);
 
 	//Dodaje uzytkownika (bibliotekarza/czytelnika w zaleznosci od trybu) do bazy danych.
 	//Przyjmuje wskaznika na obiekt Osoba utworzony przez metode createUzytkownik.
-	bool addUserToDataBase(int tryb, sqlite3* bazaDanych, Person* osoba);
+	bool addUserToDataBase(int mode, sqlite3* db, Person* p);
 
 	//Wyswietla menu tworzenia hasla (wykorzystywane w metodzie createUzytkownik).
 	string createPasswordWindow();
 
 	//Sprawdza obecnosc maila przekazanego jako argument w bazach danych Czytelnik oraz Bibliotekarz.
 	//Jezeli znajduje sie w jednej z tych baz zwraca false. W przeciwnym razie zwraca true.
-	bool checkEmailAvailability(sqlite3* bazaDanych, string email);
+	bool checkEmailAvailability(sqlite3* db, string email);
 
 	//Sprawdza email pod katem wystepowania w nim odpowiedniego zakonczenia (@ oraz nazwy domeny).
 	bool validateEmail(string email);
@@ -66,12 +66,12 @@ public:
 	//Metoda pozwalajaca zarejestrowac sie uzytkownikowi (zarowno bibliotekarzowi jak i czytelnikowi)
 	//Tryb okresla typ tworzonego konta (bibliotekarz = 2/czytelnik = 1).
 	//Jezeli rejestracja sie powiedzie, zwraca true. W przeciwnym razie zwraca false.
-	bool registerUser(int tryb, sqlite3* bazaDanych);
+	bool registerUser(int mode, sqlite3* db);
 
 	//Metoda pozwalajaca zalogowac sie na konto uzytkownikowi (zarowno bibliotekarzowi jak i czytelnikowi)
 	//do metody przekazywany jest tryb okreslajacy osobe ktora sie loguje.
 	//Zwraca wskaznik na obiekt typu Czytelnik lub Bibliotekarz w zaleznosci od trybu.
-	Person* logIn(int tryb, sqlite3* bazaDanych);
+	Person* logIn(int mode, sqlite3* db);
 
 	//funkcja dodajaca ksiazke do biblioteki.
 	//po callu wymagane jest wpisanie tytulu i kategorii, aby dodac ksiazke
@@ -112,20 +112,20 @@ public:
 	string checkCopiesList(string title);
 
 	//Metody wykorzystywane w menu po zalogowaniu czytelnika/bibliotekarza.
-	int readerMenuChoice(Reader* czytelnik);
-	int librarianMenu(Librarian*bibliotekarz, Library*biblioteka, sqlite3*bazaDanych);
-	void readerMenu(int wybor);
-	void librarianMenuChoice(int wybor, Librarian*bibliotekarz, Library*biblioteka, sqlite3*bazaDanych);
+	int readerMenuChoice(Reader* r);
+	int librarianMenu(Librarian*librarian, Library*l, sqlite3*db);
+	void readerMenu(int choice);
+	void librarianMenuChoice(int choice, Librarian*librarian, Library*l, sqlite3*db);
 
 	//Tworzy Bibliotekarza na podstawie danych w rekordzie tabeli Bibliotekarz.
 	Librarian* loadLibrarian(sqlite3*dataBase, string query);
 
 	//Metoda do modyfikacji danych bibliotekarza.
-	void changeLibrarianData(Librarian* bibliotekarz, sqlite3* bazaDanych);
+	void changeLibrarianData(Librarian* librarian, sqlite3* db);
 
 	//wczytywanie biblioteki do pamieci.
 	//zwraca wskaznik na utworzony obiekt.
-	Library* loadLibrary(sqlite3* bazaDanych);
+	Library* loadLibrary(sqlite3* db);
 };
 
 #endif

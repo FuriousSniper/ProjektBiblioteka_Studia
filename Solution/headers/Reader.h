@@ -16,21 +16,18 @@ class Reader: public Person {
 private:
 
 	const int ID;
-	string* preferredCategories;
+	//string* preferredCategories;
 	string password;
 
 public:
 
 	Reader(string firstName, string lastName, int id);
 	Reader(string firstName, string lastName, string emailAdress, string phoneNumber, int day, int month, int year, Adress, string password, int ID);
-	Reader(string firstName, string lastName, int day, int month, int year, string* preferredCategories, int ID);
 	Reader();
 	void printReaderInfo();
 	void setPassword(string newPassword);
 	string getPassword();
 	const int getID();
-	string* getPrefferedCategories();
-	void setPrefferedCategories(string* tematy);
 };
 
 #endif
