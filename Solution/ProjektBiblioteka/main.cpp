@@ -12,77 +12,30 @@ using namespace std;
 
 int main() {
 
-	Ui ui = Ui();
 	sqlite3* dataBase;
-
 	sqlite3_open("main_db.db", &dataBase);
 
-	if (dataBase == NULL)
-	{
-		printf("Failed to open DB\n");
+	if (dataBase == NULL){
+		cout << "Nie udalo sie otworzyc bazy danych. Nastopi wyjscie z programu." << endl;
 		return 1;
 	}
-		
-	Library* library = ui.loadLibrary(dataBase);
+
+	//Ladowanie danych o bibliotece do obiektu w pamieci.
+
+	Library* library = Ui :: loadLibrary(dataBase);
+
+	//Jezeli nie udalo sie zaladowac (metoda zwrocila NULL), konczy program.
 
 	if (library == NULL) {
-		cout << "Nie udalo sie utworzyc obiektu biblioteka." << endl;
+		cout << "Nie udalo sie utworzyc obiektu biblioteka. Nastapi wyjscie z programu." << endl;
 		return -1;
 	}
-	
-	for (;;) {
 
-		int accountType;
-		int mode = ui.signInUpMenu();
+	//Jezeli nie wystapily zadne kompilacja (blad otwarcia bazy, blad przy tworzeniu obiektu typu Library).
+	//Zacznij interakcje z uzytkownikiem.
 
-		if (mode == 1) {
-			//TRYB LOGOWANIA
-			accountType = ui.chooseUserType();
-			if (accountType == 3)
-				continue;
-			else if (accountType == 0)
-				break;
-			else if (accountType == 1) {
-				Person* loggedUser = ui.logIn(1, dataBase);
-				if (loggedUser == NULL) continue;
-				else {
-					Reader* loggedReader = reinterpret_cast<Reader*>(loggedUser);
-					ui.readerMenuChoice(loggedReader);
-				}
-			}
-			else if(accountType == 2){	
-				Person* loggedUser = ui.logIn(2, dataBase);
-				if (loggedUser == NULL) continue;
-				else {
-					Librarian* loggedLibrarian = reinterpret_cast<Librarian*>(loggedUser);
-					ui.librarianMenu(loggedLibrarian, library, dataBase);		
-				}
-			}
-		}
-		else if (mode == 2) {
-			//TRYB REJESTRACJI
-			int accountType = ui.chooseUserTypeRegistration();
-			if (accountType == 0)
-				break;
-			else if (accountType == 3)
-				continue;
-			else if (accountType == 1) {
-				ui.registerUser(1, dataBase);
-			}
-			else if (accountType == 2) {
-				ui.registerUser(2, dataBase);
-			}
-		}
-		else {
-			//POTENCJALNY ERROR HANDLING
-			break;
-		}
-	}
-	
-	//ui.addBook();
+	Ui :: uiStartUp(library, dataBase);
 	sqlite3_close(dataBase);
-
 	system("pause");
-
 	return 0;
 }

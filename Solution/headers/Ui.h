@@ -78,7 +78,8 @@ public:
 	bool addBook();
 
 	//metoda pozwalajaca na wypisanie wszystkich ksiazek znajdujacych sie w bazie
-	int getBooks();
+	//W zaleznosci od wybranego trybu wyswietla ksiazki dla bibliotekarz oraz czytelnika.
+	int getBooks(int mode);
 
 	//funkcja do zliczania ilosci wypozyczonych ksiazek przez czytelnika
 	int getNumberOfLentBooks(Reader c);
@@ -112,20 +113,27 @@ public:
 	string checkCopiesList(string title);
 
 	//Metody wykorzystywane w menu po zalogowaniu czytelnika/bibliotekarza.
-	int readerMenuChoice(Reader* r);
+	void readerMenuChoice(int choice, Reader* reader, Library* library, sqlite3* dataBase);
 	int librarianMenu(Librarian*librarian, Library*l, sqlite3*db);
-	void readerMenu(int choice);
+	int readerMenu(Reader* reader, Library* library, sqlite3* db);
 	void librarianMenuChoice(int choice, Librarian*librarian, Library*l, sqlite3*db);
 
 	//Tworzy Bibliotekarza na podstawie danych w rekordzie tabeli Bibliotekarz.
 	Librarian* loadLibrarian(sqlite3*dataBase, string query);
 
-	//Metoda do modyfikacji danych bibliotekarza.
-	void changeLibrarianData(Librarian* librarian, sqlite3* db);
+	//Metoda do modyfikacji danych uzytkownika (czytelnika/biblitekarza w zaleznosci od trybu).
+	void changeUserData(int mode, Person* person, sqlite3* db);
 
 	//wczytywanie biblioteki do pamieci.
 	//zwraca wskaznik na utworzony obiekt.
-	Library* loadLibrary(sqlite3* db);
+	static Library* loadLibrary(sqlite3* db);
+
+	//Wczytywanie czytelnika do pamieci
+	//zwraca wskaznika na utworzony obiekt
+	Reader* loadReader(sqlite3* dataBase, string query);
+
+	//Metoda zawierajaca interfejs do komunikacji z uzytkownikiem.
+	static void uiStartUp(Library* library, sqlite3*dataBase);
 };
 
 #endif

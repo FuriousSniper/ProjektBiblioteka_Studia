@@ -1,16 +1,16 @@
 ﻿  Ui.cpp
-C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(526,12): warning C4305: "return": obcięcie z "int" do "bool"
-C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(470,17): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
-C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(539,8): warning C4101: "error": lokalna zmienna, do której nie istnieje odwołanie
-C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(773,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
-C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(825,8): warning C4101: "error": lokalna zmienna, do której nie istnieje odwołanie
-C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(938,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
-C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(1031,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
-C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(1074,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
-C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(1232,8): warning C4101: "error": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\komputer\Desktop\Project IO\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(527,12): warning C4305: "return": obcięcie z "int" do "bool"
+C:\Users\komputer\Desktop\Project IO\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(471,17): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\komputer\Desktop\Project IO\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(548,8): warning C4101: "error": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\komputer\Desktop\Project IO\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(789,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\komputer\Desktop\Project IO\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(841,8): warning C4101: "error": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\komputer\Desktop\Project IO\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(954,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\komputer\Desktop\Project IO\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(1047,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\komputer\Desktop\Project IO\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(1090,16): warning C4101: "stmt": lokalna zmienna, do której nie istnieje odwołanie
   main.cpp
   Generowanie kodu...
-C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(260): warning C4715: "Ui::createUser”: niewszystkie ścieżki kodu zwracają wartość
-C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(528): warning C4715: "Ui::addBook”: niewszystkie ścieżki kodu zwracają wartość
-C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(1830): warning C4715: "Ui::registerUser”: niewszystkie ścieżki kodu zwracają wartość
-  ProjektBiblioteka.vcxproj -> C:\Users\mimo\Desktop\IO_Projekt\ProjektBiblioteka_Studia\Solution\x64\Debug\ProjektBiblioteka.exe
+C:\Users\komputer\Desktop\Project IO\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(1248,8): warning C4101: "error": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\komputer\Desktop\Project IO\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(260): warning C4715: "Ui::createUser”: niewszystkie ścieżki kodu zwracają wartość
+C:\Users\komputer\Desktop\Project IO\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(529): warning C4715: "Ui::addBook”: niewszystkie ścieżki kodu zwracają wartość
+C:\Users\komputer\Desktop\Project IO\ProjektBiblioteka_Studia\Solution\cpp\Ui.cpp(1948): warning C4715: "Ui::registerUser”: niewszystkie ścieżki kodu zwracają wartość
+  ProjektBiblioteka.vcxproj -> C:\Users\komputer\Desktop\Project IO\ProjektBiblioteka_Studia\Solution\x64\Debug\ProjektBiblioteka.exe

@@ -33,11 +33,11 @@ Date Utilities :: convertToData(string stringToBeConverted) {
 
 	//Jezeli moze zajsc sytuacja w ktorej rozmiar vectora moze byc rozny od 3, nalezy dodac tu wiecej warunkow.
 
-	vector<string> splitString = split_string(stringToBeConverted, "-");
-	return Date(stoi(splitString[0]), stoi(splitString[1]), stoi(splitString[2]));
+	vector<string> splitString1 = splitString(stringToBeConverted, "-");
+	return Date(stoi(splitString1[0]), stoi(splitString1[1]), stoi(splitString1[2]));
 }
 
-vector<string> Utilities :: split_string(string stringToBeSplitted, string delimeter) {
+vector<string> Utilities :: splitString(string stringToBeSplitted, string delimeter) {
 	vector<string> splittedString;
 	int startIndex = 0;
 	int  endIndex = 0;
