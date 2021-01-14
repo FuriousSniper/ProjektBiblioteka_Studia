@@ -79,7 +79,9 @@ public:
 
 	//metoda pozwalajaca na wypisanie wszystkich ksiazek znajdujacych sie w bazie
 	//W zaleznosci od wybranego trybu wyswietla ksiazki dla bibliotekarz oraz czytelnika.
-	int getBooks(int mode);
+	int getBooks(Reader r,int mode);
+
+	int getBooks2(Librarian l, int mode);
 
 	//funkcja do zliczania ilosci wypozyczonych ksiazek przez czytelnika
 	int getNumberOfLentBooks(Reader c);

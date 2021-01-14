@@ -527,7 +527,131 @@ bool Ui::addBook() {
 		return -1;
 	}
 }
-int Ui::getBooks(int mode) {
+int Ui::getBooks(Reader r,int mode) {
+
+	//Dla mode == 1 - wypisanie ksiazek dla bibliotekarza.
+	//Dla mode == 2 - wypisanie ksiazek dla czytelnika (dodatkowo umozliwia wypozyczenie ksiazki i inne operacje).
+
+	//metoda pozwalajaca na wypisanie wszystkich ksiazek znajdujacych sie w bazie
+
+	if (mode != 1 && mode != 2) {
+		return -1;
+	}
+
+	system("CLS");
+	cout << "Przegladanie ksiazek\n" << endl;
+	//wyswietlanie ksiazek w zwyklym formacie
+	sqlite3* db;
+	sqlite3_stmt* stmt;
+	const char* sql2;
+	sql2 = "SELECT tytul, autorzy from KSIAZKA;";
+	char* error;
+	sqlite3_open("main_db.db", &db);
+	if (db == NULL)
+	{
+		printf("Blad przy otwieraniu bazy danych\n");
+		return 1;
+	}
+	for (;;) {
+		//wypisywanie wszystkich ksiazek
+		sqlite3_prepare_v2(db, sql2, -1, &stmt, NULL);
+		bool done = false;
+		string opt;
+		int row = 0;
+		while (!done) {
+			switch (sqlite3_step(stmt)) {
+			case SQLITE_ROW:
+				for (int i = 0; i < sqlite3_column_count(stmt); i++) {
+					cout << sqlite3_column_name(stmt, i) << ": ";
+					if (sqlite3_column_text(stmt, i) != NULL)
+						cout << sqlite3_column_text(stmt, i) << endl;
+				}
+				cout << endl;
+
+				row++;
+				break;
+
+			case SQLITE_DONE:
+				done = true;
+				break;
+
+			default:
+				fprintf(stderr, "Failed.\n");
+				return 1;
+			}
+		}
+		sqlite3_finalize(stmt);
+
+		//Jezeli jest czytelnikiem (mode == 1) do daje mozliwosc wypozyczenia i innych operacji.
+
+		if (mode == 2) {
+			return 1;
+		}
+
+		cout << "Wpisz tytul ksiazki, aby ja wypozyczyc. \nWpisz \'1\', aby dowiedziec sie, ile ksiazek jest wypozyczonych na Twoim koncie.\nWpisz \'2\', aby posortowac liste wzgledem tytulow.\nWpisz \'3\', aby posortowac liste wzgledem autorow\nWpisz \'4\', aby wyjsc z menu\n";
+		cout << "Wybor: ";
+		getline(cin, opt);
+		if (opt == "1") {
+			//pokazuje ilosc wypozyczonych ksiazek przez czytelnika
+			system("CLS");
+			cout << "Ilosc wypozyczonych ksiazek na Twoim koncie to " << endl;
+			//TODO=========================================
+		}
+		if (opt == "2") {
+			//sortuje ksiazki wzgledem tytulow
+			system("CLS");
+			cout << "Sortowanie wzgledem tytulow " << endl;
+			sql2 = "SELECT tytul, autorzy from KSIAZKA ORDER BY tytul ASC;";
+		}
+		if (opt == "3") {
+			//sortuje ksiazki wzgledem autorow
+			system("CLS");
+			cout << "Sortowanie wzgledem autorow " << endl;
+			sql2 = "SELECT tytul, autorzy from KSIAZKA ORDER BY autorzy ASC;";
+		}
+		if (opt == "4") {
+			//wyjscie z programu
+			return 1;
+		}
+		else {
+			//TODO
+			cout << "Probujesz wypozyczyc ksiazke o tytule: " << opt << endl;
+			//if(Czytelnik.getIloscWypozyczonych) ==========================================
+			string sql = "SELECT * FROM KSIAZKA WHERE tytul='" + opt + "';";
+			sqlite3_stmt* stmt2;
+			done = false;
+			sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt2, NULL);
+			//kontrolne wypisywanie, tutaj cos sie robi...
+			while (!done) {
+				switch (sqlite3_step(stmt2)) {
+				case SQLITE_ROW:
+					for (int i = 0; i < sqlite3_column_count(stmt2); i++) {
+						cout << sqlite3_column_name(stmt2, i) << ": ";
+						if (sqlite3_column_text(stmt2, i) != NULL)
+							cout << sqlite3_column_text(stmt2, i) << endl;
+					}
+					cout << endl;
+
+					row++;
+					break;
+
+				case SQLITE_DONE:
+					done = true;
+					break;
+
+				default:
+					fprintf(stderr, "Failed.\n");
+					return 1;
+				}
+			}
+			sqlite3_finalize(stmt2);
+			//wypozycza ksiazke o wskazanym tytule (jesli takiej nie ma, to sygnalizuje blad
+			lendBook(r, opt);
+		}
+	}
+	sqlite3_finalize(stmt);
+}
+int Ui::getBooks2(Librarian r, int mode) {
 
 	//Dla mode == 1 - wypisanie ksiazek dla bibliotekarza.
 	//Dla mode == 2 - wypisanie ksiazek dla czytelnika (dodatkowo umozliwia wypozyczenie ksiazki i inne operacje).
@@ -646,7 +770,6 @@ int Ui::getBooks(int mode) {
 				}
 			}
 			sqlite3_finalize(stmt2);
-			//wypozycza ksiazke o wskazanym tytule (jesli takiej nie ma, to sygnalizuje blad
 		}
 	}
 	sqlite3_finalize(stmt);
@@ -746,10 +869,12 @@ int Ui::lendBook(Reader reader, string title) {
 		//jesli nie, to zwracamy bledy
 		if (isbn == "false") {
 			cout << "Ksiazka o tym tytule nie znajduje sie w bazie" << endl;
+			sqlite3_close(db);
 			return -1;
 		}
 		if (isbn == "NOT_AVAILABLE") {
 			cout << "Wszystkie ksiazki o tym tytule zostaly wypozyczone" << endl;
+			sqlite3_close(db);
 			return -1;
 		}
 
@@ -768,10 +893,12 @@ int Ui::lendBook(Reader reader, string title) {
 		if (rc != SQLITE_OK) {
 			cout << error << endl;
 			sqlite3_free(error);
+			sqlite3_close(db);
 			return -1;
 		}
 		std::cout << "Wypozyczono" << std::endl;
-
+		system("pause");
+		sqlite3_close(db);
 		//sukces, zwracamy 1
 		return 1;
 	}
@@ -943,6 +1070,7 @@ int Ui::getUserBooks(Reader reader) {
 		}
 	}
 	sqlite3_finalize(stmt2);
+	sqlite3_close(db);
 	return 1;
 }
 int Ui::addCopy1() {
@@ -993,6 +1121,7 @@ int Ui::addCopy1() {
 		sqlite3_close(db);
 		return -1;
 	}
+	sqlite3_close(db);
 	return 1;
 
 }
@@ -1036,6 +1165,7 @@ int Ui::addCopy2(string isbnNumber, string title) {
 		return -1;
 	}
 	cout << "Dodano egzemplarz do bazy" << endl;
+	sqlite3_close(db);
 	return 1;
 }
 int Ui::getAuthor() {
@@ -1079,6 +1209,7 @@ int Ui::getAuthor() {
 		return -1;
 	}
 	cout << "Dodano nowego autora do bazy danych" << endl;
+	sqlite3_close(db);
 	return 1;
 }
 int Ui::getAuthor2(string firstName, string title) {
@@ -1117,6 +1248,7 @@ int Ui::getAuthor2(string firstName, string title) {
 		return -1;
 	}
 	cout << "Dodano nowego autora i przypisano ksiazke" << endl;
+	sqlite3_close(db);
 	system("PAUSE");
 	return 1;
 }
@@ -1230,12 +1362,14 @@ int Ui::addAuthor3(string firstName, string title) {
 			return -1;
 		}
 		cout << "Przypisano ksiazke do autora" << endl;
+		sqlite3_close(db);
 		return 1;
 	}
 
 	else {
 		//autor nie istnieje, wiec go dodajemy i przypisujemy mu ksiazke
 		getAuthor2(firstName, title);
+		sqlite3_close(db);
 		//cout << "dodano i powracamy" << endl;
 		return 1;
 	}
@@ -1325,6 +1459,7 @@ string Ui::checkCopiesList(string title) {
 		}
 		sqlite3_finalize(stmt2);
 	}
+	sqlite3_close(db);
 	return to_return;
 }
 
@@ -1509,7 +1644,7 @@ void Ui::readerMenuChoice(int choice, Reader* reader, Library* library, sqlite3*
 	case 3:
 	{
 		//Lista ksiazek dostepnych w bibliotece
-		getBooks(1);
+		getBooks(*reader,1);
 		break;
 	}
 	case 4:
@@ -1521,6 +1656,7 @@ void Ui::readerMenuChoice(int choice, Reader* reader, Library* library, sqlite3*
 	case 5:
 	{
 		//Wypozyczanie ksiazek przez czytelnika.
+		getBooks(*reader, 1);
 		string titleInput;
 		cout << "Podaj tytul ksiazki do wypozyczenia: ";
 		getline(cin, titleInput);
@@ -1531,6 +1667,7 @@ void Ui::readerMenuChoice(int choice, Reader* reader, Library* library, sqlite3*
 	case 6:
 	{
 		//Zwracanie ksiazek przez czytelnika.
+		getUserBooks(*reader);
 		string isbnNumber;
 		cout << "Podaj numer ISBN ksiazki, ktora chcesz zwrocic: ";
 		getline(cin, isbnNumber);
@@ -1606,7 +1743,7 @@ void Ui::librarianMenuChoice(int choice, Librarian* librarian, Library* library,
 	}
 	case 3:
 	{
-		getBooks(2);	
+		getBooks2(*librarian,2);
 		break;
 	}
 	case 4:
@@ -1784,13 +1921,13 @@ void Ui::changeUserData(int mode, Person* person, sqlite3* dataBase) {
 			if (mode == 1) {
 				query = "UPDATE Czytelnik "
 					"SET telefon = '" +
-					phoneNumber + "' WHERE ID == " + to_string(reader->getID()) + ";";\
+					phoneNumber + "' WHERE ID = " + to_string(reader->getID()) + ";";\
 				reader->setPhoneNumber(phoneNumber);
 			}
 			else if (mode == 2) {
 				query = "UPDATE Bibliotekarz "
 					"SET telefon = '" +
-					phoneNumber + "' WHERE ID == " + to_string(librarian->getID()) + ";";
+					phoneNumber + "' WHERE ID = " + to_string(librarian->getID()) + ";";
 				librarian->setPhoneNumber(phoneNumber);
 			}
 			sqlite3_exec(dataBase, query.c_str(), NULL, NULL, NULL);
