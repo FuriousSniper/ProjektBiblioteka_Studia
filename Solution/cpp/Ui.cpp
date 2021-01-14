@@ -1889,13 +1889,13 @@ void Ui::changeUserData(int mode, Person* person, sqlite3* dataBase) {
 
 			if (validateEmail(email) && checkEmailAvailability(dataBase, email)){
 				if (mode == 1) {
-					query = "Czytelnik "
+					query = "UPDATE Czytelnik "
 						"SET email = '" +
 						email + "' WHERE ID == " + to_string(reader->getID()) + ";";
 					reader->setEmailAdress(email);
 				}
 				else if (mode == 2) {
-					query = "Bibliotekarz "
+					query = "UPDATE Bibliotekarz "
 						"SET email = '" +
 						email + "' WHERE ID == " + to_string(librarian->getID()) + ";";
 					librarian->setEmailAdress(email);
@@ -1914,7 +1914,6 @@ void Ui::changeUserData(int mode, Person* person, sqlite3* dataBase) {
 		{
 			string phoneNumber;
 			cout << "Podaj nowy nr. telefonu: ";
-			cin >> phoneNumber;
 			getline(cin, phoneNumber);
 			cin.clear();
 
