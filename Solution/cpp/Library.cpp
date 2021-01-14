@@ -48,7 +48,7 @@ map<string, string> Library :: loadOpeningHours(sqlite3* dataBase) {
 		//Ten program nie bedzie przewidywal ich modyfikacji.
 		//Jezeli bylaby mozliwa modyfikacja to tutaj trzeba byloby duzo wiecej dopisac...
 
-		vector<string> splitString = Utilities :: split_string(Utilities :: convertToString(sqlite3_column_text(stmt, 0)), "||");
+		vector<string> splitString = Utilities :: splitString(Utilities :: convertToString(sqlite3_column_text(stmt, 0)), "||");
 
 		if (splitString.size() != 7) {
 

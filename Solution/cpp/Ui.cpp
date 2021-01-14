@@ -393,7 +393,6 @@ int Ui::chooseUserType() {
 	return choice;
 }
 Ui::Ui() {}
-
 int Ui::chooseUserTypeRegistration() {
 	int n = 0;
 	while (true) {
@@ -437,6 +436,8 @@ bool Ui::confirmVerification() {
 		}
 	}
 }
+
+
 bool Ui::addBook() {
 	//funkcja dodajaca ksiazke do biblioteki.
 	//po callu wymagane jest wpisanie tytulu i kategorii, aby dodac ksiazke
@@ -478,7 +479,7 @@ bool Ui::addBook() {
 		//podzielenie autorow i wywolanie funkcji dodajacej/sprawdzajacej czy autor istnieje dla kazdego autora
 		if (authors.find("||") != string::npos) {
 			string delimit = "||";
-			vector<string> autors_splitted = Utilities::split_string(authors, delimit);
+			vector<string> autors_splitted = Utilities::splitString(authors, delimit);
 			for (int i = 0; i < autors_splitted.size(); i++) {
 				//metoda sprawdzajaca czy autor istnieje i dodaje go/updatuje jego ksiazki
 				addAuthor3(autors_splitted[i], title);
@@ -512,7 +513,7 @@ bool Ui::addBook() {
 			vector<string> splittedString;
 			string delimeter = "||";
 
-			splittedString = Utilities::split_string(ex, delimeter);
+			splittedString = Utilities::splitString(ex, delimeter);
 			//dla kazdego egzemplarza wywolywana jest funkcja dodajaca go do bazy danych
 			for (int i = 0; i < splittedString.size(); i++) {
 				cout << "Dodawanie egzemplarza ksiazki o isbn " << splittedString[i];
@@ -526,8 +527,16 @@ bool Ui::addBook() {
 		return -1;
 	}
 }
-int Ui::getBooks() {
+int Ui::getBooks(int mode) {
+
+	//Dla mode == 1 - wypisanie ksiazek dla bibliotekarza.
+	//Dla mode == 2 - wypisanie ksiazek dla czytelnika (dodatkowo umozliwia wypozyczenie ksiazki i inne operacje).
+
 	//metoda pozwalajaca na wypisanie wszystkich ksiazek znajdujacych sie w bazie
+
+	if (mode != 1 && mode != 2) {
+		return -1;
+	}
 
 	system("CLS");
 	cout << "Przegladanie ksiazek\n" << endl;
@@ -572,6 +581,13 @@ int Ui::getBooks() {
 			}
 		}
 		sqlite3_finalize(stmt);
+
+		//Jezeli jest czytelnikiem (mode == 1) do daje mozliwosc wypozyczenia i innych operacji.
+
+		if (mode == 2) {
+			return 1;
+		}
+
 		cout << "Wpisz tytul ksiazki, aby ja wypozyczyc. \nWpisz \'1\', aby dowiedziec sie, ile ksiazek jest wypozyczonych na Twoim koncie.\nWpisz \'2\', aby posortowac liste wzgledem tytulow.\nWpisz \'3\', aby posortowac liste wzgledem autorow\nWpisz \'4\', aby wyjsc z menu\n";
 		cout << "Wybor: ";
 		getline(cin, opt);
@@ -710,7 +726,7 @@ int Ui::lendBook(Reader reader, string title) {
 		if (db == NULL)
 		{
 			printf("Blad przy otwieraniu bazy danych\n");
-			return 1;
+			return -1;
 		}
 		sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, NULL);
 		sqlite3_step(stmt);
@@ -1081,7 +1097,7 @@ int Ui::getAuthor2(string firstName, string title) {
 	}
 	//delimiter, do podzialu na imie i nazwisko autora
 	string d = " ";
-	vector<string> sp = Utilities::split_string(firstName, d);
+	vector<string> sp = Utilities::splitString(firstName, d);
 	string name2 = sp[0];
 	string surname = sp[1];
 	string dmr = "1-1-1";
@@ -1117,7 +1133,7 @@ int Ui::addAuthor3(string firstName, string title) {
 	}
 	//rozdzielanie imienia i nazwiska autora
 	string d = " ";
-	vector<string> sp = Utilities::split_string(firstName, d);
+	vector<string> sp = Utilities::splitString(firstName, d);
 	string name2 = sp[0];
 	string surname = sp[1];
 	string query;
@@ -1193,7 +1209,7 @@ int Ui::addAuthor3(string firstName, string title) {
 		else {
 			//splitujemy ksiazki autora pobrane z bazy
 			string d2 = "||";
-			vector<string> books_split = Utilities::split_string(books, d2);
+			vector<string> books_split = Utilities::splitString(books, d2);
 
 			//forem sprawdzamy, czy taka ksiazka nie jest juz do autora przypisana
 			for (int i = 0; i < books_split.size(); i++) {
@@ -1270,7 +1286,7 @@ string Ui::checkCopiesList(string title) {
 
 	//dzielenie egzemplarzy
 	string delimit_1 = "||";
-	vector<string> split_ex = Utilities::split_string(ex, delimit_1);
+	vector<string> split_ex = Utilities::splitString(ex, delimit_1);
 
 	//dla kazdego spradzamy dostepnosc
 	for (int i = 0; i < split_ex.size(); i++) {
@@ -1311,6 +1327,8 @@ string Ui::checkCopiesList(string title) {
 	}
 	return to_return;
 }
+
+
 
 Person* Ui::logIn(int mode, sqlite3* dataBase) {
 
@@ -1380,24 +1398,13 @@ Person* Ui::logIn(int mode, sqlite3* dataBase) {
 			cout << "Pomyslnie zalogowano!" << endl;
 
 			if (mode == 1) {
-				//TODO ladowanie otrzymanego rekordu do pamieci (tworzenie obiektu typu Czytelnik).
-				//(Brak metody wczytywanieCzytelnika).
-
-				//Tym razem pobieramy wszystkie kolumny (do wczytania).
-
 				query = "SELECT * "
 					"FROM Czytelnik "
 					"WHERE email == '" +
 					emailAdress + "' AND haslo == '" +
 					password + "';";
 
-				sqlite3_prepare_v2(dataBase, query.c_str(), -1, &stmt, NULL);
-				sqlite3_step(stmt);
-
-				//To bedzie wykorzystywac metode wczytywanieCzytelnika a nie konsturktor domyslny.
-
-				Reader* reader = new Reader();
-				sqlite3_finalize(stmt);
+				Reader* reader = loadReader(dataBase, query);
 				system("pause");
 				return reader;
 			}
@@ -1440,7 +1447,7 @@ Person* Ui::logIn(int mode, sqlite3* dataBase) {
 	}
 }
 
-int Ui::readerMenuChoice(Reader* reader) {
+int Ui::readerMenu(Reader* reader, Library*library, sqlite3*dataBase) {
 
 	//Proste menu wyswietlane po zalogowaniu.
 	//Po wyborze umozliwia dalsze operacje np. wypozyczenie ksiazki, aktualizacja danych itd.
@@ -1453,7 +1460,8 @@ int Ui::readerMenuChoice(Reader* reader) {
 		cout << "2: Wyswietl dane o koncie" << endl;
 		cout << "3: Wyswietl liste dostepnych ksiazek." << endl;
 		cout << "4: Wyswietl liste wypozyczonych ksiazek." << endl;
-		cout << "5: Wyswietl liste zaleglosci." << endl;
+		cout << "5: Wypozycz ksiazke." << endl;
+		cout << "6: Oddaj ksiazke." << endl;
 		cout << "0: Wyloguj i wroc do menu glownego." << endl;
 		cout << "Wybor: ";
 		cin >> choice;
@@ -1463,11 +1471,11 @@ int Ui::readerMenuChoice(Reader* reader) {
 		if (choice == 0) {
 			return 0;
 		}
-		readerMenu(choice);
+		readerMenuChoice(choice, reader, library, dataBase);
 	}
 }
 
-void Ui::readerMenu(int choice) {
+void Ui::readerMenuChoice(int choice, Reader* reader, Library* library, sqlite3* dataBase) {
 
 	//Wyswietla odpowiednie informacje w zaleznosci od wyboru w menu czytelnika po zalogowaniu.
 	//Wybor pozwala na wykonywanie odpowiednich czynnosci np. zmiana danych konta, wypozyczenie/oddanie ksiazki.
@@ -1475,32 +1483,63 @@ void Ui::readerMenu(int choice) {
 	system("CLS");
 	switch (choice) {
 	case 1:
-		//TODO: dodac wyswietlanie danych o bibliotece.
-		cout << "Dane o bibliotece." << endl;
+	{
+		library->printLibraryInfo();
+		cout << endl;
+		cout << "Nie posiadasz uprawnien do zmiany tych danych." << endl;
 		break;
+	}
 	case 2:
-		//TODO: dodac wyswietlanie danych o koncie.
+	{
 		cout << "Dane o koncie." << endl;
+		reader->printReaderInfo();
+		cout << endl;
+		int choice1;
+		cin.clear();
+		cout << "Aby zmienic dane wprowadz 1. Inaczej wprowadz dowolna liczbe poza 1." << endl;
+		cout << "Wybor: ";
+		cin >> choice1;
+		cin.clear();
+		cout << endl;
+		if (choice1 == 1) {
+			changeUserData(1, reader, dataBase);
+		}
 		break;
-		//Po wyswietleniu ma miec mozliwosc modyfikacji niektorych danych.
+	}
 	case 3:
-		//TODO: dodac wyswietlanie listy dostepnych do wypozyczenia ksiazek.
-		cout << "Lista dostepnych ksiazek." << endl;
-		//Po wyswietleniu ma miec mozliwosc wypozyczenia ksiazki.
+	{
+		//Lista ksiazek dostepnych w bibliotece
+		getBooks(1);
 		break;
+	}
 	case 4:
-		//TODO: dodac liste wypozyczonych ksiazek.
-		cout << "Lista wypozyczonych ksiazek." << endl;
-		//Po wyswietleniu ma miec mozliwosc oddania ksiazki.
+	{
+		//Lista ksiazek wypozyczonych przez czytelnik (max 3).
+		getUserBooks(*reader);
 		break;
+	}
 	case 5:
-		//TODO: dodac wyswietlanie listy zaleglosci.
-		cout << "Lista zaleglosci." << endl;
-		//Po wyswietleniu ma miec mozliwosc oddania ksiazki.
+	{
+		//Wypozyczanie ksiazek przez czytelnika.
+		string titleInput;
+		cout << "Podaj tytul ksiazki do wypozyczenia: ";
+		getline(cin, titleInput);
+		cin.clear();
+		lendBook(*reader, titleInput);
 		break;
+	}
+	case 6:
+	{
+		//Zwracanie ksiazek przez czytelnika.
+		string isbnNumber;
+		cout << "Podaj numer ISBN ksiazki, ktora chcesz zwrocic: ";
+		getline(cin, isbnNumber);
+		cin.clear();
+		returnBook(*reader, isbnNumber);
+		break;
+	}
 	default:
 		cout << "Niewlasciwa opcja. Sprobuj ponownie" << endl;
-		//Obsluga bledow.
 		break;
 	}
 	system("pause");
@@ -1515,14 +1554,12 @@ int Ui::librarianMenu(Librarian* librarian, Library* library, sqlite3* dataBase)
 
 		system("CLS");
 		int choice = 0;
-		cout << "Wprowadz odpowiednia liczbe aby kontynuowac." << endl;
+		cout << "Wprowadz odpowiednia liczbe aby kontynuowac" << endl;
 		cout << "1: Wyswietl dane o bibliotece" << endl;
 		cout << "2: Wyswietl dane o koncie" << endl;
-		cout << "3: Wyswietl liste dostepnych ksiazek." << endl;
-		cout << "4: Wyswietl liste osob zalegajacych z oddaniem ksiazki." << endl;
-		cout << "5: Dodaj ksiazke do biblioteki." << endl;
-		cout << "6: Usun ksiazke z biblioteki." << endl;
-		cout << "0: Wyloguj i wroc do menu glownego." << endl;
+		cout << "3: Wyswietl liste dostepnych ksiazek" << endl;
+		cout << "4: Dodaj ksiazke do biblioteki" << endl;
+		cout << "0: Wyloguj i wroc do menu glownego" << endl;
 		cout << "Wybor: ";
 		cin >> choice;
 		cin.clear();
@@ -1563,26 +1600,23 @@ void Ui::librarianMenuChoice(int choice, Librarian* librarian, Library* library,
 		cin.clear();
 		cout << endl;
 		if (choice1 == 1) {
-			changeLibrarianData(librarian, dataBase);
+			changeUserData(2,librarian, dataBase);
 		}
 		break;
 	}
 	case 3:
 	{
-		getBooks();	
+		getBooks(2);	
 		break;
 	}
 	case 4:
 	{
-		//TODO: dodac liste wypozyczonych ksiazek.
-		cout << "Lista osob z zaleglosciami" << endl;
-		//Po wyswietleniu ma miec mozliwosc wyslania powiadomienia o zaleglosciach.
+		addBook();
 		break;
 	}
 	default:
 	{
 		cout << "Niewlasciwa opcja. Sprobuj ponownie" << endl;
-		//Obsluga bledow.
 		break;
 	}
 	}
@@ -1633,7 +1667,23 @@ Librarian* Ui::loadLibrarian(sqlite3* dataBase, string query) {
 }
 
 
-void Ui::changeLibrarianData(Librarian* librarian, sqlite3* dataBase) {
+void Ui::changeUserData(int mode, Person* person, sqlite3* dataBase) {
+
+	//Zmiana danych uzytkownika (czytelnika/bibliotekarza w zaleznosci od trybu).
+
+	Reader* reader = NULL;
+	Librarian* librarian = NULL;
+
+	if (mode == 1) {
+		reader = reinterpret_cast<Reader*>(person);
+	}
+	else if (mode == 2) {
+		librarian = reinterpret_cast<Librarian*>(person);
+	}
+	else {
+		cout << "Blad krytyczny. Wybrano niewlasciwy tryb." << endl;
+		return;
+	}
 
 	while (true) {
 
@@ -1648,6 +1698,7 @@ void Ui::changeLibrarianData(Librarian* librarian, sqlite3* dataBase) {
 		cout << "0: Przerwanie dokonywania zmian" << endl;
 		cin >> choice;
 		cin.clear();
+		cin.ignore(200, '\n');
 
 		string query;
 		sqlite3_stmt* stmt = NULL;
@@ -1662,20 +1713,30 @@ void Ui::changeLibrarianData(Librarian* librarian, sqlite3* dataBase) {
 			cout << "Podaj nowe haslo: ";
 			cin >> password1;
 			cin.clear();
+			cin.ignore(200, '\n');
 			cout << "Powtorz haslo: ";
 			cin >> password2;
 			cin.clear();
+			cin.ignore(200, '\n');
 
 			if (password1 != password2) {
 				int choice1 = -1;
 				cout << "Hasla nie sa zgodne. Sprobuj ponownie." << endl;
 			}
 			else {
-				query = "UPDATE Bibliotekarz "
-					"SET haslo = '" +
-					password1 + "' WHERE ID == " + to_string(librarian->getID()) + ";";
+				if (mode == 1) {
+					query = "UPDATE Czytelnik "
+						"SET haslo = '" +
+						password1 + "' WHERE ID == " + to_string(reader->getID()) + ";";
+					reader->setPassword(password1);
+				}
+				else if (mode == 2) {
+					query = "UPDATE Bibliotekarz "
+						"SET haslo = '" +
+						password1 + "' WHERE ID == " + to_string(librarian->getID()) + ";";
+					librarian->setPassword(password1);
+				}
 				sqlite3_exec(dataBase, query.c_str(), NULL, NULL, NULL);
-				librarian->setPassword(password1);
 				cout << "Pomyslnie zmieniono haslo" << endl;
 			}	
 			system("pause");
@@ -1687,13 +1748,22 @@ void Ui::changeLibrarianData(Librarian* librarian, sqlite3* dataBase) {
 			cout << "Podaj nowy adres email: ";
 			cin >> email;
 			cin.clear();
+			cin.ignore(200, '\n');
 
 			if (validateEmail(email) && checkEmailAvailability(dataBase, email)){
-				query = "UPDATE Bibliotekarz "
-					"SET email = '" +
-					email + "' WHERE ID == " + to_string(librarian->getID()) + ";";
+				if (mode == 1) {
+					query = "Czytelnik "
+						"SET email = '" +
+						email + "' WHERE ID == " + to_string(reader->getID()) + ";";
+					reader->setEmailAdress(email);
+				}
+				else if (mode == 2) {
+					query = "Bibliotekarz "
+						"SET email = '" +
+						email + "' WHERE ID == " + to_string(librarian->getID()) + ";";
+					librarian->setEmailAdress(email);
+				}
 				sqlite3_exec(dataBase, query.c_str(), NULL, NULL, NULL);
-				librarian->setEmailAdress(email);
 				cout << "Pomyslnie zmieniono adres e-mail" << endl;
 				system("pause");
 			}
@@ -1711,11 +1781,19 @@ void Ui::changeLibrarianData(Librarian* librarian, sqlite3* dataBase) {
 			getline(cin, phoneNumber);
 			cin.clear();
 
-			query = "UPDATE Bibliotekarz "
-				"SET telefon = '" +
-				phoneNumber + "' WHERE ID == " + to_string(librarian->getID()) + ";";
+			if (mode == 1) {
+				query = "UPDATE Czytelnik "
+					"SET telefon = '" +
+					phoneNumber + "' WHERE ID == " + to_string(reader->getID()) + ";";\
+				reader->setPhoneNumber(phoneNumber);
+			}
+			else if (mode == 2) {
+				query = "UPDATE Bibliotekarz "
+					"SET telefon = '" +
+					phoneNumber + "' WHERE ID == " + to_string(librarian->getID()) + ";";
+				librarian->setPhoneNumber(phoneNumber);
+			}
 			sqlite3_exec(dataBase, query.c_str(), NULL, NULL, NULL);
-			librarian->setPhoneNumber(phoneNumber);
 			cout << "Pomyslnie zmieniono nr. telefonu" << endl;
 			system("pause");
 			break;
@@ -1766,6 +1844,46 @@ Library* Ui::loadLibrary(sqlite3* dataBase) {
 
 	Library* library = new Library(emailAdress, phoneNumber, adress, openingHours, amountOfCopies);
 	return library;
+}
+
+Reader* Ui::loadReader(sqlite3* dataBase, string query) {
+	//Na poczatku sprawdza czy baza danych jest otwarta.
+	//Jezeli nie jest, probuje ja otworzyc.
+	//Jezeli nie uda sie otworzyc (wskaznik na baze == NULL) to zwraca NULL'a (oznacza, ze nie udalo sie utworzyc obiektu.
+
+	if (dataBase == NULL) {
+		sqlite3_open("..\\ProjektBiblioteka\\main_db.db", &dataBase);
+		if (dataBase == NULL) {
+			return NULL;
+		}
+	}
+
+	sqlite3_stmt* stmt = NULL;
+	sqlite3_prepare_v2(dataBase, query.c_str(), -1, &stmt, NULL);
+	int retValue = sqlite3_step(stmt);
+
+	if (retValue != SQLITE_ROW) {
+		return NULL;
+	}
+
+	int id = sqlite3_column_int(stmt, 0);
+	string firstName = Utilities::convertToString(sqlite3_column_text(stmt, 9));
+	string lastName = Utilities::convertToString(sqlite3_column_text(stmt, 10));
+	int age = sqlite3_column_int(stmt, 11);
+	Date birthDate = Utilities::convertToData(Utilities::convertToString(sqlite3_column_text(stmt, 12)));
+	string password = Utilities::convertToString(sqlite3_column_text(stmt, 13));
+	string emailAdress = Utilities::convertToString(sqlite3_column_text(stmt, 18));
+	string phoneNumber = Utilities::convertToString(sqlite3_column_text(stmt, 19));
+	string city = Utilities::convertToString(sqlite3_column_text(stmt, 6));
+	string zipCode = Utilities::convertToString(sqlite3_column_text(stmt, 7));
+	string street = Utilities::convertToString(sqlite3_column_text(stmt, 8));
+	int flatNumber = sqlite3_column_int(stmt, 14);
+	Adress adress = Adress(city, zipCode, street, flatNumber);
+
+	Reader* reader = new Reader(firstName, lastName, emailAdress, phoneNumber, birthDate.getDay(), birthDate.getMonth(), birthDate.getYear(), adress, password, id);
+
+	sqlite3_finalize(stmt);
+	return reader;
 }
 
 bool Ui::registerUser(int mode, sqlite3* dataBase) {
@@ -1825,6 +1943,56 @@ bool Ui::registerUser(int mode, sqlite3* dataBase) {
 				delete librarian;
 				return false;
 			}
+		}
+	}
+}
+
+void Ui::uiStartUp(Library* library, sqlite3*dataBase) {
+	Ui ui = Ui();
+	for (;;) {
+		int accountType;
+		int mode = ui.signInUpMenu();
+
+		if (mode == 1) {
+			//TRYB LOGOWANIA
+			accountType = ui.chooseUserType();
+			if (accountType == 3)
+				continue;
+			else if (accountType == 0)
+				break;
+			else if (accountType == 1) {
+				Person* loggedUser = ui.logIn(1, dataBase);
+				if (loggedUser == NULL) continue;
+				else {
+					Reader* loggedReader = reinterpret_cast<Reader*>(loggedUser);
+					ui.readerMenu(loggedReader, library, dataBase);
+				}
+			}
+			else if (accountType == 2) {
+				Person* loggedUser = ui.logIn(2, dataBase);
+				if (loggedUser == NULL) continue;
+				else {
+					Librarian* loggedLibrarian = reinterpret_cast<Librarian*>(loggedUser);
+					ui.librarianMenu(loggedLibrarian, library, dataBase);
+				}
+			}
+		}
+		else if (mode == 2) {
+			//TRYB REJESTRACJI
+			int accountType = ui.chooseUserTypeRegistration();
+			if (accountType == 0)
+				break;
+			else if (accountType == 3)
+				continue;
+			else if (accountType == 1) {
+				ui.registerUser(1, dataBase);
+			}
+			else if (accountType == 2) {
+				ui.registerUser(2, dataBase);
+			}
+		}
+		else {
+			break;
 		}
 	}
 }

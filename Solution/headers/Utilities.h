@@ -19,7 +19,7 @@ public:
 	static Date convertToData(string napis);
 
 	//funkcja do splitowania stringa za pomoca delimitera. arg 1 - string do podzielenia. arg 2 - delimiter. zwraca vector (uzywany jako tablica do prostego przejscia i wykonania czegos)
-	static vector<string> split_string(string stringToBeSplitted, string delimeter);
+	static vector<string> splitString(string stringToBeSplitted, string delimeter);
 };
 
 #endif
